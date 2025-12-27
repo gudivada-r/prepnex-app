@@ -15,7 +15,17 @@ import { motion } from 'framer-motion';
 
 const Sidebar = ({ activeTab, onTabChange, userData }) => {
     const navigate = useNavigate();
+    const isLoggedIn = !!localStorage.getItem('token');
     const handleLogout = () => { localStorage.removeItem('token'); navigate('/login'); };
+    const handleLogin = () => { navigate('/login'); };
+
+    const handleProtectedTab = (tab) => {
+        if (!isLoggedIn) {
+            navigate('/login');
+        } else {
+            onTabChange(tab);
+        }
+    };
 
     return (
         <div className="sidebar" style={{ width: '280px', flexShrink: 0 }}>
@@ -35,41 +45,47 @@ const Sidebar = ({ activeTab, onTabChange, userData }) => {
                 <div className={`nav-item ${activeTab === 'dashboard' ? 'active' : ''}`} onClick={() => onTabChange('dashboard')}>
                     <LayoutDashboard size={20} /> Dashboard
                 </div>
-                <div className={`nav-item ${activeTab === 'chat' ? 'active' : ''}`} onClick={() => onTabChange('chat')}>
+                <div className={`nav-item ${activeTab === 'chat' ? 'active' : ''}`} onClick={() => handleProtectedTab('chat')}>
                     <MessageSquare size={20} /> AI Navigator
                 </div>
-                <div className={`nav-item ${activeTab === 'schedule' ? 'active' : ''}`} onClick={() => onTabChange('schedule')}>
+                <div className={`nav-item ${activeTab === 'schedule' ? 'active' : ''}`} onClick={() => handleProtectedTab('schedule')}>
                     <Calendar size={20} /> Schedule
                 </div>
-                <div className={`nav-item ${activeTab === 'courses' ? 'active' : ''}`} onClick={() => onTabChange('courses')}>
+                <div className={`nav-item ${activeTab === 'courses' ? 'active' : ''}`} onClick={() => handleProtectedTab('courses')}>
                     <BookOpen size={20} /> Courses
                 </div>
-                <div className="nav-item"><TrendingUp size={20} /> Progress</div>
-                <div className={`nav-item ${activeTab === 'tutoring' ? 'active' : ''}`} onClick={() => onTabChange('tutoring')}>
+                <div className="nav-item" onClick={() => handleProtectedTab('progress')}><TrendingUp size={20} /> Progress</div>
+                <div className={`nav-item ${activeTab === 'tutoring' ? 'active' : ''}`} onClick={() => handleProtectedTab('tutoring')}>
                     <Users size={20} /> Tutoring
                 </div>
-                <div className={`nav-item ${activeTab === 'wellness' ? 'active' : ''}`} onClick={() => onTabChange('wellness')}>
+                <div className={`nav-item ${activeTab === 'wellness' ? 'active' : ''}`} onClick={() => handleProtectedTab('wellness')}>
                     <Heart size={20} /> Wellness
                 </div>
             </div>
 
             {/* Bottom Config */}
             <div style={{ marginTop: 'auto', borderTop: '1px solid #f1f5f9', paddingTop: '1rem' }}>
-                <div className="nav-item" onClick={() => onTabChange('edit-profile')}><Settings size={20} /> Settings</div>
-                <div onClick={handleLogout} className="nav-item" style={{ color: '#ef4444' }}>
-                    <LogOut size={20} /> Logout
-                </div>
+                <div className="nav-item" onClick={() => handleProtectedTab('edit-profile')}><Settings size={20} /> Settings</div>
+                {isLoggedIn ? (
+                    <div onClick={handleLogout} className="nav-item" style={{ color: '#ef4444' }}>
+                        <LogOut size={20} /> Logout
+                    </div>
+                ) : (
+                    <div onClick={handleLogin} className="nav-item" style={{ color: '#4f46e5' }}>
+                        <User size={20} /> Login / Sign Up
+                    </div>
+                )}
 
                 {/* User Profile Micro */}
                 <div style={{ marginTop: '1.5rem', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', background: '#f8fafc', borderRadius: '12px' }}>
                     <div style={{ width: '40px', height: '40px', background: '#e2e8f0', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
-                        {userData?.full_name ? userData.full_name.split(' ').map(n => n[0]).join('').toUpperCase() : '??'}
+                        {userData?.full_name ? userData.full_name.split(' ').map(n => n[0]).join('').toUpperCase() : 'A'}
                     </div>
                     <div style={{ overflow: 'hidden' }}>
                         <div style={{ fontWeight: '600', fontSize: '0.9rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                            {userData?.full_name || 'Loading...'}
+                            {userData?.full_name || 'Austin'}
                         </div>
-                        <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Computer Science</div>
+                        <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Student Navigator</div>
                     </div>
                 </div>
             </div>
@@ -91,7 +107,7 @@ const DashboardHome = ({ onNavigate, userData, onEditStats }) => {
                         <GraduationCap size={18} /> Your Academic Success Navigator
                     </div>
                     <h1 style={{ fontSize: '2.5rem', margin: '0.5rem 0 1rem 0', fontWeight: '700' }}>
-                        Good afternoon, {userData?.full_name ? userData.full_name.split(' ')[0] : 'Student'}!
+                        Good afternoon, {userData?.full_name ? userData.full_name.split(' ')[0] : 'Austin'}!
                     </h1>
                     <p style={{ maxWidth: '500px', fontSize: '1.1rem', opacity: 0.9, marginBottom: '2rem', lineHeight: '1.6' }}>
                         You have 3 assignments due this week and a chemistry midterm on Tuesday. I'm here to help you stay on track!
@@ -239,11 +255,27 @@ const Dashboard = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     const fetchUser = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
         try {
             const response = await api.get('/api/users/me');
             setUserData(response.data);
         } catch (error) {
             console.error("Failed to fetch user data:", error);
+            if (error.response?.status === 401) {
+                localStorage.removeItem('token');
+                setUserData(null);
+            }
+        }
+    };
+
+    const handleFeatureNavigate = (tab) => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/login');
+        } else {
+            setActiveTab(tab);
         }
     };
 
@@ -256,7 +288,7 @@ const Dashboard = () => {
             <Sidebar activeTab={activeTab} onTabChange={setActiveTab} userData={userData} />
 
             <main style={{ flex: 1, padding: '2rem 3rem', overflowY: 'auto' }}>
-                {activeTab === 'dashboard' && <DashboardHome onNavigate={setActiveTab} userData={userData} onEditStats={() => setIsEditModalOpen(true)} />}
+                {activeTab === 'dashboard' && <DashboardHome onNavigate={handleFeatureNavigate} userData={userData} onEditStats={() => handleFeatureNavigate('edit-profile')} />}
 
                 {activeTab === 'chat' && (
                     <div style={{ height: '100%' }}>
