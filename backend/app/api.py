@@ -14,31 +14,38 @@ router = APIRouter()
 
 @router.post("/auth/register")
 async def register(user: User, session: Session = Depends(get_session)):
-    statement = select(User).where(User.email == user.email)
-    existing_user = session.exec(statement).first()
-    if existing_user:
-        raise HTTPException(status_code=400, detail="Email already registered")
-    
-    user.password_hash = get_password_hash(user.password_hash)
-    session.add(user)
-    session.commit()
-    session.refresh(user)
-    return {"message": "User created successfully"}
+    try:
+        statement = select(User).where(User.email == user.email)
+        existing_user = session.exec(statement).first()
+        if existing_user:
+            raise HTTPException(status_code=400, detail="Email already registered")
+        
+        user.password_hash = get_password_hash(user.password_hash)
+        session.add(user)
+        session.commit()
+        session.refresh(user)
+        return {"message": "User created successfully"}
+    except Exception as e:
+        # Return the error message to help debug 500 errors
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/auth/login")
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), session: Session = Depends(get_session)):
-    statement = select(User).where(User.email == form_data.username)
-    user = session.exec(statement).first()
-    
-    if not user or not verify_password(form_data.password, user.password_hash):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    
-    access_token = create_access_token(data={"sub": user.email})
-    return {"access_token": access_token, "token_type": "bearer"}
+    try:
+        statement = select(User).where(User.email == form_data.username)
+        user = session.exec(statement).first()
+        
+        if not user or not verify_password(form_data.password, user.password_hash):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Incorrect username or password",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        
+        access_token = create_access_token(data={"sub": user.email})
+        return {"access_token": access_token, "token_type": "bearer"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 # --- Chat Endpoints ---
 
