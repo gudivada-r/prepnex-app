@@ -10,6 +10,7 @@ class User(SQLModel, table=True):
     gpa: float = Field(default=0.0)
     on_track_score: int = Field(default=0)
     ai_insight: Optional[str] = Field(default=None)
+    is_admin: bool = Field(default=False)
     created_at: datetime = Field(default_factory=datetime.utcnow)
     
     

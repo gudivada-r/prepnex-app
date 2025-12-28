@@ -9,10 +9,11 @@ import WellnessCheck from './WellnessCheck';
 import StudyTimer from './StudyTimer';
 import DropAddForms from './DropAddForms';
 import Progress from './Progress';
+import AdminPanel from './AdminPanel';
 import {
     LayoutDashboard, MessageSquare, Calendar, BookOpen,
     TrendingUp, User, Settings, LogOut, Search, Clock,
-    Users, FileText, Heart, GraduationCap, ChevronRight, Edit3, Menu, X
+    Users, FileText, Heart, GraduationCap, ChevronRight, Edit3, Menu, X, Shield
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -409,6 +410,9 @@ const Dashboard = () => {
                     {activeTab === 'privacy' && <PrivacyPolicy onBack={() => setActiveTab('dashboard')} />}
                     {activeTab === 'msa' && <MSA onBack={() => setActiveTab('dashboard')} />}
                     {activeTab === 'sla' && <SLA onBack={() => setActiveTab('dashboard')} />}
+
+                    {/* Admin */}
+                    {activeTab === 'admin' && userData?.is_admin && <AdminPanel />}
 
                 </main>
             </div>

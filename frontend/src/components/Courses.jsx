@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api';
-import { BookOpen, Plus, Trash2, TrendingUp, Award, RefreshCw, Layers } from 'lucide-react';
+import { BookOpen, Plus, Trash2, TrendingUp, Award, RefreshCw, Layers, Settings } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const gradePoints = {
@@ -17,6 +17,13 @@ const Courses = () => {
     const [isSyncing, setIsSyncing] = useState(false);
     const [syncStatus, setSyncStatus] = useState(null);
     const [newCourse, setNewCourse] = useState({ name: '', code: '', grade: 'B', credits: 3 });
+
+    // Settings Modal State
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    const [canvasConfig, setCanvasConfig] = useState({
+        id: localStorage.getItem('CANVAS_ID') || 'self',
+        token: localStorage.getItem('CANVAS_TOKEN') || '7~3LxQLMnxX4ZRzFteTC97YuyJuPaR92Aef88eLEB3M9YLtmXQ8ezH7TkPXDk4cYVx'
+    });
 
     useEffect(() => {
         fetchCourses();
@@ -170,6 +177,26 @@ const Courses = () => {
                             {syncStatus.message}
                         </motion.div>
                     )}
+
+                    {/* Settings Button */}
+                    <button
+                        onClick={() => setIsSettingsOpen(true)}
+                        style={{
+                            background: 'white',
+                            color: '#64748b',
+                            border: '1px solid #e2e8f0',
+                            padding: '10px',
+                            borderRadius: '8px',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}
+                        title="Canvas Settings"
+                    >
+                        <Settings size={18} />
+                    </button>
+
                     <button
                         onClick={handleSyncLMS}
                         disabled={isSyncing}
@@ -196,6 +223,55 @@ const Courses = () => {
                     </button>
                 </div>
             </div>
+
+            {/* Canvas Settings Modal */}
+            {isSettingsOpen && (
+                <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+                    <div className="card-white" style={{ width: '400px', padding: '2rem' }}>
+                        <h3 style={{ marginTop: 0, marginBottom: '1.5rem', fontSize: '1.25rem' }}>Canvas Configuration</h3>
+
+                        <div style={{ marginBottom: '1rem' }}>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '0.9rem' }}>Canvas Student ID / User ID</label>
+                            <input
+                                type="text"
+                                placeholder="e.g. 12345"
+                                value={canvasConfig.id}
+                                onChange={(e) => setCanvasConfig({ ...canvasConfig, id: e.target.value })}
+                                style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #e2e8f0' }}
+                            />
+                        </div>
+
+                        <div style={{ marginBottom: '1.5rem' }}>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '0.9rem' }}>Canvas API Token</label>
+                            <input
+                                type="password"
+                                placeholder="Enter your token"
+                                value={canvasConfig.token}
+                                onChange={(e) => setCanvasConfig({ ...canvasConfig, token: e.target.value })}
+                                style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #e2e8f0' }}
+                            />
+                            <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '4px' }}>
+                                This token is stored locally on your device.
+                            </div>
+                        </div>
+
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+                            <button onClick={() => setIsSettingsOpen(false)} style={{ background: 'white', border: '1px solid #e2e8f0', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer' }}>Cancel</button>
+                            <button
+                                onClick={() => {
+                                    localStorage.setItem('CANVAS_ID', canvasConfig.id);
+                                    localStorage.setItem('CANVAS_TOKEN', canvasConfig.token);
+                                    setIsSettingsOpen(false);
+                                    alert('Settings saved!');
+                                }}
+                                style={{ background: '#4f46e5', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer' }}
+                            >
+                                Save Settings
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <div className="card-white" style={{ padding: 0, overflow: 'hidden' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>

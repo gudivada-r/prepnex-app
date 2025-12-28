@@ -19,14 +19,20 @@ async def debug_sync():
     
     # 2. Get a User from DB
     with Session(engine) as session:
-        # Just grab the first user
-        user = session.exec(select(User)).first()
+        # Target specific user
+        user = session.exec(select(User).where(User.email == "b@student.org")).first()
         if not user:
-            print("No users found in DB. Creating a dummy one.")
-            user = User(email="test@example.com", password_hash="hash")
+            print("Target User 'b@student.org' not found in DB. Creating now...")
+            from app.auth import get_password_hash
+            user = User(
+                email="b@student.org", 
+                full_name="Bob Student",
+                password_hash=get_password_hash("password")
+            )
             session.add(user)
             session.commit()
             session.refresh(user)
+            print(f"Created user ID: {user.id}")
         
         print(f"Syncing for User ID: {user.id} ({user.email})")
         
