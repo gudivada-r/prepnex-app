@@ -7,10 +7,17 @@ from pydantic import BaseModel
 
 from app.auth import get_session, create_access_token, get_password_hash, verify_password, get_current_user
 from app.models import ChatSession, ChatMessage, Tutor, User
-from app.agent.graph import app_graph
-from langchain_core.messages import HumanMessage
 from datetime import datetime
 from app.integrations.lms.canvas import CanvasService
+
+# Optional imports for AI Navigator (may not be available on Vercel due to size constraints)
+try:
+    from app.agent.graph import app_graph
+    from langchain_core.messages import HumanMessage
+    AGENT_AVAILABLE = True
+except ImportError:
+    AGENT_AVAILABLE = False
+    print("WARNING: AI Navigator agent not available (langgraph not installed)")
 
 router = APIRouter()
 
@@ -342,47 +349,44 @@ async def query_agent(
     session.commit()
 
     # 3. Retrieve Context (History)
-    # Get last 10 messages for context window to maintain conversation flow
     statement = select(ChatMessage).where(ChatMessage.session_id == chat_session.id).order_by(ChatMessage.timestamp.asc())
     history_msgs_db = session.exec(statement).all()
     
-    # Convert DB messages to LangChain format
-    from langchain_core.messages import HumanMessage, AIMessage
-    
-    history_lc = []
-    for msg in history_msgs_db:
-        # Skip the current message we just saved to avoid duplication in context if we appended it before
-        # But actually, we just saved it, so it IS in the DB.
-        # We need to construct the list of messages passed to the graph carefully.
-        # The graph state usually expects a list of messages.
-        
-        content = msg.content
-        # If AI message is JSON, extract just the content for the context context
-        if msg.sender == "ai":
-            try:
-                import json
-                data = json.loads(content)
-                text = data.get("message_content", "")
-                history_lc.append(AIMessage(content=text))
-            except:
-                history_lc.append(AIMessage(content=content))
-        else:
-            history_lc.append(HumanMessage(content=content))
+    # 4. Generate Response
+    if AGENT_AVAILABLE:
+        # Convert DB messages to LangChain format
+        history_lc = []
+        for msg in history_msgs_db:
+            content = msg.content
+            # If AI message is JSON, extract just the content for the context
+            if msg.sender == "ai":
+                try:
+                    import json
+                    data = json.loads(content)
+                    text = data.get("message_content", "")
+                    history_lc.append(AIMessage(content=text))
+                except:
+                    history_lc.append(AIMessage(content=content))
+            else:
+                history_lc.append(HumanMessage(content=content))
 
-    # 4. Invoke the graph
-    # If a file was 'attached' in this turn, we inject a prompt modification
-    # (Note: The file modification was saved to DB in step 2, so it is already in history_lc[-1])
-    
-    # We pass the ENTIRE history to the graph
-    inputs = {
-        "messages": history_lc,
-        "student_id": str(current_user.id),
-        "next_step": "",
-        "final_response": {}
-    }
-    
-    result = await app_graph.ainvoke(inputs)
-    final_response_dict = result.get("final_response", {})
+        # Invoke the graph
+        inputs = {
+            "messages": history_lc,
+            "student_id": str(current_user.id),
+            "next_step": "",
+            "final_response": {}
+        }
+        
+        result = await app_graph.ainvoke(inputs)
+        final_response_dict = result.get("final_response", {})
+    else:
+        # Fallback response when agent is not available
+        final_response_dict = {
+            "message_content": f"I received your message: '{request.query}'. The AI Navigator is currently running in limited mode. Please try the Flashcards or Voice Notes features which are fully functional!",
+            "cited_sources": [],
+            "action_items": []
+        }
     
     # 5. Save AI Response
     import json
