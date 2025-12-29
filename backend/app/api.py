@@ -138,6 +138,145 @@ async def transcribe_audio(file: bytes = File(...), language: str = Form("Englis
     }
 
 
+# --- Lecture Notes Endpoints ---
+
+from app.models import LectureNote
+from pydantic import BaseModel
+
+class LectureNoteSave(BaseModel):
+    title: Optional[str] = None
+    course_name: Optional[str] = None
+    professor_name: Optional[str] = None
+    transcript: str
+    summary: List[str]
+    language: str = "English"
+    duration_seconds: int = 0
+
+@router.post("/lecture-notes/save")
+async def save_lecture_note(
+    note_data: LectureNoteSave,
+    current_user: User = Depends(get_current_user),
+    session: Session = Depends(get_session)
+):
+    """Save a lecture note with transcript and summary"""
+    import json
+    from datetime import datetime
+    
+    # Auto-generate title if not provided
+    title = note_data.title
+    if not title:
+        # AI-generated title based on course/professor/date
+        if note_data.course_name and note_data.professor_name:
+            title = f"{note_data.course_name} - {note_data.professor_name} - {datetime.now().strftime('%m/%d/%Y')}"
+        elif note_data.course_name:
+            title = f"{note_data.course_name} - {datetime.now().strftime('%m/%d/%Y')}"
+        else:
+            title = f"Lecture - {datetime.now().strftime('%m/%d/%Y %I:%M %p')}"
+    
+    lecture_note = LectureNote(
+        user_id=current_user.id,
+        title=title,
+        course_name=note_data.course_name,
+        professor_name=note_data.professor_name,
+        transcript=note_data.transcript,
+        summary=json.dumps(note_data.summary),
+        language=note_data.language,
+        duration_seconds=note_data.duration_seconds
+    )
+    
+    session.add(lecture_note)
+    session.commit()
+    session.refresh(lecture_note)
+    
+    return {"id": lecture_note.id, "title": lecture_note.title, "message": "Lecture note saved successfully"}
+
+@router.get("/lecture-notes/history")
+async def get_lecture_history(
+    current_user: User = Depends(get_current_user),
+    session: Session = Depends(get_session)
+):
+    """Get all lecture notes for the current user, sorted by date desc"""
+    import json
+    statement = select(LectureNote).where(LectureNote.user_id == current_user.id).order_by(LectureNote.created_at.desc())
+    notes = session.exec(statement).all()
+    
+    # Parse summary JSON for each note
+    result = []
+    for note in notes:
+        result.append({
+            "id": note.id,
+            "title": note.title,
+            "course_name": note.course_name,
+            "professor_name": note.professor_name,
+            "transcript": note.transcript,
+            "summary": json.loads(note.summary) if note.summary else [],
+            "language": note.language,
+            "duration_seconds": note.duration_seconds,
+            "is_bookmarked": note.is_bookmarked,
+            "created_at": note.created_at.isoformat()
+        })
+    
+    return result
+
+@router.get("/lecture-notes/{note_id}")
+async def get_lecture_note(
+    note_id: int,
+    current_user: User = Depends(get_current_user),
+    session: Session = Depends(get_session)
+):
+    """Get a specific lecture note"""
+    import json
+    note = session.get(LectureNote, note_id)
+    if not note or note.user_id != current_user.id:
+        raise HTTPException(status_code=404, detail="Lecture note not found")
+    
+    return {
+        "id": note.id,
+        "title": note.title,
+        "course_name": note.course_name,
+        "professor_name": note.professor_name,
+        "transcript": note.transcript,
+        "summary": json.loads(note.summary) if note.summary else [],
+        "language": note.language,
+        "duration_seconds": note.duration_seconds,
+        "is_bookmarked": note.is_bookmarked,
+        "created_at": note.created_at.isoformat()
+    }
+
+@router.put("/lecture-notes/{note_id}/bookmark")
+async def toggle_bookmark(
+    note_id: int,
+    current_user: User = Depends(get_current_user),
+    session: Session = Depends(get_session)
+):
+    """Toggle bookmark status for a lecture note"""
+    note = session.get(LectureNote, note_id)
+    if not note or note.user_id != current_user.id:
+        raise HTTPException(status_code=404, detail="Lecture note not found")
+    
+    note.is_bookmarked = not note.is_bookmarked
+    session.add(note)
+    session.commit()
+    
+    return {"is_bookmarked": note.is_bookmarked}
+
+@router.delete("/lecture-notes/{note_id}")
+async def delete_lecture_note(
+    note_id: int,
+    current_user: User = Depends(get_current_user),
+    session: Session = Depends(get_session)
+):
+    """Delete a lecture note"""
+    note = session.get(LectureNote, note_id)
+    if not note or note.user_id != current_user.id:
+        raise HTTPException(status_code=404, detail="Lecture note not found")
+    
+    session.delete(note)
+    session.commit()
+    
+    return {"message": "Lecture note deleted"}
+
+
 class FlashcardRequest(BaseModel):
     note_content: Optional[str] = None
     course_name: Optional[str] = None

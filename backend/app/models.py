@@ -106,3 +106,17 @@ class MarketplaceItem(SQLModel, table=True):
     image_url: Optional[str] = None
     status: str = Field(default="available") # available, sold
     created_at: datetime = Field(default_factory=datetime.utcnow)
+
+class LectureNote(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    user_id: int = Field(foreign_key="user.id")
+    title: str  # Auto-generated or user-provided
+    course_name: Optional[str] = None
+    professor_name: Optional[str] = None
+    transcript: str  # Full transcription
+    summary: str  # JSON array of key takeaways
+    language: str = Field(default="English")
+    duration_seconds: int = Field(default=0)
+    is_bookmarked: bool = Field(default=False)
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
