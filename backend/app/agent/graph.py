@@ -34,6 +34,9 @@ def router_node(state: AgentState):
         # Default to Tutor for general queries or Supervisor synthesis
         return {"next_step": "tutor"}
 
+import os
+import google.generativeai as genai
+
 async def tutor_agent(state: AgentState):
     """
     Academic Tutor Agent.
@@ -47,12 +50,40 @@ async def tutor_agent(state: AgentState):
     # Act: Use RAG for academic policies/resources or knowledge
     rag_info = rag_tool.query(last_msg, category="academic")
     
-    # Basic Memory check: see if previous messages exist
+    # Basic Memory check
     context_prefix = ""
     if len(messages) > 1:
         context_prefix = f"Considering our previous discussion about {messages[-3].content if len(messages)>2 else 'your studies'}, "
     
-    message = f"{context_prefix}I see your grades are: {grades}. Based on '{last_msg}', here is some info: {rag_info}. Let's make a study plan."
+    # AI Generation
+    api_key = os.environ.get("GOOGLE_API_KEY")
+    if api_key:
+        try:
+            genai.configure(api_key=api_key)
+            model = genai.GenerativeModel('gemini-flash-latest')
+            
+            prompt = f"""
+            You are an expert academic tutor and advisor.
+            
+            Context:
+            - Student Grades: {grades}
+            - Institutional Knowledge: {rag_info}
+            - Conversation Context: {context_prefix}
+            
+            Student Query: "{last_msg}"
+            
+            Provide a helpful, encouraging, and specific response. 
+            If their grades are low, suggest specific actions based on the "Institutional Knowledge".
+            Keep the tone supportive.
+            """
+            
+            response = model.generate_content(prompt)
+            message = response.text
+        except Exception as e:
+            print(f"Agent AI Gen Failed: {e}")
+            message = f"{context_prefix}I see your grades are: {grades}. Based on '{last_msg}', here is some info: {rag_info}. Let's make a study plan."
+    else:
+        message = f"{context_prefix}I see your grades are: {grades}. Based on '{last_msg}', here is some info: {rag_info}. Let's make a study plan."
     
     return {
         "messages": [AIMessage(content=message)],
