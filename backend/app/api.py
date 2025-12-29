@@ -301,7 +301,9 @@ async def generate_flashcards(request: FlashcardRequest, current_user: User = De
     
     # 1. Gemini Generation (Preferred)
     api_key = os.environ.get("GOOGLE_API_KEY")
+    print(f"DEBUG FLASHCARDS: API Key present? {bool(api_key)}")
     if api_key:
+        print(f"DEBUG FLASHCARDS: Attempting Gemini generation for topic_request={is_topic_request}")
         try:
             import google.generativeai as genai
             import json
@@ -314,11 +316,13 @@ async def generate_flashcards(request: FlashcardRequest, current_user: User = De
             else:
                 prompt = f"Extract exactly 20 flashcards from the following notes. Return valid JSON array of objects with 'front' and 'back' keys.\n\nNotes:\n{request.note_content[:4000]}"
 
+            print(f"DEBUG FLASHCARDS: Sending prompt to Gemini...")
             response = model.generate_content(
                 prompt,
                 generation_config={"response_mime_type": "application/json"}
             )
             
+            print(f"DEBUG FLASHCARDS: Got response from Gemini, parsing...")
             data = json.loads(response.text)
             # data is usually the array directly or an object, Gemini follows schema well but lets handle both
             if isinstance(data, list):
@@ -330,6 +334,7 @@ async def generate_flashcards(request: FlashcardRequest, current_user: User = De
 
             # Formate response
             cards = [{"id": f"card-{i}", "front": c["front"], "back": c["back"]} for i, c in enumerate(cards_data)]
+            print(f"DEBUG FLASHCARDS: Successfully generated {len(cards)} cards")
             return {"flashcards": cards}
             
         except Exception as e:
@@ -337,6 +342,9 @@ async def generate_flashcards(request: FlashcardRequest, current_user: User = De
             print(f"DEBUG: Gemini Flashcard Gen Failed. Error: {e}")
             print(f"DEBUG: Traceback: {traceback.format_exc()}")
             # Fallthrough to mock
+            
+    else:
+        print("DEBUG FLASHCARDS: No API key found, using mock data")
             
     # 2. Mock Logic (Fallback)
     if is_topic_request:
