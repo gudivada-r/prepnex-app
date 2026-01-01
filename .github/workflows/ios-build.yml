@@ -69,7 +69,8 @@ jobs:
             -allowProvisioningUpdates \
             -authenticationKeyID ${{ secrets.APP_STORE_CONNECT_KEY_ID }} \
             -authenticationKeyIssuerID ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }} \
-            -authenticationKeyPath `pwd`/AuthKey.p8
+            -authenticationKeyPath `pwd`/AuthKey.p8 \
+            DEVELOPMENT_TEAM=${{ secrets.APPLE_TEAM_ID }}
 
       - name: Export IPA
         run: |
@@ -80,7 +81,8 @@ jobs:
             -allowProvisioningUpdates \
             -authenticationKeyID ${{ secrets.APP_STORE_CONNECT_KEY_ID }} \
             -authenticationKeyIssuerID ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }} \
-            -authenticationKeyPath `pwd`/AuthKey.p8
+            -authenticationKeyPath `pwd`/AuthKey.p8 \
+            DEVELOPMENT_TEAM=${{ secrets.APPLE_TEAM_ID }}
 
       - name: Upload to TestFlight
         uses: apple-actions/upload-testflight-build@v1
