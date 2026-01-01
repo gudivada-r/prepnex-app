@@ -3,34 +3,31 @@ default_platform(:ios)
 platform :ios do
   desc "Push a new release build to the App Store (TestFlight)"
   lane :release do
-    # 1. Provide the App Store Connect API Key
-    api_key = app_store_connect_api_key(
+    # 1. Use the built-in action to create the API key
+    key = app_store_connect_api_key(
       key_id: ENV["APP_STORE_CONNECT_KEY_ID"],
       issuer_id: ENV["APP_STORE_CONNECT_ISSUER_ID"],
       key_content: ENV["APP_STORE_CONNECT_KEY_CONTENT"],
-      duration: 1200,
-      in_house: false
+      is_key_content_base64: false
     )
 
-    # 2. Get the certificates and profiles automatically
-    cert(api_key: api_key)
-    sigh(
-      api_key: api_key,
-      app_identifier: "com.studentsuccess.navigator",
-      force: true
+    # 2. Get the certificates and profiles
+    get_certificates(api_key: key)
+    get_provisioning_profile(
+      api_key: key,
+      app_identifier: "com.studentsuccess.navigator"
     )
 
     # 3. Build the app
-    gym(
+    build_app(
       project: "frontend/ios/App/App.xcodeproj",
       scheme: "App",
       export_method: "app-store",
       output_directory: "output",
-      output_name: "App.ipa",
-      export_team_id: ENV["APPLE_TEAM_ID"]
+      output_name: "App.ipa"
     )
 
     # 4. Upload to TestFlight
-    pilot(api_key: api_key)
+    upload_to_testflight(api_key: key)
   end
 end
