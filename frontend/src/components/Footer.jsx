@@ -42,6 +42,14 @@ const Footer = ({ onNavigate }) => {
                     >
                         SLA
                     </a>
+                    <a
+                        href="#"
+                        onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('support'); }}
+                        style={{ textDecoration: 'none', color: '#64748b', transition: 'color 0.2s' }}
+                        className="footer-link"
+                    >
+                        Support
+                    </a>
                 </div>
 
                 {/* Copyright */}

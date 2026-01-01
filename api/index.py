@@ -183,10 +183,33 @@ if not BACKEND_LOADED:
     @app.post("/api/auth/login")
     def login_fallback():
         from fastapi import HTTPException
-        import sqlmodel, pydantic
-        error_msg = f"Backend failed to load. Error: {BACKEND_ERROR}. Env: SQLModel={sqlmodel.__version__}, Pydantic={pydantic.VERSION}"
-        print(error_msg)
+        import traceback
+        
+        error_details = {
+            "message": "Backend failed to load",
+            "backend_error": BACKEND_ERROR,
+            "solution": "Check Vercel deployment logs and ensure all dependencies are installed"
+        }
+        
+        print(f"Login attempt failed - Backend not loaded: {BACKEND_ERROR}")
+        
         raise HTTPException(
-            status_code=500, 
-            detail=error_msg
+            status_code=503,  # Service Unavailable is more appropriate than 500
+            detail=error_details
         )
+    
+    @app.get("/api/backend-status")
+    def backend_status():
+        """Diagnostic endpoint to check backend loading status"""
+        import sys
+        return {
+            "backend_loaded": BACKEND_LOADED,
+            "backend_error": BACKEND_ERROR,
+            "python_version": sys.version,
+            "sys_path": sys.path[:3],  # First 3 paths for brevity
+            "environment": {
+                "has_database_url": bool(os.getenv("DATABASE_URL")),
+                "has_google_api_key": bool(os.getenv("GOOGLE_API_KEY"))
+            }
+        }
+

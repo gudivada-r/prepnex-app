@@ -1,13 +1,13 @@
-# Exclude heavy files and directories
-backend/venv/
-backend/__pycache__/
-backend/app/__pycache__/
-backend/app/agent/__pycache__/
-backend/app/integrations/__pycache__/
-backend/*.pyc
-backend/database.db
-backend/*.log
-backend_log.txt
+**/venv/
+**/__pycache__/
+**/*.pyc
+**/*.db
+**/*.log
+**/node_modules/
+**/dist/
+frontend/ios/
+frontend/android/
+app_store_screenshots/
 
 # Exclude test files
 backend/test_*.py
@@ -29,6 +29,8 @@ frontend/.vite/
 frontend/android/
 frontend/ios/
 frontend/resources/
+app_store_screenshots/
+resize_screenshots.py
 
 # Exclude git and config
 .git/

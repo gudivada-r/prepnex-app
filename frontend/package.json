@@ -6,11 +6,13 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:ios": "vite build && npx cap sync ios",
     "lint": "eslint .",
     "preview": "vite preview",
     "mobile:sync": "npm run build && npx cap sync",
     "mobile:open:ios": "npx cap open ios",
-    "mobile:open:android": "npx cap open android"
+    "mobile:open:android": "npx cap open android",
+    "cap:update": "npx cap update ios"
   },
   "dependencies": {
     "@capacitor/android": "^8.0.0",

@@ -24,6 +24,7 @@ import SLA from './legal/SLA';
 import Footer from './Footer';
 import FacultyDashboard from './FacultyDashboard';
 import DegreeRoadmap from './DegreeRoadmap';
+import Support from './Support';
 
 
 import {
@@ -585,6 +586,7 @@ const Dashboard = () => {
                     {/* Admin */}
                     {/* Main Features */}
                     {activeTab === 'degree-roadmap' && <DegreeRoadmap />}
+                    {activeTab === 'support' && <Support onBack={() => setActiveTab('dashboard')} />}
                     {activeTab === 'adminPanel' && userData?.is_admin && <AdminPanel />}
 
                     {activeTab !== 'chat' && <Footer onNavigate={(tab) => setActiveTab(tab)} />}

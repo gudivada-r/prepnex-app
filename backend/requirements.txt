@@ -2,9 +2,7 @@ fastapi
 uvicorn
 sqlmodel
 langgraph
-langchain
-langchain_community
-langchain_openai
+langchain-core
 python-jose[cryptography]
 passlib[bcrypt]
 python-multipart
