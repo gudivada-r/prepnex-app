@@ -1,7 +1,6 @@
 # No platform block to avoid scoping issues
 lane :release do
   # 1. Create the API key
-  # We use the built-in action but store it in a variable
   api_key = app_store_connect_api_key(
     key_id: ENV["APP_STORE_CONNECT_KEY_ID"],
     issuer_id: ENV["APP_STORE_CONNECT_ISSUER_ID"],
@@ -13,20 +12,28 @@ lane :release do
   cert(api_key: api_key)
 
   # 3. Get Provisioning Profile (App Store)
+  # This sets the ENV["SIGH_UUID"] variable
   sigh(
     api_key: api_key,
     app_identifier: "com.studentsuccess.navigator",
+    team_id: ENV["APPLE_TEAM_ID"],
     force: true
   )
 
   # 4. Build the App (.ipa)
+  # We explicitly map the bundle ID to the profile UUID we just downloaded
   gym(
     project: "frontend/ios/App/App.xcodeproj",
     scheme: "App",
     export_method: "app-store",
     output_directory: "output",
     output_name: "App.ipa",
-    xcargs: "-sdk iphoneos -destination 'generic/platform=iOS'"
+    xcargs: "PROVISIONING_PROFILE_SPECIFIER=#{ENV['SIGH_UUID']} DEVELOPMENT_TEAM=#{ENV['APPLE_TEAM_ID']} -sdk iphoneos -destination 'generic/platform=iOS'",
+    export_options: {
+      provisioningProfiles: {
+        "com.studentsuccess.navigator" => ENV["SIGH_UUID"]
+      }
+    }
   )
 
   # 5. Upload to TestFlight
