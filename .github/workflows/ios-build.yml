@@ -32,9 +32,8 @@ jobs:
         working-directory: ./frontend
         run: npx cap sync ios
 
-      - name: Install Cocoapods
-        working-directory: ./frontend/ios/App
-        run: pod install
+      # No Podfile found, assuming SPM is used for dependencies.
+
 
       - name: Prepare API Key
         run: echo "${{ secrets.APP_STORE_CONNECT_KEY_CONTENT }}" > AuthKey.p8
