@@ -12,6 +12,7 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [fullName, setFullName] = useState('');
     const [isRegistering, setIsRegistering] = useState(false);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleAuth = async (e) => {
@@ -21,6 +22,7 @@ const Login = () => {
             ? { email, password_hash: password, full_name: fullName }
             : new URLSearchParams({ username: email, password: password });
 
+        setLoading(true);
         try {
             const config = isRegistering ? {} : { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } };
             const response = await api.post(endpoint, payload, config);
@@ -38,6 +40,8 @@ const Login = () => {
             const url = error.config ? error.config.url : "Unknown";
             const detail = error.response?.data?.detail || error.message;
             alert(`Authentication failed!\nStatus: ${status}\nURL: ${url}\nError: ${detail}`);
+        } finally {
+            setLoading(false);
         }
     };
 
