@@ -32,6 +32,12 @@ jobs:
         working-directory: ./frontend
         run: npx cap sync ios
 
+      - name: Strip macOS Detritus
+        run: |
+          find . -name "*.png" -exec xattr -c {} \; || true
+          find . -name "*.storyboard" -exec xattr -c {} \; || true
+          find . -name "*.xcassets" -exec xattr -c {} \; || true
+
       - name: Install Bundler
         run: gem install bundler
 
