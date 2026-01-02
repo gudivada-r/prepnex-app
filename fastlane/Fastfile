@@ -1,9 +1,21 @@
 lane :release do
-  # 0. Setup Temporary Keychain for CI
-  # This avoids the "Permissions" popup hanging the build
-  setup_ci
+  # 1. Manual Keychain Setup (Bulletproof method for remote CI)
+  keychain_name = "ios_build_keychain"
+  keychain_password = "build_password"
+  
+  # Ensure we start fresh
+  delete_keychain(name: keychain_name) if File.exist?("#{Dir.home}/Library/Keychains/#{keychain_name}-db")
+  
+  create_keychain(
+    name: keychain_name,
+    password: keychain_password,
+    default_keychain: true,
+    unlock: true,
+    timeout: 0, # Never lock again during this session
+    add_to_search_list: true
+  )
 
-  # 1. Create the API key
+  # 2. Create the API key
   key = app_store_connect_api_key(
     key_id: ENV["APP_STORE_CONNECT_KEY_ID"],
     issuer_id: ENV["APP_STORE_CONNECT_ISSUER_ID"],
@@ -11,7 +23,8 @@ lane :release do
     is_key_content_base64: false
   )
 
-  # 2. Get Certificates and Profiles
+  # 3. Get Certificates and Profiles
+  # cert will now install into our 'ios_build_keychain' automatically
   cert(api_key: key)
   sigh(
     api_key: key,
@@ -20,7 +33,7 @@ lane :release do
     force: true
   )
 
-  # 3. Force settings at the project level
+  # 4. Force settings at the project level
   update_code_signing_settings(
     use_automatic_signing: false,
     path: "frontend/ios/App/App.xcodeproj",
@@ -30,7 +43,7 @@ lane :release do
     team_id: ENV["APPLE_TEAM_ID"]
   )
 
-  # 4. Build the App with explicit overrides
+  # 5. Build the App
   build_app(
     project: "frontend/ios/App/App.xcodeproj",
     scheme: "App",
@@ -38,14 +51,9 @@ lane :release do
     output_directory: "output",
     output_name: "App.ipa",
     clean: false,
-    xcargs: "DEVELOPMENT_TEAM=#{ENV['APPLE_TEAM_ID']} PROVISIONING_PROFILE_SPECIFIER=#{ENV['SIGH_UUID']} CODE_SIGN_STYLE=Manual -sdk iphoneos -destination 'generic/platform=iOS' ENABLE_BITCODE=NO",
-    export_options: {
-      provisioningProfiles: {
-        "com.studentsuccess.navigator" => ENV["SIGH_UUID"]
-      }
-    }
+    xcargs: "DEVELOPMENT_TEAM=#{ENV['APPLE_TEAM_ID']} PROVISIONING_PROFILE_SPECIFIER=#{ENV['SIGH_UUID']} CODE_SIGN_STYLE=Manual -sdk iphoneos -destination 'generic/platform=iOS' ENABLE_BITCODE=NO"
   )
 
-  # 5. Upload to TestFlight
+  # 6. Upload to TestFlight
   upload_to_testflight(api_key: key)
 end
