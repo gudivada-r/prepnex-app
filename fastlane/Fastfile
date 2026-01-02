@@ -1,21 +1,7 @@
+lane :release do
   # 0. CI Setup (Configures keychain, timeouts, etc. automatically)
   setup_ci
 
-  # 1. Manual Keychain Setup
-  keychain_name = "ios_build_keychain"
-  keychain_password = "build_password"
-  keychain_path = File.expand_path("~/Library/Keychains/#{keychain_name}-db")
-  
-  # ... (Existing auth and cleanup code matches, verify snippet context)
-  
-  delete_keychain(name: keychain_name) if File.exist?(keychain_path)
-  # ...
-
-  # 6. Build the App
-  build_app(
-    project: "frontend/ios/App/App.xcodeproj",
-    scheme: "App",
-    export_method: "app-store",
   # 1. Authenticate
   key = app_store_connect_api_key(
     key_id: ENV["APP_STORE_CONNECT_KEY_ID"],
@@ -24,7 +10,7 @@
     is_key_content_base64: false
   )
 
-  # 1.1 Ensure App ID exists
+  # 1.1 Ensure App ID exists (Fix for clean accounts)
   produce(
     app_identifier: "com.studentsuccess.navigator",
     app_name: "StudentSuccess",
@@ -34,11 +20,8 @@
   )
 
   # 2. Cleanup Old Certs (Avoid Max Limit)
-  # Since CI does not persist the private key, old certs are useless. 
-  # We revoke them to free up the 3-slot limit.
   puts "Automated Cleanup: Checking for certificates to revoke..."
   Spaceship::ConnectAPI::Certificate.all.each do |c|
-    # Check for distribution types
     if c.certificate_type == "DISTRIBUTION" || c.certificate_type == "IOS_DISTRIBUTION"
       puts "Revoking old certificate: #{c.id} (#{c.name})"
       c.delete!
@@ -73,11 +56,11 @@
     export_method: "app-store",
     output_directory: "output",
     output_name: "App.ipa",
-    clean: false,
-    build_path: "build",
-    derived_data_path: "derived_data",
+    clean: true,
+    # derived_data_path: "derived_data", # Let Fastlane handle this
     xcargs: "DEVELOPMENT_TEAM=#{ENV['APPLE_TEAM_ID']} PROVISIONING_PROFILE_SPECIFIER=#{ENV['SIGH_UUID']} CODE_SIGN_STYLE=Manual -sdk iphoneos -destination 'generic/platform=iOS' ENABLE_BITCODE=NO",
     export_options: {
+      compileBitcode: false,
       provisioningProfiles: {
         "com.studentsuccess.navigator" => ENV["SIGH_UUID"]
       }
