@@ -31,7 +31,7 @@ import Subscription from './Subscription';
 import {
     LayoutDashboard, MessageSquare, Calendar, BookOpen,
     TrendingUp, User, Settings, LogOut, Clock,
-    Users, FileText, Heart, GraduationCap, ChevronRight, Edit3, Menu, X, Shield, History as HistoryIcon, Brain, ScanLine, Mic, ShieldAlert, AlertTriangle, Briefcase, Map
+    Users, FileText, Heart, GraduationCap, ChevronRight, Edit3, Menu, X, Shield, History as HistoryIcon, Brain, ScanLine, Mic, ShieldAlert, AlertTriangle, Briefcase, Map, CreditCard
 } from 'lucide-react';
 
 import { motion } from 'framer-motion';
