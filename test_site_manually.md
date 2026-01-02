@@ -6,13 +6,13 @@
 - ✅ **All Fixes Applied**: stripe dependency, import order, module pre-loading
 
 ## Current Issue
-⚠️ **Investigating Blank Page**: I have updated `vercel.json` to point assets to the root (fixing a potential 404 error).
-I also injected a **Debug Script** into `index.html`.
+⚠️ **Fixing 404 Error**: The previous deployment caused a 404 because the build output IS namespaced under `/frontend/`.
+I have restored the `/frontend/` prefix in `vercel.json` but kept the SPA fix.
 
 ## 🔧 **Next Steps:**
 1. **Refresh the page** after deployment finishes.
-2. If you see a **Red Error Message**, please copy-paste it here.
-3. If the site works, great!
+2. The 404 should be gone.
+3. If it is still blank, my **Red Error Screen** (added in previous step) should tell us why.
 
 ### Option 1: Hard Refresh (Try This First!)
 1. Open: https://studentsuccess-nu.vercel.app/
