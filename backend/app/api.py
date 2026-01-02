@@ -6,7 +6,7 @@ import os
 import stripe
 from pydantic import BaseModel
 
-from app.auth import get_session, create_access_token, get_password_hash, verify_password, get_current_user
+from app.auth import get_session, create_access_token, get_password_hash, verify_password, get_current_user, get_admin_user
 from app.models import ChatSession, ChatMessage, Tutor, User, StudentHold
 from datetime import datetime
 from app.integrations.lms.canvas import CanvasService
@@ -981,7 +981,6 @@ async def delete_tutor(
 # --- Admin Outreach & Campaigns ---
 
 from app.models import Campaign
-from app.auth import get_admin_user
 
 @router.get("/admin/students")
 async def get_admin_students(
