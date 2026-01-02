@@ -55,16 +55,13 @@ lane :release do
   )
 
   # 5. Fix Project Settings
-  update_code_signing_settings(
-    use_automatic_signing: false,
-    targets: ["App"], 
-    path: "frontend/ios/App/App.xcodeproj",
-    bundle_identifier: "com.studentsuccess.navigator",
-    code_sign_identity: "Apple Distribution",
-    profile_uuid: ENV["SIGH_UUID"],
-    team_id: ENV["APPLE_TEAM_ID"]
-  )
-
+  # update_code_signing_settings(...) # Disabled, using sed instead to avoid pbxproj corruption
+  
+  # 5.1 Inject Team ID (Raw Text Replacement)
+  # Fresh Capacitor projects have empty Team ID. We inject it manually.
+  sh("sed -i '' 's/DEVELOPMENT_TEAM = \"\";/DEVELOPMENT_TEAM = #{ENV['APPLE_TEAM_ID']};/g' frontend/ios/App/App.xcodeproj/project.pbxproj || true")
+  sh("sed -i '' 's/bundleIdentifier = \"com.example.app\";/bundleIdentifier = \"com.studentsuccess.navigator\";/g' frontend/ios/App/App.xcodeproj/project.pbxproj || true")
+  
   # 5.5 Allow codesign to access the keychain without prompt (Crucial for CI)
   sh("security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k #{keychain_password} #{keychain_path}")
 
