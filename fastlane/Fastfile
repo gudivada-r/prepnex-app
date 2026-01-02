@@ -15,6 +15,11 @@ lane :release do
     add_to_search_list: true
   )
 
+  # 1.5 Install WWDR Certificates (Essential for Trust Chain)
+  # CI environments often lack these, causing "Untrusted Certificate" errors during signing.
+  sh("curl -f -o AppleWWDRCAG3.cer https://www.apple.com/certificateauthority/AppleWWDRCAG3.cer && security import AppleWWDRCAG3.cer -k #{keychain_path} -T /usr/bin/codesign")
+  sh("curl -f -o AppleWWDRCAG6.cer https://www.apple.com/certificateauthority/AppleWWDRCAG6.cer && security import AppleWWDRCAG6.cer -k #{keychain_path} -T /usr/bin/codesign")
+
   # 2. Authenticate
   key = app_store_connect_api_key(
     key_id: ENV["APP_STORE_CONNECT_KEY_ID"],
