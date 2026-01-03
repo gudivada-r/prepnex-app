@@ -452,22 +452,76 @@ class TexasAnalyzeRequest(BaseModel):
     typeId: int
     name: str
 
+class TexasReport(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    inst_id: str
+    name: str
+    sector: str
+    data_json: str # Storing JSON as string for simplicity on SQLite/Postgres compatibility
+    ai_insight: str
+    last_updated: datetime = Field(default_factory=datetime.utcnow)
+
+# Ensure table exists (Quick migration for Vercel)
+try:
+    SQLModel.metadata.create_all(engine)
+except:
+    pass
+
 @app.post("/api/texas/analyze")
 def analyze_texas_college(req: TexasAnalyzeRequest):
-    """Fetches metrics and generates Gemini insights for a college."""
+    """
+    Fetches metrics and generates Gemini insights for a college.
+    Strategy: Check DB first -> If missing, Scrape & Save.
+    """
     if not texas_scraper:
         return {"error": "Texas Module not active"}
-        
-    # 1. Fetch Metrics
+    
+    # 1. Check Database
+    try:
+        from sqlmodel import Session, select
+        with Session(engine) as session:
+            existing = session.exec(select(TexasReport).where(TexasReport.inst_id == req.instId)).first()
+            if existing:
+                # Return cached data
+                # TODO: Add logic to refresh if > 30 days
+                return {
+                    "college": existing.name,
+                    "data_summary": json.loads(existing.data_json),
+                    "ai_insight": existing.ai_insight,
+                    "source": "database"
+                }
+    except Exception as db_e:
+        print(f"DB Read Error: {db_e}")
+
+    # 2. Scrape Live
     data = texas_scraper.fetch_college_metrics(req.instId, req.sector, req.typeId)
     
-    # 2. Analyze
+    # 3. Analyze
     insight = texas_scraper.generate_insights(req.name, data)
+    
+    # 4. Save to DB
+    try:
+        from sqlmodel import Session
+        with Session(engine) as session:
+            # Upsert logic (Delete old if exists)
+            # For now, just create new or ignore
+            new_report = TexasReport(
+                inst_id=req.instId,
+                name=req.name,
+                sector=req.sector,
+                data_json=json.dumps(data),
+                ai_insight=insight
+            )
+            session.add(new_report)
+            session.commit()
+    except Exception as save_e:
+        print(f"DB Save Error: {save_e}")
     
     return {
         "college": req.name,
         "data_summary": data, 
-        "ai_insight": insight
+        "ai_insight": insight,
+        "source": "live_scrape"
     }
 
 

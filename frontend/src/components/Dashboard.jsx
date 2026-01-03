@@ -7,6 +7,7 @@ import TutoringCenter from './TutoringCenter';
 import Courses from './Courses';
 import WellnessCheck from './WellnessCheck';
 import StudyTimer from './StudyTimer';
+import TexasAnalytics from './TexasAnalytics';
 import DropAddForms from './DropAddForms';
 import Progress from './Progress';
 import History from './History';
@@ -601,6 +602,8 @@ const Dashboard = () => {
                             </div>
                         </div>
                     )}
+
+                    {activeTab === 'analytics' && <TexasAnalytics />}
 
                     {activeTab === 'history' && <History onSelectSession={(id) => handleFeatureNavigate('chat', null, id)} />}
 
