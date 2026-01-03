@@ -34,17 +34,26 @@
   --safe-area-inset-left: env(safe-area-inset-left);
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  min-height: 100dvh; /* Modern mobile fix */
+  min-height: 100dvh;
+  /* Modern mobile fix */
   background-color: var(--bg-color);
   color: var(--text-primary);
-  overflow: hidden;
-  /* Prevent body scroll, let specific containers scroll */
+  overflow-x: hidden;
+  /* Prevent horizontal scroll */
+  overflow-y: hidden;
+  /* Let root handle vertical scroll */
   /* iOS safe area support */
   padding-top: var(--safe-area-inset-top);
   padding-bottom: var(--safe-area-inset-bottom);
@@ -55,7 +64,8 @@ body {
 #root {
   width: 100%;
   height: 100vh;
-  height: 100dvh; /* Modern mobile fix */
+  height: 100dvh;
+  /* Modern mobile fix */
   display: flex;
   flex-direction: column;
 }
@@ -80,7 +90,8 @@ body {
     position: fixed;
     left: 0;
     top: 0;
-    height: 100dvh; /* Stable full height */
+    height: 100dvh;
+    /* Stable full height */
     transform: translateX(-100%);
     width: 280px !important;
     /* Fixed width for drawer */
@@ -88,7 +99,8 @@ body {
     z-index: 1000 !important;
     /* Ensure it is on top */
     padding: 1rem;
-    padding-top: calc(1rem + var(--safe-area-inset-top)); /* Respect notch */
+    padding-top: calc(1rem + var(--safe-area-inset-top));
+    /* Respect notch */
   }
 
   .sidebar.open {
@@ -101,7 +113,8 @@ body {
     inset: 0;
     height: 100dvh;
     background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px); /* Premium blur effect */
+    backdrop-filter: blur(4px);
+    /* Premium blur effect */
     z-index: 999;
     display: none;
     transition: opacity 0.3s;
