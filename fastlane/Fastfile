@@ -72,10 +72,9 @@ lane :release do
   sh("security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k #{keychain_password} #{keychain_path}")
 
   # 5.6 Ensure unique build number (Timestamp based to avoid duplicates)
-  increment_build_number(
-    build_number: Time.now.to_i.to_s
-  )
-
+  # increment_build_number failed due to missing Project settings.
+  # We override CURRENT_PROJECT_VERSION directly in build arguments instead.
+  
   # 6. Build the App
   build_app(
     workspace: "frontend/ios/App/App.xcworkspace", # Use workspace for CocoaPods (Capacitor 6+)
@@ -87,8 +86,9 @@ lane :release do
     suppress_xcode_output: false, # Show full log for debugging Exit Code 65
     # derived_data_path: "derived_data", # Let Fastlane handle this
     # Don't pass PROVISIONING_PROFILE_SPECIFIER globally in xcargs, it breaks Pods!
-    # TARGETED_DEVICE_FAMILY=1 forces iPhone Only (removes iPad requirement)
-    xcargs: "-sdk iphoneos -destination 'generic/platform=iOS' ENABLE_BITCODE=NO TARGETED_DEVICE_FAMILY=1",
+    # TARGETED_DEVICE_FAMILY=1 forces iPhone Only
+    # CURRENT_PROJECT_VERSION overrides the build number with timestamp
+    xcargs: "-sdk iphoneos -destination 'generic/platform=iOS' ENABLE_BITCODE=NO TARGETED_DEVICE_FAMILY=1 CURRENT_PROJECT_VERSION=#{Time.now.to_i}",
     export_options: {
       signingStyle: "manual",
       compileBitcode: false,
