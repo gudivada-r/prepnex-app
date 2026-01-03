@@ -531,7 +531,7 @@ const Dashboard = () => {
                     {/* Responsive Padding adjustment */}
                     <style>{`
                         @media (max-width: 768px) {
-                            .main - content {
+                            .main-content {
                             padding: ${activeTab === 'chat' ? 0 : '1rem'} !important;
                         padding-top: calc(5rem + env(safe-area-inset-top)) !important;
                             }
@@ -544,12 +544,12 @@ const Dashboard = () => {
                         gap: 1rem !important;
                             }
                         .edit-btn-wrapper {
-                            grid - column: 1 / -1 !important;
+                            grid-column: 1 / -1 !important;
                         justify-content: center !important;
                         margin-bottom: 0.5rem !important;
                             }
                         .stat-card-glass {
-                            margin - bottom: 0 !important;
+                            margin-bottom: 0 !important;
                         width: 100% !important;
                             }
                         }
