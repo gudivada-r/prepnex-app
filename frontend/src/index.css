@@ -40,6 +40,13 @@
   box-sizing: border-box;
 }
 
+html {
+  width: 100%;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  /* Prevent font zooming on rotation */
+}
+
 body {
   margin: 0;
   display: flex;

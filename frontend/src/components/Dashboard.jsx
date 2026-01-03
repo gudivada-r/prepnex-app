@@ -479,24 +479,25 @@ const Dashboard = () => {
     return (
         <div style={{ display: 'flex', height: '100vh', height: '100dvh', background: '#f8fafc', flexDirection: 'column' }}>
             {/* Mobile Header - Only visible on small screens */}
+            {/* Mobile Header - Only visible on small screens */}
             <div className="mobile-only" style={{
-                padding: 'calc(2.5rem + env(safe-area-inset-top)) 1rem 1rem 1rem',
-                background: 'rgba(255, 255, 255, 0.9)',
+                padding: 'calc(2rem + env(safe-area-inset-top)) 1rem 1rem 1rem',
+                background: 'rgba(255, 255, 255, 0.95)',
                 backdropFilter: 'blur(12px)',
                 WebkitBackdropFilter: 'blur(12px)',
                 borderBottom: '1px solid rgba(226, 232, 240, 0.8)',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                zIndex: 30,
-                position: 'sticky',
-                top: 0
+                zIndex: 50,
+                width: '100%',
+                flexShrink: 0
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <div style={{ padding: '0px', borderRadius: '8px' }}>
                         <img src={logoAsset} alt="Logo" style={{ width: '28px', height: '28px', borderRadius: '4px' }} />
                     </div>
 
-                    <span style={{ fontWeight: '700', fontSize: '1.2rem' }}>Navigator</span>
+                    <span style={{ fontWeight: '700', fontSize: '1.2rem', color: '#0f172a' }}>Navigator</span>
                 </div>
                 <button onClick={() => setIsMobileMenuOpen(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#1e293b' }}>
                     <Menu size={24} />
