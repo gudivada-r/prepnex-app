@@ -296,3 +296,126 @@ if not BACKEND_LOADED:
             }
         }
 
+@app.get("/api/admin/seed_demo_g")
+def seed_demo_user_g():
+    """
+    Seeds a rich demo user 'g@student.org' for App Store Review / Demo purposes.
+    Includes: Courses (History/Planned), Holds, Alerts, Financials, etc.
+    """
+    try:
+        from app.auth import engine, get_password_hash
+        from sqlmodel import Session, select
+        from app.models import (
+            User, Course, StudentHold, Scholarship, MarketplaceItem, 
+            Mentorship, StudyGroup
+        )
+        from datetime import datetime, timedelta
+
+        log = []
+        
+        with Session(engine) as session:
+            # 1. Create/Update User
+            user = session.exec(select(User).where(User.email == "g@student.org")).first()
+            if not user:
+                user = User(
+                    email="g@student.org",
+                    password_hash=get_password_hash("demo123"),
+                    full_name="Greg Demo",
+                    major="Computer Science",
+                    gpa=3.5,
+                    on_track_score=88,
+                    background="Transfer Student interested in AI",
+                    interests="Robotics, Machine Learning, Guitar",
+                    ai_insight="You are performing strongly in CS core classes but check your math requirements."
+                )
+                session.add(user)
+                session.commit()
+                session.refresh(user)
+                log.append("Created user g@student.org")
+            else:
+                log.append("User g@student.org already exists")
+
+            # 2. Clear existing data for this user to avoid duplicates if run multiple times
+            # (Optional: for now we just append/check existence to be safe)
+            
+            # 3. Courses (Degree Roadmap)
+            # Completed
+            if not session.exec(select(Course).where(Course.user_id == user.id, Course.code == "CS101")).first():
+                session.add(Course(user_id=user.id, name="Intro to Programming", code="CS101", grade="A", credits=4, suggestion="Completed"))
+            if not session.exec(select(Course).where(Course.user_id == user.id, Course.code == "MATH101")).first():
+                session.add(Course(user_id=user.id, name="Calculus I", code="MATH101", grade="B+", credits=4, suggestion="Completed"))
+            
+            # In Progress
+            if not session.exec(select(Course).where(Course.user_id == user.id, Course.code == "CS201")).first():
+                session.add(Course(user_id=user.id, name="Data Structures", code="CS201", grade="In Progress", credits=3, suggestion="Current"))
+            if not session.exec(select(Course).where(Course.user_id == user.id, Course.code == "MATH201")).first():
+                session.add(Course(user_id=user.id, name="Linear Algebra", code="MATH201", grade="In Progress", credits=3, suggestion="Current"))
+
+            # Planned (AI Auto-Plan demo)
+            if not session.exec(select(Course).where(Course.user_id == user.id, Course.code == "CS301")).first():
+                session.add(Course(user_id=user.id, name="Algorithms", code="CS301", grade="Planned", credits=3, suggestion="Fall 2026"))
+            if not session.exec(select(Course).where(Course.user_id == user.id, Course.code == "CS402")).first():
+                session.add(Course(user_id=user.id, name="Machine Learning", code="CS402", grade="Planned", credits=3, suggestion="Spring 2027"))
+
+            log.append("Seeded courses")
+
+            # 4. Holds & Alerts (Dashboard/Signals)
+            if not session.exec(select(StudentHold).where(StudentHold.user_id == user.id, StudentHold.title == "Tuition Balance")).first():
+                session.add(StudentHold(
+                    user_id=user.id, 
+                    item_type="hold", 
+                    category="Financial", 
+                    title="Tuition Balance", 
+                    description="Outstanding balance for Spring semester.", 
+                    amount=4500.00, 
+                    status="active",
+                    due_date=datetime.utcnow() + timedelta(days=15)
+                ))
+            
+            if not session.exec(select(StudentHold).where(StudentHold.user_id == user.id, StudentHold.title == "Midterm Alert")).first():
+                session.add(StudentHold(
+                    user_id=user.id, 
+                    item_type="alert", 
+                    category="Academic", 
+                    title="Midterm Alert", 
+                    description="Prof. Smith flagged low attendance in Linear Algebra.", 
+                    amount=0, 
+                    status="active"
+                ))
+
+            log.append("Seeded holds/alerts")
+
+            # 5. Marketplace & Social (Social Campus)
+            # Create a dummy seller if needed, or just let Greg sell something
+            if not session.exec(select(MarketplaceItem).where(MarketplaceItem.seller_id == user.id)).first():
+                session.add(MarketplaceItem(
+                    seller_id=user.id,
+                    seller_name=user.full_name,
+                    title="Used Calculus Textbook",
+                    price=45.00,
+                    condition="Good",
+                    status="available"
+                ))
+            
+            # 6. Scholarships (Financial Nexus)
+            if not session.exec(select(Scholarship).where(Scholarship.provider == "Tech Foundation")).first():
+                session.add(Scholarship(
+                    title="Future Tech Leader Grant",
+                    description="For students demonstrating excellence in CS.",
+                    amount=2500.00,
+                    deadline=datetime.utcnow() + timedelta(days=60),
+                    requirements="GPA > 3.5, CS Major",
+                    category="Merit",
+                    provider="Tech Foundation"
+                ))
+            
+            session.commit()
+            log.append("Seeded Marketplace and Scholarships")
+
+        return {"status": "success", "log": log, "user": "g@student.org", "password": "demo123"}
+
+    except Exception as e:
+        import traceback
+        return {"status": "error", "message": str(e), "traceback": traceback.format_exc()}
+
+
