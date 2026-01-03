@@ -2,6 +2,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import os
 import sys
+from datetime import datetime
+from typing import Optional
+from sqlmodel import SQLModel, Field
 
 # Create a minimal FastAPI app
 app = FastAPI(title="Student Success API - Minimal")
