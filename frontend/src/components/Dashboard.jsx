@@ -530,8 +530,6 @@ const Dashboard = () => {
                 >
                     {/* Responsive Padding adjustment */}
                     <style>{`
-                    {/* Responsive Styles */}
-                    <style>{`
                         @media (max-width: 768px) {
                             .main - content {
                             padding: ${activeTab === 'chat' ? 0 : '1rem'} !important;
