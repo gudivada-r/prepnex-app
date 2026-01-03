@@ -70,9 +70,10 @@
     .login-wrapper {
         flex-direction: column;
         padding: 1.5rem;
-        justify-content: flex-start;
+        justify-content: center;
+        /* Better centering */
         min-height: 100vh;
-        min-height: -webkit-fill-available;
+        min-height: 100dvh;
         /* iOS Safari fix */
     }
 
