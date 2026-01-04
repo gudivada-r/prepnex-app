@@ -165,7 +165,7 @@ const Sidebar = ({ activeTab, onTabChange, userData, isOpen, onClose }) => {
 
                         {/* Legal Footer */}
                         <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #f1f5f9', fontSize: '0.65rem', color: '#94a3b8' }}>
-                            <div style={{ marginBottom: '0.25rem' }}>© 2025 Student Success</div>
+                            <div style={{ marginBottom: '0.25rem' }}>© 2026 Student Success (v1.1 CIP)</div>
                             <div style={{ display: 'flex', gap: '12px' }}>
                                 <span onClick={() => handleProtectedTab('privacy')} style={{ cursor: 'pointer', textDecoration: 'none', hover: { textDecoration: 'underline' } }}>Privacy</span>
                                 <span onClick={() => handleProtectedTab('msa')} style={{ cursor: 'pointer', textDecoration: 'none', hover: { textDecoration: 'underline' } }}>MSA</span>
