@@ -2,8 +2,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import os
 import sys
-from datetime import datetime
-from typing import Optional
+from datetime import datetime, timedelta
+from typing import Optional, List
+from api.cip_codes import CIPCode, refresh_cip_database
 from sqlmodel import SQLModel, Field
 
 # Create a minimal FastAPI app
@@ -430,7 +431,7 @@ try:
         # Fallback for module execution
         try:
             from api.texas_analytics import TexasAccountabilityScraper
-from api.cip_codes import CIPCode, refresh_cip_database
+
         except ImportError:
             # Last resort: try standard import if in sys.path
             import texas_analytics as TexasAccountabilityScraper
