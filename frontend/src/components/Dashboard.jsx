@@ -8,6 +8,7 @@ import Courses from './Courses';
 import WellnessCheck from './WellnessCheck';
 import StudyTimer from './StudyTimer';
 import TexasAnalytics from './TexasAnalytics';
+import CIPExplorer from './CIPExplorer';
 import DropAddForms from './DropAddForms';
 import Progress from './Progress';
 import History from './History';
@@ -101,6 +102,7 @@ const Sidebar = ({ activeTab, onTabChange, userData, isOpen, onClose }) => {
                     <div className={`nav-item ${activeTab === 'courses' ? 'active' : ''}`} onClick={() => handleProtectedTab('courses')}><BookOpen size={20} /> Courses</div>
                     <div className={`nav-item ${activeTab === 'schedule' ? 'active' : ''}`} onClick={() => handleProtectedTab('schedule')}><Calendar size={20} /> Schedule</div>
                     <div className={`nav-item ${activeTab === 'syllabus' ? 'active' : ''}`} onClick={() => handleProtectedTab('syllabus')}><ScanLine size={20} /> Syllabus Scanner</div>
+                    <div className={`nav-item ${activeTab === 'cip' ? 'active' : ''}`} onClick={() => handleProtectedTab('cip')}><BookOpen size={20} /> CIP Codes</div>
                     <div className={`nav-item ${activeTab === 'voice-notes' ? 'active' : ''}`} onClick={() => handleProtectedTab('voice-notes')}><Mic size={20} /> Lecture Notes</div>
 
                     <div className="section-title">My Records</div>
@@ -605,6 +607,8 @@ const Dashboard = () => {
                     )}
 
                     {activeTab === 'analytics' && <TexasAnalytics />}
+
+                    {activeTab === 'cip' && <CIPExplorer />}
 
                     {activeTab === 'history' && <History onSelectSession={(id) => handleFeatureNavigate('chat', null, id)} />}
 

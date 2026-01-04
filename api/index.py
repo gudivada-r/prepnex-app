@@ -430,6 +430,7 @@ try:
         # Fallback for module execution
         try:
             from api.texas_analytics import TexasAccountabilityScraper
+from api.cip_codes import CIPCode, refresh_cip_database
         except ImportError:
             # Last resort: try standard import if in sys.path
             import texas_analytics as TexasAccountabilityScraper
@@ -530,9 +531,8 @@ def analyze_texas_college(req: TexasAnalyzeRequest):
 @app.get("/api/texas/cron/refresh")
 def cron_refresh_texas_data():
     """
-    Cron Job Endpoint: Refreshes outdated reports.
-    Scheduled: Monthly.
-    Limit: 5 colleges per run to avoid timeout.
+    CRON JOB Endpoint (e.g., Monthly).
+    Refreshes stale data for a few colleges to keep DB up to date.
     """
     if not texas_scraper:
         return {"status": "skipped", "reason": "module_not_loaded"}
@@ -551,12 +551,9 @@ def cron_refresh_texas_data():
             
             for report in stale_reports:
                 try:
-                    print(f"Refreshing {report.name}...")
-                    # Scrape
-                    # We need type_id. We only stored sector. 
-                    # We can infer type_id or store it in DB.
-                    # For now, approximate: universities=1, twoYear=2.
-                    type_id = 1 if report.sector == 'universities' else 2 
+                    # Refresh logic (simplified)
+                    type_id = 1 # Approximated/Default
+                    if report.sector == 'health-related': type_id = 2 
                     
                     data = texas_scraper.fetch_college_metrics(report.inst_id, report.sector, type_id)
                     insight = texas_scraper.generate_insights(report.name, data)
@@ -575,9 +572,33 @@ def cron_refresh_texas_data():
         return {"status": "error", "message": str(e)}
     
     return {
-        "status": "success",
+        "status": "success", 
         "updated": updated_count,
         "errors": errors
     }
+
+# --- CIP CODES API ---
+
+@app.get("/api/cip")
+def get_cip_codes(search: Optional[str] = None):
+    with Session(engine) as session:
+        query = select(CIPCode)
+        if search:
+            query = query.where(
+                (CIPCode.title.contains(search)) | 
+                (CIPCode.code.contains(search))
+            )
+        results = session.exec(query.limit(100)).all()
+        return results
+
+@app.post("/api/cip/refresh")
+def refresh_cip_codes_endpoint():
+    with Session(engine) as session:
+        try:
+            result = refresh_cip_database(session)
+            return result
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
+
 
 
