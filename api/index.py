@@ -603,3 +603,14 @@ def refresh_cip_codes_endpoint():
 
 
 
+
+@app.get("/api/cip/init")
+def init_cip_tables():
+    """Force creation of CIPCode table"""
+    try:
+        from app.auth import engine
+        print("Explicitly creating tables for CIP...")
+        SQLModel.metadata.create_all(engine)
+        return {"status": "Tables Created", "metadata_tables": list(SQLModel.metadata.tables.keys())}
+    except Exception as e:
+        return {"status": "Error", "detail": str(e)}
