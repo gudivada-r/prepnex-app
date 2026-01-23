@@ -50,6 +50,9 @@ const MOCK_CUSTOMER_INFO = {
     nonSubscriptionTransactions: [],
 };
 
+const API_KEY = "appl_uhitnXmAVGjaBgGgeolgvaTNffP";
+let isConfigured = false;
+
 const loadRevenueCat = async () => {
     // Check if we are Native
     const isNative = Capacitor.isNativePlatform();
@@ -73,20 +76,30 @@ const loadRevenueCat = async () => {
 };
 
 export const initializeIAP = async () => {
+    if (isConfigured) return;
+
     const p = await loadRevenueCat();
     if (p && !p.isMock) {
         try {
-            await p.configure({ apiKey: "appl_uhitnXmAVGjaBgGgeolgvaTNffP" });
+            await p.configure({ apiKey: API_KEY });
+            isConfigured = true;
             console.log("RevenueCat configured successfully");
         } catch (e) {
             console.error("RevenueCat configuration failed", e);
         }
     } else {
+        isConfigured = true;
         console.log("RevenueCat (Web Mock) Initialized");
     }
 };
 
 export const getRevenueCatOfferings = async () => {
+    // Safety Check: Ensure SDK is configured before fetching
+    if (!isConfigured) {
+        console.log("RevenueCat not configured yet, initializing now...");
+        await initializeIAP();
+    }
+
     const p = await loadRevenueCat();
     if (p) {
         if (p.isMock) {
