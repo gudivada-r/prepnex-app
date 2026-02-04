@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Capacitor } from '@capacitor/core';
 
 // Dynamic base URL
 const getBaseUrl = () => {
@@ -8,6 +9,11 @@ const getBaseUrl = () => {
     // Development Environment
     if (import.meta.env.MODE === 'development') {
         return 'http://localhost:8000';
+    }
+
+    // Native App (Robust Detection)
+    if (Capacitor.isNativePlatform()) {
+        return 'https://www.aumtech.ai';
     }
 
     // Native App (Capacitor/Ionic/File)
