@@ -108,9 +108,18 @@ export const getRevenueCatOfferings = async () => {
             return MOCK_OFFERINGS;
         }
         try {
-            return await p.getOfferings();
+            // Add Timeout Mechanism (5 seconds)
+            const timeout = new Promise((_, reject) =>
+                setTimeout(() => reject(new Error("Timeout fetching Key Offerings from Apple/RevenueCat")), 5000)
+            );
+            const offerings = await Promise.race([
+                p.getOfferings(),
+                timeout
+            ]);
+            return offerings;
         } catch (e) {
             console.error("Error getting offerings", e);
+            throw e; // Re-throw so the UI knows it failed
         }
     }
     return null;
