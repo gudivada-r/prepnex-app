@@ -13,21 +13,33 @@ const Subscription = ({ userData, onBack }) => {
     // Platform Detection
     const [isNative, setIsNative] = useState(Capacitor.isNativePlatform());
 
-    useEffect(() => {
-        const loadOfferings = async () => {
-            // Unified Loading: Works for Web (Mock) and Native (Real)
-            try {
-                const offerings = await getRevenueCatOfferings();
-                if (offerings && offerings.current && offerings.current.availablePackages.length > 0) {
-                    setPackages(offerings.current.availablePackages);
-                } else {
-                    console.warn("No IAP packages found.");
+    const loadOfferings = async () => {
+        setLoading(true);
+        // Unified Loading: Works for Web (Mock) and Native (Real)
+        try {
+            const offerings = await getRevenueCatOfferings();
+            console.log("Offerings fetched:", offerings);
+            if (offerings && offerings.current && offerings.current.availablePackages.length > 0) {
+                setPackages(offerings.current.availablePackages);
+            } else {
+                console.warn("No IAP packages found.");
+                if (isNative) {
+                    // Detailed debug for empty offerings (Common in Sandbox)
+                    // alert("DEBUG: Connected to RevenueCat, but 'current' offering is empty or has no packages. Check RevenueCat Console.");
                 }
-            } catch (e) {
-                console.error("Error fetching offerings", e);
-                setDebugError(e.message);
             }
-        };
+        } catch (e) {
+            console.error("Error fetching offerings", e);
+            setDebugError(e.message);
+            if (isNative) {
+                alert(`IAP Fetch Error: ${e.message}\nCode: ${e.code || 'Unknown'}`);
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
         loadOfferings();
     }, []);
 
@@ -192,9 +204,9 @@ const Subscription = ({ userData, onBack }) => {
 
                     {/* Retry Link for Native if Store is Unavailable (Helps if network was flakey during review) */}
                     {isNative && packages.length === 0 && !loading && (
-                         <div style={{ textAlign: 'center', marginTop: '0.75rem' }}>
+                        <div style={{ textAlign: 'center', marginTop: '0.75rem' }}>
                             <button
-                                onClick={() => window.location.reload()}
+                                onClick={loadOfferings}
                                 style={{ background: 'none', border: 'none', color: '#4f46e5', fontSize: '0.85rem', cursor: 'pointer', textDecoration: 'underline' }}
                             >
                                 Retry loading products
