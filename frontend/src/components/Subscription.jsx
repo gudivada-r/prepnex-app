@@ -206,7 +206,19 @@ const Subscription = ({ userData, onBack }) => {
                     {isNative && packages.length === 0 && !loading && (
                         <div style={{ textAlign: 'center', marginTop: '0.75rem' }}>
                             <button
-                                onClick={loadOfferings}
+                                onClick={async () => {
+                                    await loadOfferings();
+                                    // Diagnostic Test
+                                    if (isNative) {
+                                        try {
+                                            const { Purchases } = await import('@revenuecat/purchases-capacitor');
+                                            const products = await Purchases.getProducts({ productIdentifiers: ['Student_Success'] });
+                                            alert(`DIAGNOSTIC:\nDirect Fetch found ${products.products.length} products.\nID: ${products.products[0]?.identifier || 'None'}`);
+                                        } catch (e) {
+                                            alert(`DIAGNOSTIC FAILED: ${e.message}`);
+                                        }
+                                    }
+                                }}
                                 style={{ background: 'none', border: 'none', color: '#4f46e5', fontSize: '0.85rem', cursor: 'pointer', textDecoration: 'underline' }}
                             >
                                 Retry loading products
