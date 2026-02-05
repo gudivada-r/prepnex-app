@@ -79,7 +79,7 @@ const Sidebar = ({ activeTab, onTabChange, userData, isOpen, onClose }) => {
 
                         <div>
                             <h2 style={{ fontSize: '1.25rem', fontWeight: '800', margin: 0, lineHeight: 1.1 }}>Student Success</h2>
-                            <span style={{ fontSize: '0.85rem', color: '#64748b' }}>Navigator</span>
+                            <span style={{ fontSize: '0.85rem', color: '#64748b' }}>by AI Agents</span>
                         </div>
                     </div>
                     {/* Mobile Close Button */}
@@ -191,7 +191,7 @@ const DashboardHome = ({ onNavigate, userData, onEditStats }) => {
             >
                 <div style={{ flex: 1 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.5rem', opacity: 0.9 }}>
-                        <GraduationCap size={18} /> Your Academic Success Navigator
+                        <Brain size={18} /> Student Success by AI Agent
                     </div>
                     <h1 style={{ fontSize: '2.5rem', margin: '0.5rem 0 1rem 0', fontWeight: '700' }}>
                         Good afternoon, {userData?.full_name ? userData.full_name.split(' ')[0] : 'Student'}!
@@ -504,7 +504,7 @@ const Dashboard = () => {
                         <img src={logoAsset} alt="Logo" style={{ width: '28px', height: '28px', borderRadius: '4px' }} />
                     </div>
 
-                    <span style={{ fontWeight: '700', fontSize: '1.2rem', color: '#0f172a' }}>Navigator</span>
+                    <span style={{ fontWeight: '700', fontSize: '1.2rem', color: '#0f172a' }}>Student Success AI</span>
                 </div>
                 <button onClick={() => setIsMobileMenuOpen(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#1e293b' }}>
                     <Menu size={24} />
