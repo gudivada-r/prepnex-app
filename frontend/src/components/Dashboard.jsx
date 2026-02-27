@@ -72,8 +72,8 @@ const Sidebar = ({ activeTab, onTabChange, userData, isOpen, onClose }) => {
             <div className={`sidebar ${isOpen ? 'open' : ''}`}>
                 {/* Logo & Close Button */}
                 <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '2.5rem', paddingTop: '1rem' }}>
-                    <div style={{ padding: '4px', borderRadius: '10px' }}>
-                        <img src={logoAsset} alt="Logo" style={{ width: '120px', height: 'auto', borderRadius: '8px', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.1))' }} />
+                    <div style={{ padding: '0px', borderRadius: '10px' }}>
+                        <img src={logoAsset} alt="Logo" style={{ width: '200px', height: 'auto', borderRadius: '12px', filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.15))' }} />
                     </div>
 
                     <div style={{ textAlign: 'center', marginTop: '12px' }}>
