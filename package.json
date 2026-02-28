@@ -5,6 +5,6 @@
         "frontend"
     ],
     "scripts": {
-        "build": "npm run build --prefix frontend"
+        "build": "npm run build -w frontend"
     }
 }
