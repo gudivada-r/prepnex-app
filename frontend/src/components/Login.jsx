@@ -102,7 +102,7 @@ Error: ${detail}`);
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     margin: 0
-                }}>Student Success AI</h1>
+                }}>aumtech.ai | Student Success AI</h1>
                 <h2 style={{ color: '#a5b4fc', fontSize: '1.5rem', marginTop: '-0.5rem', marginBottom: '1.5rem', fontWeight: '600' }}>
                     Powered by AI Agents
                 </h2>

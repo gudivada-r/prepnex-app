@@ -1,0 +1,21 @@
+{
+    "name": "Aumtech.ai | Student Success Navigator",
+    "short_name": "Aumtech",
+    "description": "AI-powered academic, administrative, and wellness support for students.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#4f46e5",
+    "icons": [
+        {
+            "src": "/bookmark_logo.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/bookmark_logo.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
