@@ -18,11 +18,7 @@
             "destination": "/api/index.py"
         },
         {
-            "source": "/(sitemap.xml|robots.txt|manifest.json)",
-            "destination": "/$1"
-        },
-        {
-            "source": "/(.*)",
+            "source": "/((?!api|sitemap.xml|robots.txt|manifest.json|favicon.ico|assets/).*)",
             "destination": "/index.html"
         }
     ]
