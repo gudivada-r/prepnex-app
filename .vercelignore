@@ -27,7 +27,7 @@ _nav_stack_template/
 
 # Assets and screenshots
 app_store_screenshots/
-assets/
+/assets/
 frontend/ios/
 frontend/android/
 frontend/resources/
