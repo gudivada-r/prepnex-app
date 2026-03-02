@@ -18,7 +18,23 @@
             "destination": "/api/index.py"
         },
         {
-            "source": "/((?!api|sitemap.xml|robots.txt|manifest.json|favicon.ico|assets/).*)",
+            "source": "/sitemap.xml",
+            "destination": "/sitemap.xml"
+        },
+        {
+            "source": "/robots.txt",
+            "destination": "/robots.txt"
+        },
+        {
+            "source": "/manifest.json",
+            "destination": "/manifest.json"
+        },
+        {
+            "source": "/favicon.ico",
+            "destination": "/favicon.ico"
+        },
+        {
+            "source": "/(.*)",
             "destination": "/index.html"
         }
     ]
