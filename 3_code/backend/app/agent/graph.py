@@ -65,39 +65,45 @@ async def tutor_agent(state: AgentState):
         grade_context = "No grade data available yet (student may not have connected their LMS)."
 
     if api_key:
-        try:
-            genai.configure(api_key=api_key)
-            # Try the latest available model
-            model = genai.GenerativeModel('gemini-2.0-flash')
-            
-            prompt = f"""
-            You are an expert academic tutor and advisor at a university.
-            
-            Context:
-            - {grade_context}
-            - Institutional Knowledge: {rag_info}
-            - Conversation Context: {context_prefix}
-            
-            Student Query: "{last_msg}"
-            
-            Provide a helpful, encouraging, and specific response.
-            If grade data is available and grades are low, suggest specific actions based on the Institutional Knowledge.
-            If no grade data is available, still answer the question helpfully without mentioning grades.
-            Keep the tone supportive and concise.
-            """
-            
-            response = model.generate_content(prompt)
-            message = response.text
-        except Exception as e:
-            error_msg = str(e)
-            print(f"Agent AI Gen Failed: {error_msg}")
-            # Temporarily show the error so we can debug it
-            message = f"[DEBUG - Gemini Error]: {error_msg}"
+        genai.configure(api_key=api_key)
+        
+        # Try models in order of free tier availability
+        models_to_try = ['gemini-1.5-flash-8b', 'gemini-1.5-flash', 'gemini-2.0-flash']
+        message = None
+        
+        prompt = f"""
+        You are an expert academic tutor and advisor at a university.
+        
+        Context:
+        - {grade_context}
+        - Institutional Knowledge: {rag_info}
+        - Conversation Context: {context_prefix}
+        
+        Student Query: "{last_msg}"
+        
+        Provide a helpful, encouraging, and specific response.
+        If grade data is available and grades are low, suggest specific actions based on the Institutional Knowledge.
+        If no grade data is available, still answer the question helpfully without mentioning grades.
+        Keep the tone supportive and concise (2-4 sentences).
+        """
+        
+        for model_name in models_to_try:
+            try:
+                model = genai.GenerativeModel(model_name)
+                response = model.generate_content(prompt)
+                message = response.text
+                print(f"Gemini success with model: {model_name}")
+                break
+            except Exception as e:
+                print(f"Model {model_name} failed: {str(e)[:100]}")
+                continue
+        
+        if not message:
+            # All models hit quota — give a helpful answer from RAG
+            message = f"Here's what I know about your question: {rag_info} — Feel free to ask me anything about your courses, deadlines, or wellness!"
     else:
-        if grades:
-            message = f"{context_prefix}Based on your question about '{last_msg}', here is what I know: {rag_info}. Let's make a study plan!"
-        else:
-            message = f"{context_prefix}Great question! Here's what I know: {rag_info}. Feel free to ask me anything about your courses, deadlines, or wellness!"
+        message = f"Great question! Here's what I know: {rag_info}. Feel free to ask me anything about your courses, deadlines, or wellness!"
+
 
 
     
