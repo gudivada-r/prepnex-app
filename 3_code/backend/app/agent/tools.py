@@ -36,30 +36,35 @@ class LMSTool:
         self.canvas = CanvasService(base_url=base_url, access_token=token)
 
     async def get_student_grades(self, student_id: str) -> Dict:
-        """Fetch actual grades from the LMS (priority) or database."""
+        """Fetch grades from local DB (preferred), then Canvas if available."""
+        # 1. Try DB first — fastest and always works
         try:
-            # 1. Try Live LMS Fetch
-            if not self.canvas.is_mock:
-                print("Fetching live grades from Canvas...")
-                lms_grades = await self.canvas.get_course_grades()
-                if lms_grades:
-                    # Format for agent: "Math: 95% (A)"
-                    return {name: f"{data['score']}% ({data['grade']})" for name, data in lms_grades.items()}
-
-            # 2. Fallback to DB
             from app.auth import engine
             from app.models import Course
             with Session(engine) as session:
                 statement = select(Course).where(Course.user_id == int(student_id))
                 courses = session.exec(statement).all()
-                if not courses:
-                    # 3. Fallback to Mock Canvas data if DB is empty and no live connection
-                    mock_courses = await self.canvas.get_courses()
-                    return {c["name"]: "N/A" for c in mock_courses}
-                
-                return {c.name: c.grade for c in courses}
-        except Exception as e:
-            return {"Error": f"Could not fetch grades: {str(e)}"}
+                if courses:
+                    return {c.name: c.grade for c in courses}
+        except Exception as db_err:
+            print(f"DB grade lookup failed: {db_err}")
+
+        # 2. Try Canvas if DB is empty
+        try:
+            token = self.canvas.access_token
+            if token and token.strip():
+                print("Fetching live grades from Canvas...")
+                lms_grades = await self.canvas.get_course_grades()
+                if lms_grades:
+                    return {name: f"{data['score']}% ({data['grade']})" 
+                            for name, data in lms_grades.items()}
+        except Exception as canvas_err:
+            # Canvas is unavailable — silently ignore, the AI will answer Q&A without grade context
+            print(f"Canvas unavailable (will answer Q&A without grades): {canvas_err}")
+
+        # 3. No grades available — return empty so AI skips grade context
+        return {}
+
     
     async def get_upcoming_assignments(self, student_id: str) -> List[Dict]:
         """Fetch upcoming assignments from Canvas."""

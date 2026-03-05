@@ -57,33 +57,48 @@ async def tutor_agent(state: AgentState):
     
     # AI Generation
     api_key = os.environ.get("GOOGLE_API_KEY")
+
+    # Build grade context string — skip gracefully if no grades
+    if grades:
+        grade_context = "Student Grades: " + ", ".join([f"{k}: {v}" for k, v in grades.items()])
+    else:
+        grade_context = "No grade data available yet (student may not have connected their LMS)."
+
     if api_key:
         try:
             genai.configure(api_key=api_key)
-            model = genai.GenerativeModel('gemini-flash-latest')
+            model = genai.GenerativeModel('gemini-1.5-flash')
             
             prompt = f"""
-            You are an expert academic tutor and advisor.
+            You are an expert academic tutor and advisor at a university.
             
             Context:
-            - Student Grades: {grades}
+            - {grade_context}
             - Institutional Knowledge: {rag_info}
             - Conversation Context: {context_prefix}
             
             Student Query: "{last_msg}"
             
-            Provide a helpful, encouraging, and specific response. 
-            If their grades are low, suggest specific actions based on the "Institutional Knowledge".
-            Keep the tone supportive.
+            Provide a helpful, encouraging, and specific response.
+            If grade data is available and grades are low, suggest specific actions based on the Institutional Knowledge.
+            If no grade data is available, still answer the question helpfully without mentioning grades.
+            Keep the tone supportive and concise.
             """
             
             response = model.generate_content(prompt)
             message = response.text
         except Exception as e:
             print(f"Agent AI Gen Failed: {e}")
-            message = f"{context_prefix}I see your grades are: {grades}. Based on '{last_msg}', here is some info: {rag_info}. Let's make a study plan."
+            if grades:
+                message = f"{context_prefix}Based on your question about '{last_msg}', here is what I know: {rag_info}. Let's make a study plan!"
+            else:
+                message = f"{context_prefix}Great question! Here's what I know: {rag_info}. Feel free to ask me anything about your courses, deadlines, or wellness!"
     else:
-        message = f"{context_prefix}I see your grades are: {grades}. Based on '{last_msg}', here is some info: {rag_info}. Let's make a study plan."
+        if grades:
+            message = f"{context_prefix}Based on your question about '{last_msg}', here is what I know: {rag_info}. Let's make a study plan!"
+        else:
+            message = f"{context_prefix}Great question! Here's what I know: {rag_info}. Feel free to ask me anything about your courses, deadlines, or wellness!"
+
     
     return {
         "messages": [AIMessage(content=message)],
