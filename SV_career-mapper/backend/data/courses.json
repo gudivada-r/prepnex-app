@@ -1,0 +1,57 @@
+[
+    {
+        "id": 1,
+        "code": "CS101",
+        "name": "Intro to Data Science",
+        "description": "Foundations of data analysis, python programming, and statistical modeling.",
+        "skills": [
+            "Python",
+            "Data Analysis",
+            "Machine Learning"
+        ]
+    },
+    {
+        "id": 2,
+        "code": "ENG202",
+        "name": "Modern Rhetoric",
+        "description": "Analysis of persuasive communication in digital media and public discourse.",
+        "skills": [
+            "Public Relations",
+            "Content Strategy",
+            "Digital Marketing"
+        ]
+    },
+    {
+        "id": 3,
+        "code": "BIO305",
+        "name": "Molecular Biology",
+        "description": "Study of biological activity at the molecular level, including DNA, RNA, and protein synthesis.",
+        "skills": [
+            "Biotechnology",
+            "Lab Research",
+            "Genetics"
+        ]
+    },
+    {
+        "id": 4,
+        "code": "MKT401",
+        "name": "Digital Marketing Analytics",
+        "description": "Using data to drive marketing decisions and measure campaign performance.",
+        "skills": [
+            "Google Analytics",
+            "SQL",
+            "Market Research"
+        ]
+    },
+    {
+        "id": 5,
+        "code": "PSY150",
+        "name": "Organizational Psychology",
+        "description": "Applying psychological principles to workplace productivity and employee well-being.",
+        "skills": [
+            "Human Resources",
+            "Conflict Resolution",
+            "Employee Training"
+        ]
+    }
+]

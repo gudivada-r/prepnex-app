@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">StudentSuccess</string>
+    <string name="title_activity_main">StudentSuccess</string>
+    <string name="package_name">com.studentsuccess.navigator</string>
+    <string name="custom_url_scheme">com.studentsuccess.navigator</string>
+</resources>

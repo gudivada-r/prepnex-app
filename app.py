@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from datetime import datetime
 from fetch_grants import fetch_education_grants
 
 # Set page config
@@ -53,15 +54,20 @@ win_prob = st.sidebar.slider(
 # --- Data Fetching Section ---
 st.header("Latest Education Grants")
 
-if st.button("Refresh Data"):
+if st.button("Refresh Data", type="primary"):
     with st.spinner("Fetching latest grants from Grants.gov..."):
         grants = fetch_education_grants()
         st.session_state['grants'] = grants
+        st.session_state['last_updated'] = datetime.now()
 elif 'grants' not in st.session_state:
     # Initial load
     with st.spinner("Fetching latest grants from Grants.gov..."):
         grants = fetch_education_grants()
         st.session_state['grants'] = grants
+        st.session_state['last_updated'] = datetime.now()
+
+if 'last_updated' in st.session_state:
+    st.caption(f"Last updated: {st.session_state['last_updated'].strftime('%Y-%m-%d %H:%M:%S')}")
 
 grants = st.session_state.get('grants', [])
 

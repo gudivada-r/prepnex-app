@@ -73,7 +73,7 @@ def fetch_education_grants():
 
         # Sort by date (newest first) and take top 10
         # Note: 'published' is a string, might need parsing for strict sorting, but RSS is usually ordered.
-        return education_grants[:10]
+        return education_grants
 
     except Exception as e:
         print(f"Error fetching grants: {e}")
