@@ -4,10 +4,10 @@
   "webDir": "dist",
   "bundledWebRuntime": false,
   "server": {
-    "url": "https://studentsuccess-nu.vercel.app",
+    "url": "https://www.aumtech.ai",
     "androidScheme": "https",
     "iosScheme": "https",
-    "hostname": "app.studentsuccess.local",
+    "hostname": "app.aumtech.ai",
     "cleartext": false
   },
   "ios": {
