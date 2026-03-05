@@ -118,7 +118,22 @@ def admin_agent(state: AgentState):
     calendar = calendar_tool.check_calendar(state["student_id"])
     policy = rag_tool.query(query, category="admin")
     
-    message = f"Regarding '{query}': {policy}. Upcoming deadlines: {calendar}"
+    # Format calendar events cleanly
+    calendar_text = ""
+    if calendar:
+        events = []
+        for item in calendar:
+            try:
+                from datetime import datetime
+                dt = datetime.fromisoformat(item['time'])
+                events.append(f"• {item['event']} — {dt.strftime('%A, %b %d at %I:%M %p')}")
+            except Exception:
+                events.append(f"• {item['event']}")
+        calendar_text = "\n".join(events)
+    
+    message = f"Regarding your question: {policy}"
+    if calendar_text:
+        message += f"\n\nUpcoming deadlines:\n{calendar_text}"
     
     return {
         "messages": [AIMessage(content=message)],
@@ -128,6 +143,7 @@ def admin_agent(state: AgentState):
             "action_items": []
         }
     }
+
 
 def wellness_agent(state: AgentState):
     """
