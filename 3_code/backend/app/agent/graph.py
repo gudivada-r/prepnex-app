@@ -35,7 +35,7 @@ def router_node(state: AgentState):
         return {"next_step": "tutor"}
 
 import os
-import google.generativeai as genai
+import httpx
 
 async def tutor_agent(state: AgentState):
     """
@@ -65,42 +65,43 @@ async def tutor_agent(state: AgentState):
         grade_context = "No grade data available yet (student may not have connected their LMS)."
 
     if api_key:
-        genai.configure(api_key=api_key)
-        
-        # Try models in order of free tier availability
-        models_to_try = ['gemini-1.5-flash-8b', 'gemini-1.5-flash', 'gemini-2.0-flash']
+        # Call Gemini REST API directly — bypasses library version issues
+        models_to_try = ['gemini-1.5-flash-8b', 'gemini-1.5-flash', 'gemini-1.5-pro']
         message = None
         
-        prompt = f"""
-        You are an expert academic tutor and advisor at a university.
-        
-        Context:
-        - {grade_context}
-        - Institutional Knowledge: {rag_info}
-        - Conversation Context: {context_prefix}
-        
-        Student Query: "{last_msg}"
-        
-        Provide a helpful, encouraging, and specific response.
-        If grade data is available and grades are low, suggest specific actions based on the Institutional Knowledge.
-        If no grade data is available, still answer the question helpfully without mentioning grades.
-        Keep the tone supportive and concise (2-4 sentences).
-        """
-        
+        prompt_text = f"""You are an expert academic tutor and advisor at a university.
+
+Context:
+- {grade_context}
+- Institutional Knowledge: {rag_info}
+- Conversation Context: {context_prefix}
+
+Student Query: "{last_msg}"
+
+Provide a helpful, encouraging, and specific response in 2-4 sentences.
+If grade data is available and grades are low, suggest specific actions.
+If no grade data is available, answer helpfully without mentioning grades."""
+
         for model_name in models_to_try:
             try:
-                model = genai.GenerativeModel(model_name)
-                response = model.generate_content(prompt)
-                message = response.text
-                print(f"Gemini success with model: {model_name}")
-                break
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={api_key}"
+                payload = {
+                    "contents": [{"parts": [{"text": prompt_text}]}],
+                    "generationConfig": {"maxOutputTokens": 512, "temperature": 0.7}
+                }
+                async with httpx.AsyncClient(timeout=20.0) as client:
+                    resp = await client.post(url, json=payload)
+                    resp.raise_for_status()
+                    data = resp.json()
+                    message = data["candidates"][0]["content"]["parts"][0]["text"]
+                    print(f"Gemini REST success with model: {model_name}")
+                    break
             except Exception as e:
-                print(f"Model {model_name} failed: {str(e)[:100]}")
+                print(f"Gemini REST {model_name} failed: {str(e)[:150]}")
                 continue
-        
+
         if not message:
-            # All models hit quota — give a helpful answer from RAG
-            message = f"Here's what I know about your question: {rag_info} — Feel free to ask me anything about your courses, deadlines, or wellness!"
+            message = f"Here's what I know: {rag_info} — Feel free to ask me anything about your courses, deadlines, or wellness!"
     else:
         message = f"Great question! Here's what I know: {rag_info}. Feel free to ask me anything about your courses, deadlines, or wellness!"
 
