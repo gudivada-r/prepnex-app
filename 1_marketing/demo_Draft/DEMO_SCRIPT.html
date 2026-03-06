@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>aumtech.ai — Demo Script</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #0B0E27;
+            --surface: #131630;
+            --surface2: #1b1f42;
+            --accent: #7c6dfa;
+            --accent2: #a78bfa;
+            --gold: #f59e0b;
+            --text: #e2e8f0;
+            --muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
+            --scene-colors: #6366f1, #8b5cf6, #0ea5e9, #10b981, #f59e0b, #ef4444, #ec4899, #3b82f6, #14b8a6, #f97316, #84cc16, #a855f7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background: linear-gradient(135deg, #0B0E27, #261644);
+            border-bottom: 1px solid var(--border);
+            padding: 2.5rem 3rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+        }
+
+        header .logo-pill {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border-radius: 14px;
+            padding: 10px 18px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            white-space: nowrap;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #fff, #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        /* ===== MAIN LAYOUT ===== */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 3rem 2rem 6rem;
+        }
+
+        /* ===== TIMING BAR ===== */
+        .timing-bar {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+        }
+
+        .timing-bar h2 {
+            grid-column: 1 / -1;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .time-chip {
+            background: var(--surface2);
+            border-radius: 10px;
+            padding: 0.65rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .time-chip .label {
+            font-size: 0.7rem;
+            color: var(--muted);
+        }
+
+        .time-chip .val {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--accent2);
+        }
+
+        .time-chip.total {
+            background: linear-gradient(135deg, rgba(124, 109, 250, 0.2), rgba(167, 139, 250, 0.15));
+            border: 1px solid rgba(124, 109, 250, 0.3);
+        }
+
+        .time-chip.total .val {
+            color: var(--gold);
+            font-size: 1.1rem;
+        }
+
+        /* ===== SCENE CARD ===== */
+        .scene {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .scene:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .scene-header {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            padding: 1.25rem 1.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .scene-number {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1rem;
+            flex-shrink: 0;
+            color: #fff;
+        }
+
+        .scene-title {
+            flex: 1;
+        }
+
+        .scene-title h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .scene-title .screen-note {
+            font-size: 0.78rem;
+            color: var(--muted);
+            font-style: italic;
+        }
+
+        .scene-duration {
+            background: var(--surface2);
+            padding: 0.3rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--gold);
+            white-space: nowrap;
+        }
+
+        .scene-body {
+            padding: 1.75rem;
+        }
+
+        .narration {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 3px solid var(--accent);
+            border-radius: 0 10px 10px 0;
+            padding: 1.25rem 1.5rem;
+        }
+
+        .narration p {
+            margin-bottom: 0.75rem;
+            font-size: 0.97rem;
+            line-height: 1.75;
+        }
+
+        .narration p:last-child {
+            margin-bottom: 0;
+        }
+
+        .pause-note {
+            display: inline-block;
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--gold);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 6px;
+            padding: 0.15rem 0.6rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin: 0.25rem 0;
+        }
+
+        /* ===== SUMMARY TABLE ===== */
+        .summary-section {
+            margin-top: 3rem;
+        }
+
+        .summary-section h2 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--accent2);
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--surface);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--surface2);
+            padding: 0.85rem 1.25rem;
+            text-align: left;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        td {
+            padding: 0.85rem 1.25rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        tr:last-child td {
+            background: rgba(124, 109, 250, 0.1);
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        /* ===== NOTES BOX ===== */
+        .notes-box {
+            margin-top: 2rem;
+            background: var(--surface);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            border-radius: 16px;
+            padding: 1.75rem;
+        }
+
+        .notes-box h2 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #10b981;
+            margin-bottom: 1rem;
+        }
+
+        .notes-box ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .notes-box li {
+            font-size: 0.9rem;
+            display: flex;
+            gap: 0.75rem;
+            align-items: baseline;
+        }
+
+        .notes-box li::before {
+            content: '→';
+            color: #10b981;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        code {
+            background: var(--surface2);
+            padding: 0.1rem 0.45rem;
+            border-radius: 5px;
+            font-size: 0.85em;
+            color: var(--accent2);
+            font-family: 'Courier New', monospace;
+        }
+
+        /* ===== PRINT ===== */
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+
+            header {
+                background: white;
+                border-bottom: 2px solid #333;
+            }
+
+            .scene {
+                border: 1px solid #ccc;
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo-pill">aumtech.ai</div>
+        <div>
+            <h1>Demo Script — Student Success Navigator</h1>
+            <p>Full walkthrough · 12 scenes · ~9 min 30 sec · Narrated live demo</p>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- Timing Summary Bar -->
+        <div class="timing-bar">
+            <h2>⏱ Scene Timing at a Glance</h2>
+            <div class="time-chip"><span class="label">01 Intro</span><span class="val">45s</span></div>
+            <div class="time-chip"><span class="label">02 Sign In</span><span class="val">30s</span></div>
+            <div class="time-chip"><span class="label">03 Dashboard</span><span class="val">60s</span></div>
+            <div class="time-chip"><span class="label">04 AI Navigator</span><span class="val">90s</span></div>
+            <div class="time-chip"><span class="label">05 Courses</span><span class="val">60s</span></div>
+            <div class="time-chip"><span class="label">06 Tutoring</span><span class="val">90s</span></div>
+            <div class="time-chip"><span class="label">07 Wellness</span><span class="val">45s</span></div>
+            <div class="time-chip"><span class="label">08 Holds</span><span class="val">45s</span></div>
+            <div class="time-chip"><span class="label">09 Financial Aid</span><span class="val">60s</span></div>
+            <div class="time-chip"><span class="label">10 Social Campus</span><span class="val">45s</span></div>
+            <div class="time-chip"><span class="label">11 Admin Panel</span><span class="val">60s</span></div>
+            <div class="time-chip"><span class="label">12 Closing</span><span class="val">45s</span></div>
+            <div class="time-chip total"><span class="label">⏱ Total Runtime</span><span class="val">~9m 30s</span>
+            </div>
+        </div>
+
+        <!-- SCENE 01 -->
+        <div class="scene">
+            <div class="scene-header">
+                <div class="scene-number" style="background:linear-gradient(135deg,#6366f1,#818cf8);">01</div>
+                <div class="scene-title">
+                    <h3>Introduction — Hook</h3>
+                    <div class="screen-note">🖥 Screen: Login page — aumtech.ai logo, deep blue background</div>
+                </div>
+                <div class="scene-duration">45 sec</div>
+            </div>
+            <div class="scene-body">
+                <div class="narration">
+                    <p>"For decades, higher education has been the last frontier untouched by the AI revolution.</p>
+                    <p>Healthcare got diagnostic AI. Finance got algorithmic intelligence. Legal got contract
+                        automation. But the place where human potential is shaped the most — the university — has been
+                        left behind, running on spreadsheets, siloed portals, and overburdened advisors who simply
+                        cannot give every student the attention they deserve.</p>
+                    <p>Until now.</p>
+                    <p>Meet <strong>aumtech.ai</strong> — the world's first <em>Agentic Student Success Platform</em>.
+                        Not a chatbot. Not a dashboard. An intelligent academic operating system that thinks alongside
+                        every student, every day — from enrollment to graduation.</p>
+                    <p>We are not adding AI to education. We are <em>rebuilding the student experience from the ground
+                            up with AI at its core.</em></p>
+                    <p>What you are about to see is a live, fully deployed system — handling real academic advising,
+                        intelligent tutoring triage, financial aid matching, and institutional analytics — all powered
+                        by Google Gemini and built for universities at scale.</p>
+                    <p>Let's go."</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCENE 02 -->
+    <div class="scene">
+        <div class="scene-header">
+            <div class="scene-number" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);">02</div>
+            <div class="scene-title">
+                <h3>Sign In &amp; First Impression</h3>
+                <div class="screen-note">🖥 Screen: Login form — type credentials → click Sign In → Dashboard loads
+                </div>
+            </div>
+            <div class="scene-duration">30 sec</div>
+        </div>
+        <div class="scene-body">
+            <div class="narration">
+                <p>"The sign-in experience is clean and professional. Students log in with their university
+                    credentials.</p>
+                <p>What happens next is immediate — our AI backend instantly loads their personalized profile:
+                    courses, GPA trends, outstanding holds, and a dynamically generated AI insight — all before the
+                    page even finishes rendering."</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCENE 03 -->
+    <div class="scene">
+        <div class="scene-header">
+            <div class="scene-number" style="background:linear-gradient(135deg,#0ea5e9,#38bdf8);">03</div>
+            <div class="scene-title">
+                <h3>Dashboard Overview</h3>
+                <div class="screen-note">🖥 Screen: Main Dashboard — AI greeting card, On-Track Score, Quick
+                    Actions, sidebar</div>
+            </div>
+            <div class="scene-duration">60 sec</div>
+        </div>
+        <div class="scene-body">
+            <div class="narration">
+                <p>"Welcome to the Student Dashboard. The very first thing a student sees is a warm, personalized
+                    greeting from the AI Navigator — noticing the time of day, their academic progress, and
+                    surfacing the most important action items right away.</p>
+                <p>In the center, we have the On-Track Score — a real-time metric reflecting GPA, assignment
+                    completion, holds status, and wellness across all courses.</p>
+                <p>Quick Actions give one-click access to the most common student needs: checking holds, booking an
+                    advisor, or starting an AI conversation.</p>
+                <p>On the left sidebar, the navigation panel organizes everything across five categories: Home,
+                    Academics, Resources, Campus Life, and Administrative. No hunting around. Everything is exactly
+                    where you expect it."</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCENE 04 -->
+    <div class="scene">
+        <div class="scene-header">
+            <div class="scene-number" style="background:linear-gradient(135deg,#10b981,#34d399);">04</div>
+            <div class="scene-title">
+                <h3>AI Navigator Chat</h3>
+                <div class="screen-note">🖥 Screen: Click 'AI Navigator' → chat opens → type question → AI responds
+                </div>
+            </div>
+            <div class="scene-duration">90 sec</div>
+        </div>
+        <div class="scene-body">
+            <div class="narration">
+                <p>"At the heart of aumtech.ai is the AI Navigator — a conversational academic agent powered by
+                    Google Gemini.</p>
+                <p>This isn't a generic chatbot. It knows this student. It has access to their enrolled courses, GPA
+                    history, and academic calendar. Watch this.</p>
+                <p>I'll ask: 'I failed my Calculus midterm — what should I do?'</p>
+                <span class="pause-note">⏸ pause — wait for AI response</span>
+                <p>Incredible. In seconds, the AI analyzed the student's full academic context, identified Calculus
+                    II as the struggling course, recommended booking a tutoring session, flagged an upcoming retake
+                    opportunity, and suggested the appropriate academic petition form — all in natural language.</p>
+                <p>Every conversation is saved in the chat history panel. Students can return to prior sessions,
+                    pick up exactly where they left off, and export key advice. This is truly a next-generation
+                    academic advising experience — available 24/7, not just during office hours."</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCENE 05 -->
+    <div class="scene">
+        <div class="scene-header">
+            <div class="scene-number" style="background:linear-gradient(135deg,#f59e0b,#fbbf24);">05</div>
+            <div class="scene-title">
+                <h3>Courses &amp; Degree Roadmap</h3>
+                <div class="screen-note">🖥 Screen: Click 'Courses' → course list → then click 'Degree Roadmap'
+                </div>
+            </div>
+            <div class="scene-duration">60 sec</div>
+        </div>
+        <div class="scene-body">
+            <div class="narration">
+                <p>"Under Academics, students get a crystal-clear view of every course they are taking — grades,
+                    credit hours, and AI-generated improvement suggestions appear automatically.</p>
+                <p>But we go further. Click on the Degree Roadmap — and now the student sees their entire academic
+                    journey laid out visually. Which credits are complete. Which are in progress. What's missing
+                    before they can graduate.</p>
+                <p>No more mysterious holds about missing prerequisites. The AI Navigator proactively surfaces gaps
+                    before they become problems."</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCENE 06 -->
+    <div class="scene">
+        <div class="scene-header">
+            <div class="scene-number" style="background:linear-gradient(135deg,#ef4444,#f87171);">06</div>
+            <div class="scene-title">
+                <h3>Tutoring Center — Intelligent Triage</h3>
+                <div class="screen-note">🖥 Screen: Click 'Tutoring Center' → sync roster → select course → enter
+                    triage note → book</div>
+            </div>
+            <div class="scene-duration">90 sec</div>
+        </div>
+        <div class="scene-body">
+            <div class="narration">
+                <p>"One of aumtech.ai's most powerful features is the intelligent Tutoring System, built on what we
+                    call 'Roster Truth' — the system syncs directly with the university's LMS, whether it's Canvas
+                    or Blackboard, to know exactly which courses a student is enrolled in.</p>
+                <p>Watch what happens when a student tries to book a session.</p>
+                <span class="pause-note">⏸ click Sync Roster</span>
+                <p>Their full course schedule — CS101, Calculus II, Academic Writing — all verified live from the
+                    LMS.</p>
+                <p>Now they select Intro to Computer Science, enter a triage note: 'I am struggling with Python
+                    Lists', and attach a screenshot of their error.</p>
+                <span class="pause-note">⏸ click Book Appointment</span>
+                <p>In under two seconds, three things happen simultaneously: Our AI analyzes the triage note and
+                    generates a concise Brief for the Teaching Assistant. Our Round Robin load balancer assigns the
+                    TA with the lowest current workload. And a confirmation email is sent to the student.</p>
+                <p>This is not just scheduling. This is intelligent academic triage at scale." </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCENE 07 -->
+    <div class="scene">
+        <div class="scene-header">
+            <div class="scene-number" style="background:linear-gradient(135deg,#ec4899,#f472b6);">07</div>
+            <div class="scene-title">
+                <h3>Wellness Check &amp; Study Timer</h3>
+                <div class="screen-note">🖥 Screen: Click 'Wellness' → answer survey → click 'Study Timer'</div>
+            </div>
+            <div class="scene-duration">45 sec</div>
+        </div>
+        <div class="scene-body">
+            <div class="narration">
+                <p>"aumtech.ai doesn't just track grades — it cares about the whole student.</p>
+                <p>The Wellness Check-In is a brief, thoughtful survey. Responses are processed by the AI to
+                    personalize recommendations — a study break, a campus resource, or a gentle nudge toward
+                    counseling services.</p>
+                <p>And for students who need focus, the Study Timer provides a built-in Pomodoro-style productivity
+                    tool. Session data is even factored into the on-track score."</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCENE 08 -->
+    <div class="scene">
+        <div class="scene-header">
+            <div class="scene-number" style="background:linear-gradient(135deg,#3b82f6,#60a5fa);">08</div>
+            <div class="scene-title">
+                <h3>Holds &amp; Alerts Center</h3>
+                <div class="screen-note">🖥 Screen: Click 'Holds &amp; Alerts' → active hold cards with descriptions
+                </div>
+            </div>
+            <div class="scene-duration">45 sec</div>
+        </div>
+        <div class="scene-body">
+            <div class="narration">
+                <p>"One of the biggest sources of student frustration is the mystery hold — a financial or
+                    administrative block that prevents registration, with zero explanation of how to resolve it.</p>
+                <p>aumtech.ai's Holds Center shows every active hold in plain language: what it is, why it exists,
+                    how much is owed if applicable, and exactly what the student needs to do to resolve it. One
+                    click initiates resolution — no more emailing three different offices to figure out why you
+                    can't register."</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCENE 09 -->
+    <div class="scene">
+        <div class="scene-header">
+            <div class="scene-number" style="background:linear-gradient(135deg,#14b8a6,#2dd4bf);">09</div>
+            <div class="scene-title">
+                <h3>Financial Aid Nexus &amp; Scholarships</h3>
+                <div class="screen-note">🖥 Screen: Click 'Financial Aid Nexus' → scholarships list → click AI Match
+                    → Draft Statement</div>
+            </div>
+            <div class="scene-duration">60 sec</div>
+        </div>
+        <div class="scene-body">
+            <div class="narration">
+                <p>"Financial stress is one of the top reasons students drop out. aumtech.ai tackles this head-on
+                    with the Financial Aid Nexus.</p>
+                <p>The platform surfaces available scholarships tailored to the student's profile. Click 'AI Match',
+                    and Gemini instantly analyzes the student's GPA, major, background, and interests against every
+                    available scholarship — ranking them by fit with a personal explanation.</p>
+                <p>Even more powerful: click 'Draft Statement', and the AI writes a personalized, professional
+                    scholarship essay — ready to review and submit. What used to take days of writing now takes
+                    seconds."</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCENE 10 -->
+    <div class="scene">
+        <div class="scene-header">
+            <div class="scene-number" style="background:linear-gradient(135deg,#f97316,#fb923c);">10</div>
+            <div class="scene-title">
+                <h3>Social Campus</h3>
+                <div class="screen-note">🖥 Screen: Click 'Social Campus' → Study Groups tab → Marketplace tab</div>
+            </div>
+            <div class="scene-duration">45 sec</div>
+        </div>
+        <div class="scene-body">
+            <div class="narration">
+                <p>"College is not just academics — it's community. The Social Campus module connects students with
+                    each other.</p>
+                <p>The Study Buddy Finder matches students taking the same courses so they can form groups and study
+                    together. The Peer Mentoring hub lets upperclassmen offer guidance to incoming students.</p>
+                <p>And the Textbook Marketplace? Students can buy and sell textbooks directly within the platform —
+                    no third-party sites, no awkward meetups."</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCENE 11 -->
+    <div class="scene">
+        <div class="scene-header">
+            <div class="scene-number" style="background:linear-gradient(135deg,#84cc16,#a3e635);">11</div>
+            <div class="scene-title">
+                <h3>Admin Panel &amp; Dean's Analytics</h3>
+                <div class="screen-note">🖥 Screen: Click 'Admin Panel' → risk dashboard → create campaign →
+                    Tutoring Analytics</div>
+            </div>
+            <div class="scene-duration">60 sec</div>
+        </div>
+        <div class="scene-body">
+            <div class="narration">
+                <p>"Now let's flip to the administrator view — what university leadership and advising staff see.
+                </p>
+                <p>The Admin Panel gives leadership a live dashboard of every student, ranked by academic risk. High
+                    GPA students are flagged green. Students in trouble are flagged red, with full context.</p>
+                <p>From here, admins can launch targeted outreach campaigns in a single click — select at-risk
+                    students in a specific major, write a message, send — and the system logs every campaign with
+                    full audit trails.</p>
+                <p>And through the Tutoring Analytics dashboard, the Dean can see which courses have the highest
+                    demand, which topics students struggle with most, and how effectively the TA team responds — all
+                    in real time."</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCENE 12 -->
+    <div class="scene">
+        <div class="scene-header">
+            <div class="scene-number" style="background:linear-gradient(135deg,#a855f7,#c084fc);">12</div>
+            <div class="scene-title">
+                <h3>Closing — Call to Action</h3>
+                <div class="screen-note">🖥 Screen: Return to Dashboard — wide shot of full UI</div>
+            </div>
+            <div class="scene-duration">45 sec</div>
+        </div>
+        <div class="scene-body">
+            <div class="narration">
+                <p>"aumtech.ai is more than software — it's a mission.</p>
+                <p>We believe every student, regardless of background, deserves the kind of personalized,
+                    intelligent academic support that used to be reserved for those who could afford private tutors
+                    and premium advising services.</p>
+                <p>With AI-powered advising, intelligent tutoring triage, real-time analytics, and a platform
+                    designed from the ground up around the student experience — aumtech.ai is ready to transform
+                    student success at scale.</p>
+                <p>We are live at aumtech.ai. Let's give every student their own Navigator."</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Table -->
+    <div class="summary-section">
+        <h2>📊 Scene Timing Summary</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Feature</th>
+                    <th>Duration</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>01</td>
+                    <td>Introduction / Hook</td>
+                    <td>45s</td>
+                </tr>
+                <tr>
+                    <td>02</td>
+                    <td>Sign In &amp; First Impression</td>
+                    <td>30s</td>
+                </tr>
+                <tr>
+                    <td>03</td>
+                    <td>Dashboard Overview</td>
+                    <td>60s</td>
+                </tr>
+                <tr>
+                    <td>04</td>
+                    <td>AI Navigator Chat</td>
+                    <td>90s</td>
+                </tr>
+                <tr>
+                    <td>05</td>
+                    <td>Courses &amp; Degree Roadmap</td>
+                    <td>60s</td>
+                </tr>
+                <tr>
+                    <td>06</td>
+                    <td>Tutoring Center — Intelligent Triage</td>
+                    <td>90s</td>
+                </tr>
+                <tr>
+                    <td>07</td>
+                    <td>Wellness Check &amp; Study Timer</td>
+                    <td>45s</td>
+                </tr>
+                <tr>
+                    <td>08</td>
+                    <td>Holds &amp; Alerts Center</td>
+                    <td>45s</td>
+                </tr>
+                <tr>
+                    <td>09</td>
+                    <td>Financial Aid Nexus &amp; Scholarships</td>
+                    <td>60s</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>Social Campus</td>
+                    <td>45s</td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td>Admin Panel &amp; Dean's Analytics</td>
+                    <td>60s</td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td>Closing &amp; Call to Action</td>
+                    <td>45s</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><strong>⏱ TOTAL</strong></td>
+                    <td><strong>~9 min 30 sec</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Recording Notes -->
+    <div class="notes-box">
+        <h2>🎬 Recording Notes</h2>
+        <ul>
+            <li>Live URL: <code>https://aumtech.ai</code> — or local: <code>http://localhost:5173</code></li>
+            <li>Student login: <code>student@university.edu</code> / <code>student123</code></li>
+            <li>Admin login: <code>admin@university.edu</code> / <code>admin123</code></li>
+            <li>Allow 2–3 seconds on each screen before narration begins for each scene</li>
+            <li>Keep cursor movements slow and deliberate — no fast jerky swipes</li>
+            <li>AI Navigator may have slight delays depending on Gemini API response time</li>
+            <li>Record at 1920×1080 resolution for best quality</li>
+        </ul>
+    </div>
+
+    </div>
+</body>
+
+</html>

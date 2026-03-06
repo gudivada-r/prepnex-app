@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>aumtech.ai — Student Success Navigator</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #0a0a1a;
+      color: white;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Slide container fills full viewport ── */
+    .slide {
+      width: 100vw;
+      height: 100vh;
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    .slide.active {
+      display: flex;
+    }
+
+    /* ════════════════════════════════════════
+       SLIDE 1 — The Problem
+    ════════════════════════════════════════ */
+    #slide1 {
+      background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    }
+
+    .s1-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5vw;
+      padding: 5vw 7vw;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+
+    .s1-left h1 {
+      font-size: clamp(2rem, 4.2vw, 5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      background: linear-gradient(to right, #fff 40%, #a5b4fc);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1.4rem;
+    }
+
+    .s1-left p {
+      font-size: clamp(1rem, 1.4vw, 1.5rem);
+      color: #94a3b8;
+      line-height: 1.7;
+    }
+
+    .frust-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4vw;
+    }
+
+    .frust-card {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 1vw;
+      padding: 1.4vw 1.8vw;
+      display: flex;
+      align-items: center;
+      gap: 1.2vw;
+    }
+
+    .frust-card .em {
+      font-size: clamp(1.5rem, 2.5vw, 3rem);
+      min-width: 3vw;
+      text-align: center;
+    }
+
+    .frust-card h3 {
+      font-size: clamp(0.9rem, 1.1vw, 1.3rem);
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 0.3rem;
+    }
+
+    .frust-card p {
+      font-size: clamp(0.75rem, 0.9vw, 1rem);
+      color: #64748b;
+    }
+
+    /* ════════════════════════════════════════
+       SLIDE 2 — The Scale
+    ════════════════════════════════════════ */
+    #slide2 {
+      background: linear-gradient(135deg, #1a0533 0%, #2d1b69 50%, #0f1a3d 100%);
+      flex-direction: column;
+      gap: 3vh;
+      padding: 5vh 7vw;
+    }
+
+    #slide2 h1 {
+      font-size: clamp(1.8rem, 3.5vw, 4.5rem);
+      font-weight: 900;
+      text-align: center;
+      background: linear-gradient(to right, #f9a8d4, #c084fc, #818cf8);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    #slide2 .sub {
+      text-align: center;
+      font-size: clamp(0.9rem, 1.3vw, 1.5rem);
+      color: #94a3b8;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5vw;
+      width: 100%;
+    }
+
+    .stat-block {
+      text-align: center;
+      padding: 3vh 2vw;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 1.5vw;
+    }
+
+    .stat-block .num {
+      font-size: clamp(2.5rem, 5.5vw, 7rem);
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 0.8rem;
+    }
+
+    .stat-block:nth-child(1) .num {
+      color: #f87171;
+    }
+
+    .stat-block:nth-child(2) .num {
+      color: #fbbf24;
+    }
+
+    .stat-block:nth-child(3) .num {
+      color: #34d399;
+    }
+
+    .stat-block .lbl {
+      font-size: clamp(0.75rem, 1.1vw, 1.3rem);
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    /* ════════════════════════════════════════
+       SLIDE 3 — The Solution
+    ════════════════════════════════════════ */
+    #slide3 {
+      background: linear-gradient(135deg, #0d1b2a 0%, #1a3a4f 40%, #0a2540 100%);
+      flex-direction: column;
+      padding: 4vh 7vw;
+      gap: 3vh;
+    }
+
+    #slide3 .hdr {
+      text-align: center;
+    }
+
+    #slide3 .hdr h1 {
+      font-size: clamp(1.8rem, 3.5vw, 4.5rem);
+      font-weight: 900;
+      background: linear-gradient(to right, #38bdf8, #818cf8, #34d399);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    #slide3 .hdr p {
+      font-size: clamp(0.9rem, 1.2vw, 1.4rem);
+      color: #94a3b8;
+    }
+
+    .feats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5vw;
+      width: 100%;
+    }
+
+    .feat {
+      padding: 2.2vh 1.8vw;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 1vw;
+    }
+
+    .feat .fi {
+      font-size: clamp(1.2rem, 2vw, 2.5rem);
+      margin-bottom: 0.8rem;
+    }
+
+    .feat h3 {
+      font-size: clamp(0.85rem, 1.05vw, 1.2rem);
+      font-weight: 700;
+      color: #e2e8f0;
+      margin-bottom: 0.4rem;
+    }
+
+    .feat p {
+      font-size: clamp(0.7rem, 0.88vw, 1rem);
+      color: #64748b;
+      line-height: 1.5;
+    }
+
+    /* ════════════════════════════════════════
+       SLIDE 4 — Brand Title
+    ════════════════════════════════════════ */
+    #slide4 {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #0ea5e9 100%);
+    }
+
+    .brand-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2.5vh;
+    }
+
+    .logo-ring {
+      width: clamp(100px, 13vw, 200px);
+      height: clamp(100px, 13vw, 200px);
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(2.5rem, 6vw, 8rem);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.15);
+      }
+
+      50% {
+        transform: scale(1.06);
+        box-shadow: 0 0 60px 20px rgba(255, 255, 255, 0.06);
+      }
+    }
+
+    .brand-name {
+      font-size: clamp(3rem, 7vw, 10rem);
+      font-weight: 900;
+      color: white;
+      letter-spacing: -0.03em;
+      text-shadow: 0 4px 40px rgba(0, 0, 0, 0.25);
+    }
+
+    .brand-tag {
+      font-size: clamp(1rem, 2vw, 2.5rem);
+      color: rgba(255, 255, 255, 0.8);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .brand-sub {
+      font-size: clamp(0.8rem, 1.1vw, 1.3rem);
+      color: rgba(255, 255, 255, 0.55);
+      margin-top: 0.3rem;
+    }
+
+    /* ── Progress dots ── */
+    #dots {
+      position: fixed;
+      bottom: 2.5vh;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 200;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .dot.on {
+      background: white;
+      transform: scale(1.4);
+    }
+
+    /* ── Floating ambient orbs ── */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      opacity: 0.18;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Ambient background orbs (always visible, across all slides) -->
+  <div class="orb" style="width:35vw;height:35vw;background:#6366f1;top:-10vh;left:-8vw;"></div>
+  <div class="orb" style="width:28vw;height:28vw;background:#a855f7;bottom:-5vh;right:-5vw;"></div>
+
+  <!-- ── SLIDE 1 ── -->
+  <div class="slide active" id="slide1">
+    <div class="s1-wrap">
+      <div class="s1-left">
+        <h1>Students Are<br>Left Behind.</h1>
+        <p>Thousands of students navigate a fragmented maze of outdated systems, siloed emails, and manual advising —
+          with no unified support.</p>
+      </div>
+      <div class="frust-list">
+        <div class="frust-card">
+          <div class="em">😤</div>
+          <div>
+            <h3>Disconnected Systems</h3>
+            <p>GPA tracker, email, LMS, financial aid — all separate, never in sync</p>
+          </div>
+        </div>
+        <div class="frust-card">
+          <div class="em">⏳</div>
+          <div>
+            <h3>Advising Bottlenecks</h3>
+            <p>Waiting weeks for a 30-minute appointment — with no AI support in between</p>
+          </div>
+        </div>
+        <div class="frust-card">
+          <div class="em">🚫</div>
+          <div>
+            <h3>Mystery Holds &amp; Alerts</h3>
+            <p>Registration blocked with no explanation — emailing 3 offices to find out why</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 2 ── -->
+  <div class="slide" id="slide2">
+    <h1>The Cost of Doing Nothing</h1>
+    <p class="sub">Every semester, universities lose students that could have been saved.</p>
+    <div class="stats-row">
+      <div class="stat-block">
+        <div class="num">40%</div>
+        <div class="lbl">of college students never graduate — many due to avoidable holds &amp; missed deadlines</div>
+      </div>
+      <div class="stat-block">
+        <div class="num">73%</div>
+        <div class="lbl">of students say they couldn't get help when they needed it outside office hours</div>
+      </div>
+      <div class="stat-block">
+        <div class="num">$50K</div>
+        <div class="lbl">average student debt without AI-matched scholarship support</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 3 ── -->
+  <div class="slide" id="slide3">
+    <div class="hdr">
+      <h1>Introducing aumtech.ai</h1>
+      <p>One unified AI platform for every stage of the student journey.</p>
+    </div>
+    <div class="feats">
+      <div class="feat">
+        <div class="fi">🤖</div>
+        <h3>AI Navigator</h3>
+        <p>24/7 personal AI academic advisor powered by Google Gemini</p>
+      </div>
+      <div class="feat">
+        <div class="fi">📊</div>
+        <h3>Live GPA &amp; On-Track Score</h3>
+        <p>Real-time composite metric across courses, wellness &amp; holds</p>
+      </div>
+      <div class="feat">
+        <div class="fi">🎓</div>
+        <h3>Intelligent Tutoring</h3>
+        <p>AI triage + round-robin TA assignment in under 2 seconds</p>
+      </div>
+      <div class="feat">
+        <div class="fi">🗺️</div>
+        <h3>Degree Roadmap</h3>
+        <p>Visualize your path to graduation — drag &amp; drop planning</p>
+      </div>
+      <div class="feat">
+        <div class="fi">💰</div>
+        <h3>Financial Aid Nexus</h3>
+        <p>AI-matched scholarships with instant essay drafting</p>
+      </div>
+      <div class="feat">
+        <div class="fi">🏥</div>
+        <h3>Wellness &amp; Holds</h3>
+        <p>Plain-language hold resolution + daily wellness check-ins</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 4 ── -->
+  <div class="slide" id="slide4">
+    <div class="brand-wrap">
+      <div class="logo-ring">🎓</div>
+      <div class="brand-name">aumtech.ai</div>
+      <div class="brand-tag">Student Success Navigator</div>
+      <div class="brand-sub">Powered by Google Gemini AI &nbsp;·&nbsp; Live at aumtech.ai</div>
+    </div>
+  </div>
+
+  <!-- Progress dots -->
+  <div id="dots">
+    <div class="dot on" id="d0"></div>
+    <div class="dot" id="d1"></div>
+    <div class="dot" id="d2"></div>
+    <div class="dot" id="d3"></div>
+  </div>
+
+  <script>
+    // ── Slide manager ──
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const dots = [0, 1, 2, 3].map(i => document.getElementById('d' + i));
+    let cur = 0;
+
+    function showSlide(n) {
+      slides[cur].classList.remove('active');
+      dots[cur].classList.remove('on');
+      cur = n;
+      slides[cur].classList.add('active');
+      dots[cur].classList.add('on');
+    }
+
+    // Expose for Playwright to call: window.goToSlide(0..3)
+    window.goToSlide = showSlide;
+
+    // Auto-advance: 20s → 16s → 20s → (stays on 4)
+    const TIMES = [20000, 16000, 20000];
+    function scheduleNext(idx) {
+      if (idx < TIMES.length) {
+        setTimeout(() => { showSlide(idx + 1); scheduleNext(idx + 1); }, TIMES[idx]);
+      }
+    }
+    scheduleNext(0);
+  </script>
+</body>
+
+</html>

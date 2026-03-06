@@ -20,6 +20,7 @@ import LectureVoiceNotes from './LectureVoiceNotes';
 import HoldsCenter from './HoldsCenter';
 import FinancialAidNexus from './FinancialAidNexus';
 import CareerPathfinder from './CareerPathfinder';
+import CareerMapper from './CareerMapper';
 import PrivacyPolicy from './legal/PrivacyPolicy';
 import MSA from './legal/MSA';
 import SLA from './legal/SLA';
@@ -115,6 +116,7 @@ const Sidebar = ({ activeTab, onTabChange, userData, isOpen, onClose }) => {
                     <div className={`nav-item ${activeTab === 'tutoring' ? 'active' : ''}`} onClick={() => handleProtectedTab('tutoring')}><GraduationCap size={20} /> Tutoring Center</div>
                     <div className={`nav-item ${activeTab === 'financial' ? 'active' : ''}`} onClick={() => handleProtectedTab('financial')}><GraduationCap size={20} /> Financial Nexus</div>
                     <div className={`nav-item ${activeTab === 'career' ? 'active' : ''}`} onClick={() => handleProtectedTab('career')}><Briefcase size={20} /> Career Pathfinder</div>
+                    <div className={`nav-item ${activeTab === 'ednex' ? 'active' : ''}`} onClick={() => handleProtectedTab('ednex')}><Briefcase size={20} /> Project EdNex</div>
                     <div className={`nav-item ${activeTab === 'holds' ? 'active' : ''}`} onClick={() => handleProtectedTab('holds')}><ShieldAlert size={20} /> Holds & Alerts</div>
                     <div className={`nav-item ${activeTab === 'subscription' ? 'active' : ''}`} onClick={() => handleProtectedTab('subscription')}><CreditCard size={20} /> My Plan</div>
 
@@ -187,7 +189,14 @@ const DashboardHome = ({ onNavigate, userData, onEditStats }) => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="hero-card"
+                style={{ position: 'relative' }}
             >
+                {/* EdNex Verified Badge */}
+                {userData?.is_ednex_verified && (
+                    <div style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'rgba(255,255,255,0.2)', padding: '4px 12px', borderRadius: '20px', fontSize: '0.75rem', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px', border: '1px solid rgba(255,255,255,0.3)', color: 'white' }}>
+                        <Shield size={14} /> EdNex Verified
+                    </div>
+                )}
                 <div style={{ flex: 1 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.5rem', opacity: 0.9 }}>
                         <Brain size={18} /> aumtech.ai Navigator
@@ -426,7 +435,36 @@ const Dashboard = () => {
 
         try {
             const res = await api.get('/api/users/me');
-            setUserData(res.data);
+            let baseUser = res.data;
+
+            try {
+                // Fetch Enterprise Context from EdNex
+                const edNexRes = await api.get('/api/ednex/context');
+
+                if (edNexRes.data?.status === 'success' && edNexRes.data.context) {
+                    const ctx = edNexRes.data.context;
+                    baseUser.is_ednex_verified = true;
+
+                    if (ctx.student_profile?.name) baseUser.full_name = ctx.student_profile.name;
+
+                    if (ctx.sis_stream?.cumulative_gpa !== undefined) {
+                        baseUser.gpa = parseFloat(ctx.sis_stream.cumulative_gpa);
+                    }
+                    if (ctx.finance_stream?.tuition_balance !== undefined) {
+                        baseUser.tuition_balance = parseFloat(ctx.finance_stream.tuition_balance);
+                        baseUser.has_financial_hold = ctx.finance_stream.has_financial_hold;
+                    }
+
+                    // Simple heuristic for on_track_score based on enterprise data
+                    if (baseUser.gpa) {
+                        baseUser.on_track_score = Math.min(100, Math.round((baseUser.gpa / 4.0) * 100));
+                    }
+                }
+            } catch (err) {
+                console.log("EdNex sync unavailable:", err);
+            }
+
+            setUserData(baseUser);
         } catch (error) {
             console.error("Failed to fetch user data:", error);
             if (error.response?.status === 401) {
@@ -629,6 +667,7 @@ const Dashboard = () => {
                     {activeTab === 'financial' && <FinancialAidNexus onNavigate={handleFeatureNavigate} />}
 
                     {activeTab === 'career' && <CareerPathfinder />}
+                    {activeTab === 'ednex' && <CareerMapper />}
 
                     {activeTab === 'forms' && <DropAddForms onBack={() => setActiveTab('dashboard')} />}
 

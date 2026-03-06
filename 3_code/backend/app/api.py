@@ -1682,3 +1682,23 @@ async def analyze_skill_gap(
         return data
     except Exception as e:
         return {"error": str(e), "acquired_skills": [], "missing_skills": ["Error analyzing"], "recommended_actions": []}
+
+@router.get('/admin/health')
+async def system_health(current_user: User = Depends(get_current_user), session: Session = Depends(get_session)):
+    if not current_user.is_admin:
+        raise HTTPException(status_code=403, detail='Not an admin')
+    from app.models import User, ChatSession, ChatMessage, Course, FormRequest, Advisor, StudyGroup, Mentorship, MarketplaceItem, LectureNote, StudentHold, Scholarship, Campaign, TutoringAppointment
+    from sqlmodel import select, func
+    tables = {'Users': User, 'Chat Sessions': ChatSession, 'Messages': ChatMessage, 'Courses': Course, 'Form Requests': FormRequest, 'Advisors': Advisor, 'Study Groups': StudyGroup, 'Mentorships': Mentorship, 'Marketplace Items': MarketplaceItem, 'Lecture Notes': LectureNote, 'Student Holds': StudentHold, 'Scholarships': Scholarship, 'Campaigns': Campaign, 'Tutoring Appointments': TutoringAppointment}
+    health = {}
+    for name, model in tables.items():
+        try:
+            health[name] = session.exec(select(func.count(model.id))).one()
+        except:
+            health[name] = 0
+    return health
+
+
+from app.ednex import ednex_router
+router.include_router(ednex_router, prefix='/ednex', tags=['ednex'])
+

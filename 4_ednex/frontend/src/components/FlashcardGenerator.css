@@ -1,0 +1,161 @@
+.flashcard-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+    width: 100%;
+}
+
+.flashcard-header {
+    margin-bottom: 2rem;
+}
+
+.flashcard-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 0.5rem;
+}
+
+.flashcard-subtitle {
+    color: #64748b;
+    line-height: 1.5;
+}
+
+.input-card {
+    background: white;
+    padding: 0;
+}
+
+.flashcard-textarea {
+    width: 100%;
+    min-height: 200px;
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    resize: vertical;
+    font-size: 1rem;
+    font-family: inherit;
+    box-sizing: border-box;
+    /* Critical for padding */
+}
+
+.generate-btn {
+    background: #4f46e5;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.generate-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Card Mode */
+.card-mode-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    width: 100%;
+}
+
+.scene {
+    perspective: 1000px;
+    width: 100%;
+    max-width: 600px;
+    height: 400px;
+}
+
+.card-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    border-radius: 20px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+    transition: transform 0.6s;
+}
+
+.card-front {
+    background: white;
+    border: 1px solid #e2e8f0;
+}
+
+.card-back {
+    background: #4f46e5;
+    color: white;
+    transform: rotateY(180deg);
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.circle-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid #e2e8f0;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.circle-btn:hover {
+    background: #f8fafc;
+    transform: scale(1.1);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .flashcard-container {
+        padding: 1rem;
+    }
+
+    .flashcard-title {
+        font-size: 1.5rem;
+    }
+
+    .flashcard-textarea {
+        min-height: 150px;
+    }
+
+    .scene {
+        height: 300px;
+        /* Smaller height for mobile */
+    }
+
+    .card-face {
+        padding: 1.5rem;
+    }
+
+    .card-face h3 {
+        font-size: 1.25rem;
+        /* Smaller font for questions */
+    }
+
+    .card-face p {
+        font-size: 1.1rem;
+        /* Smaller font for answers */
+    }
+}

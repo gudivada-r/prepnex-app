@@ -4,7 +4,7 @@ import api from '../api';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const AdminPanel = () => {
-    const [activeSection, setActiveSection] = useState('campaigns'); // 'campaigns', 'advisors', 'tutors', 'analytics'
+    const [activeSection, setActiveSection] = useState('campaigns'); // 'campaigns', 'advisors', 'tutors', 'analytics', 'health'
 
     return (
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
@@ -79,6 +79,23 @@ const AdminPanel = () => {
                 >
                     <Users size={18} /> Tutors
                 </button>
+                <button
+                    onClick={() => setActiveSection('health')}
+                    style={{
+                        padding: '12px 24px',
+                        borderRadius: '8px',
+                        border: 'none',
+                        background: activeSection === 'health' ? '#4f46e5' : 'white',
+                        color: activeSection === 'health' ? 'white' : '#64748b',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        display: 'flex', alignItems: 'center', gap: '8px',
+                        boxShadow: activeSection === 'health' ? '0 4px 6px -1px rgba(79, 70, 229, 0.2)' : '0 1px 2px 0 rgba(0,0,0,0.05)',
+                        whiteSpace: 'nowrap'
+                    }}
+                >
+                    <Activity size={18} /> System Health
+                </button>
             </div>
 
             <div className="card-white" style={{ minHeight: '400px' }}>
@@ -88,6 +105,8 @@ const AdminPanel = () => {
                     <DeansDashboard />
                 ) : activeSection === 'advisors' ? (
                     <AdvisorsManager />
+                ) : activeSection === 'health' ? (
+                    <SystemHealth />
                 ) : (
                     <TutorsManager />
                 )}
@@ -631,6 +650,52 @@ const TutorsManager = () => {
                     ))}
                 </tbody>
             </table>
+        </div>
+    );
+};
+
+const SystemHealth = () => {
+    const [health, setHealth] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchHealth = async () => {
+            try {
+                const res = await api.get('/api/admin/health');
+                setHealth(res.data);
+            } catch (error) {
+                console.error("Failed to fetch system health");
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchHealth();
+    }, []);
+
+    if (loading) return <div style={{ padding: '2rem', textAlign: 'center', color: '#64748b' }}>Loading System Health...</div>;
+    if (!health) return <div style={{ padding: '2rem', textAlign: 'center' }}>Failed to load health data.</div>;
+
+    return (
+        <div style={{ padding: '1rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                <div>
+                    <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: '700', color: '#1e293b' }}>System Health overview</h2>
+                    <p style={{ margin: '0.5rem 0 0 0', color: '#64748b' }}>Real-time row counts for all modules.</p>
+                </div>
+                <div style={{ background: '#ecfdf5', padding: '8px 16px', borderRadius: '20px', color: '#10b981', fontWeight: '600', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <CheckCircle size={16} /> All Systems Operational
+                </div>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginBottom: '2.5rem' }}>
+                {Object.entries(health).map(([module, count]) => (
+                    <div key={module} style={{ padding: '1.5rem', borderRadius: '12px', border: '1px solid #e2e8f0', background: 'white', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+                        <div style={{ color: '#64748b', fontSize: '0.85rem', fontWeight: '600', marginBottom: '0.5rem', textTransform: 'uppercase' }}>{module}</div>
+                        <div style={{ fontSize: '2.5rem', fontWeight: '800', color: '#4f46e5' }}>{count}</div>
+                        <div style={{ color: '#64748b', fontSize: '0.8rem', marginTop: '0.5rem' }}>Total Rows</div>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };

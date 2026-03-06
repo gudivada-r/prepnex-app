@@ -1,0 +1,17 @@
+fastapi
+uvicorn
+sqlmodel
+langgraph
+langchain
+langchain_community
+langchain_openai
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
+python-dotenv
+httpx
+psycopg2-binary
+bcrypt
+google-generativeai
+supabase
+google-generativeai
