@@ -10,7 +10,8 @@ class AgentState(TypedDict):
     student_id: str
     next_step: str
     final_response: dict
-
+    student_context: dict
+    
 # --- Nodes ---
 
 def router_node(state: AgentState):
@@ -58,11 +59,16 @@ async def tutor_agent(state: AgentState):
     # AI Generation
     api_key = os.environ.get("GOOGLE_API_KEY")
 
+    student_context = state.get("student_context", {})
+    context_str = f"Student Profile: Name: {student_context.get('name')}, Major: {student_context.get('major')}, GPA: {student_context.get('gpa')}, Background: {student_context.get('background')}, Interests: {student_context.get('interests')}"
+
     # Build grade context string — skip gracefully if no grades
     if grades:
-        grade_context = "Student Grades: " + ", ".join([f"{k}: {v}" for k, v in grades.items()])
+        grade_context = "LMS Grades: " + ", ".join([f"{k}: {v}" for k, v in grades.items()])
     else:
-        grade_context = "No grade data available yet (student may not have connected their LMS)."
+        grade_context = "LMS Grades: Not connected."
+        
+    grade_context = f"{context_str}\n{grade_context}"
 
     if api_key:
         # Call Gemini REST API directly — bypasses library version issues

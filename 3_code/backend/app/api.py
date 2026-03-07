@@ -826,7 +826,14 @@ async def query_agent(
             "messages": history_lc,
             "student_id": str(current_user.id),
             "next_step": "",
-            "final_response": {}
+            "final_response": {},
+            "student_context": {
+                "name": current_user.full_name,
+                "major": current_user.major,
+                "gpa": current_user.gpa,
+                "background": current_user.background,
+                "interests": current_user.interests
+            }
         }
         
         try:
