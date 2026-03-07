@@ -459,6 +459,14 @@ const Dashboard = () => {
                     if (baseUser.gpa) {
                         baseUser.on_track_score = Math.min(100, Math.round((baseUser.gpa / 4.0) * 100));
                     }
+
+                    // Persist EdNex-enriched GPA back to the DB so it survives page reloads
+                    if (baseUser.gpa) {
+                        api.put('/api/users/me', {
+                            gpa: baseUser.gpa,
+                            on_track_score: baseUser.on_track_score
+                        }).catch(err => console.log("GPA persist failed:", err));
+                    }
                 }
             } catch (err) {
                 console.log("EdNex sync unavailable:", err);

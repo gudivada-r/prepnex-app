@@ -933,8 +933,10 @@ async def read_users_me(
 ):
     # Dynamic Insight Generation (Simple Rule-based for Demo)
     # In a real system, this would be an async background agent task
-    if not current_user.ai_insight:
-        insight = f"Welcome back, {current_user.full_name.split(' ')[0]}! "
+    # Regenerate insight if missing OR if gpa is still 0 (EdNex may not have enriched yet)
+    if not current_user.ai_insight or current_user.gpa == 0.0:
+        first_name = (current_user.full_name or current_user.email).split(' ')[0]
+        insight = f"Welcome back, {first_name}! "
         
         if current_user.gpa >= 3.5:
             insight += "You are doing excellently with a high GPA. Keep up the great work in your honors classes."
@@ -981,6 +983,9 @@ class UserUpdate(BaseModel):
     full_name: Optional[str] = None
     gpa: Optional[float] = None
     on_track_score: Optional[int] = None
+    major: Optional[str] = None
+    background: Optional[str] = None
+    interests: Optional[str] = None
 
 @router.put("/users/me")
 async def update_user_me(
@@ -994,6 +999,12 @@ async def update_user_me(
         current_user.gpa = user_update.gpa
     if user_update.on_track_score is not None:
         current_user.on_track_score = user_update.on_track_score
+    if user_update.major is not None:
+        current_user.major = user_update.major
+    if user_update.background is not None:
+        current_user.background = user_update.background
+    if user_update.interests is not None:
+        current_user.interests = user_update.interests
     
     session.add(current_user)
     session.commit()
