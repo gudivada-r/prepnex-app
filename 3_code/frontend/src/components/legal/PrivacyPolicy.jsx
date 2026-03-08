@@ -13,7 +13,7 @@ const PrivacyPolicy = ({ onBack }) => (
             <h3 style={{ marginTop: '1.5rem', fontWeight: 'bold' }}>1. Information We Collect</h3>
             <ul style={{ listStyleType: 'disc', marginLeft: '1.5rem', marginBottom: '1rem' }}>
                 <li><strong>Account Information:</strong> Name, email address, and student ID.</li>
-                <li><strong>Academic Data:</strong> Courses, grades, and assignments synced from your LMS (Canvas).</li>
+                <li><strong>Academic Data:</strong> Courses, grades, and assignments securely provided via your institution's EdNex Data Warehouse.</li>
                 <li><strong>Usage Data:</strong> Interactions with our AI features and chat logs.</li>
             </ul>
 

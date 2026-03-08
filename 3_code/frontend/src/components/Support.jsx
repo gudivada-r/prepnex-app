@@ -106,8 +106,8 @@ const Support = ({ onBack }) => {
                         answer="Absolutely. We use enterprise-grade encryption to protect all your data. Your academic records are only used to provide you with personalized recommendations."
                     />
                     <FAQItem
-                        question="Can I sync with my university LMS?"
-                        answer="Yes, Student Success Navigator supports integration with Canvas and Blackboard. Go to Settings to connect your accounts."
+                        question="How is my course data updated?"
+                        answer="Your academic data, including courses and grades, is securely synchronized directly from your institution's EdNex Data Warehouse. You can click 'Refresh EdNex Data' in your Courses view to fetch the latest updates."
                     />
                     <FAQItem
                         question="How do I resolve a hold on my account?"
