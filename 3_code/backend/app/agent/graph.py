@@ -72,30 +72,28 @@ async def tutor_agent(state: AgentState):
 
     if api_key:
         # Call Gemini REST API directly — bypasses library version issues
-        models_to_try = ['gemini-2.5-flash', 'gemini-1.5-flash-8b', 'gemini-1.5-flash', 'gemini-1.5-pro']
+        # Use fastest models first to stay within Vercel's 10s serverless timeout
+        models_to_try = ['gemini-1.5-flash-8b', 'gemini-1.5-flash', 'gemini-1.5-pro']
         message = None
         
-        prompt_text = f"""You are an expert academic tutor and advisor at a university.
+        prompt_text = f"""You are a concise, friendly academic advisor bot.
 
 Context:
 - {grade_context}
-- Institutional Knowledge: {rag_info}
-- Conversation Context: {context_prefix}
+- Knowledge: {rag_info}
 
-Student Query: "{last_msg}"
+Student asks: "{last_msg}"
 
-Provide a helpful, encouraging, and specific response in 2-4 sentences.
-If grade data is available and grades are low, suggest specific actions.
-If no grade data is available, answer helpfully without mentioning grades."""
+Respond in 2-3 SHORT sentences maximum. Be direct and complete — do not trail off or stop mid-sentence. If you need to list things, use at most 3 bullet points."""
 
         for model_name in models_to_try:
             try:
                 url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={api_key}"
                 payload = {
                     "contents": [{"parts": [{"text": prompt_text}]}],
-                    "generationConfig": {"maxOutputTokens": 512, "temperature": 0.7}
+                    "generationConfig": {"maxOutputTokens": 256, "temperature": 0.5}
                 }
-                async with httpx.AsyncClient(timeout=20.0) as client:
+                async with httpx.AsyncClient(timeout=8.0) as client:
                     resp = await client.post(url, json=payload)
                     resp.raise_for_status()
                     data = resp.json()
