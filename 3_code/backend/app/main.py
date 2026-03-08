@@ -13,7 +13,7 @@ app = FastAPI(title="Student Success API", version="0.1.0")
 app.add_middleware(
     CORSMiddleware,
     # allow_origins=[...],  # Commented out to use regex
-    allow_origin_regex=r"https://.*\.aumtech\.ai|https://studentsuccess.*\.vercel\.app|http://localhost.*|capacitor://.*|ionic://.*",
+    allow_origin_regex=r"https://.*\.aumtech\.ai|https://.*\.vercel\.app|http://localhost.*|capacitor://.*|ionic://.*",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
