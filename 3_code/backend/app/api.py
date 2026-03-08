@@ -793,37 +793,44 @@ async def query_agent(
     """
     Main endpoint to interact with the AntiGravity Agent.
     """
-    # 1. Handle Session
+    # Detect EdNex virtual users (negative ID = stateless proxy, no DB persistence)
+    is_ednex_user = current_user.id is not None and current_user.id < 0
+
+    # 1. Handle Session (skip DB for EdNex virtual users to avoid FK constraint failures)
     chat_session = None
-    if request.session_id:
-        chat_session = session.get(ChatSession, request.session_id)
-        if not chat_session or chat_session.user_id != current_user.id:
-            raise HTTPException(status_code=404, detail="Session not found")
-    else:
-        # Create new session
-        title = f"Chat on {datetime.now().strftime('%m/%d %H:%M')}"
-        chat_session = ChatSession(user_id=current_user.id, title=title)
-        session.add(chat_session)
+    virtual_session_id = 0
+    if not is_ednex_user:
+        if request.session_id:
+            chat_session = session.get(ChatSession, request.session_id)
+            if not chat_session or chat_session.user_id != current_user.id:
+                raise HTTPException(status_code=404, detail="Session not found")
+        else:
+            # Create new session
+            title = f"Chat on {datetime.now().strftime('%m/%d %H:%M')}"
+            chat_session = ChatSession(user_id=current_user.id, title=title)
+            session.add(chat_session)
+            session.commit()
+            session.refresh(chat_session)
+
+        # 2. Save User Message
+        content_to_save = request.query
+        if request.file_id:
+            content_to_save += f"\n\n[Attached File: {request.file_id}]"
+
+        user_msg_db = ChatMessage(
+            session_id=chat_session.id,
+            sender="user",
+            content=content_to_save
+        )
+        session.add(user_msg_db)
         session.commit()
-        session.refresh(chat_session)
 
-    # 2. Save User Message
-    # Append file context if present
-    content_to_save = request.query
-    if request.file_id:
-        content_to_save += f"\n\n[Attached File: {request.file_id}]"
-
-    user_msg_db = ChatMessage(
-        session_id=chat_session.id,
-        sender="user",
-        content=content_to_save
-    )
-    session.add(user_msg_db)
-    session.commit()
-
-    # 3. Retrieve Context (History)
-    statement = select(ChatMessage).where(ChatMessage.session_id == chat_session.id).order_by(ChatMessage.timestamp.asc())
-    history_msgs_db = session.exec(statement).all()
+        # 3. Retrieve Context (History)
+        statement = select(ChatMessage).where(ChatMessage.session_id == chat_session.id).order_by(ChatMessage.timestamp.asc())
+        history_msgs_db = session.exec(statement).all()
+    else:
+        # EdNex stateless proxy: no DB persistence, just use the current message as history
+        history_msgs_db = []
     
     # 4. Generate Response
     if AGENT_AVAILABLE:
@@ -876,31 +883,34 @@ async def query_agent(
             "action_items": []
         }
     
-    # 5. Save AI Response
+    # 5. Save AI Response (only for persistent DB users, not EdNex virtual users)
     import json
-    ai_msg_db = ChatMessage(
-        session_id=chat_session.id,
-        sender="ai",
-        content=json.dumps(final_response_dict)
-    )
-    session.add(ai_msg_db)
-    session.commit()
+    if not is_ednex_user and chat_session:
+        ai_msg_db = ChatMessage(
+            session_id=chat_session.id,
+            sender="ai",
+            content=json.dumps(final_response_dict)
+        )
+        session.add(ai_msg_db)
+        session.commit()
     
-    # 5.5 PUSH CONTEXT BACK TO EDNEX WAREHOUSE 
+    # 5.5 PUSH CONTEXT BACK TO EDNEX WAREHOUSE (for EdNex users)
     # Ensures the proxy remains stateless while persisting the insight for future sessions
-    try:
-        from app.ednex import update_ednex_ai_summary
-        summary_payload = final_response_dict.get('message_content', '')[:150] + "..."
-        if final_response_dict.get('action_items'):
-            summary_payload += f" Actions: {final_response_dict.get('action_items')}"
-        update_ednex_ai_summary(current_user.email, summary_payload)
-    except Exception as e:
-        print(f"Non-critical EdNex Warning: failed to writeback AI summary. {e}")
+    if is_ednex_user:
+        try:
+            from app.ednex import update_ednex_ai_summary
+            summary_payload = final_response_dict.get('message_content', '')[:150] + "..."
+            if final_response_dict.get('action_items'):
+                summary_payload += f" Actions: {final_response_dict.get('action_items')}"
+            update_ednex_ai_summary(current_user.email, summary_payload)
+        except Exception as e:
+            print(f"Non-critical EdNex Warning: failed to writeback AI summary. {e}")
     
     # 6. Return response with session_id
+    resolved_session_id = chat_session.id if chat_session else 0
     return {
         **final_response_dict,
-        "session_id": chat_session.id
+        "session_id": resolved_session_id
     }
 
 @router.get("/chat/history/sessions", response_model=List[ChatSession])
