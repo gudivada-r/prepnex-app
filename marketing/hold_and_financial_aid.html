@@ -77,7 +77,7 @@
 
         /* ─── AI CHAT WIDGET ─── */
         .chat-wrapper {
-            gridcolumn: 1 / -1;
+            grid-column: 1 / -1;
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: var(--radius);
@@ -477,7 +477,7 @@
         <!-- Two-column layout -->
         <div class="hold-grid">
 
-            <!-- Self-Service Steps Card -->
+            <!-- Solo Quest Steps Card -->
             <div class="card" id="resolve-card">
                 <h2>🔧 How to Resolve Your Hold</h2>
                 <ol class="step-list">
@@ -522,18 +522,18 @@
                     <div class="avatar">🤖</div>
                     <div class="info">
                         <h4>Financial Aid AI</h4>
-                        <p>Self-service support · Instant responses</p>
+                        <p>Solo Quest support · Instant responses</p>
                     </div>
                     <div class="status-dot"></div>
                 </div>
 
                 <div class="chat-mode-bar">
                     <button class="active" id="tab-selfservice" onclick="switchTab('selfservice')">🔧
-                        Self-Service</button>
-                    <button id="tab-expert" onclick="switchTab('expert')">👤 Talk to Expert</button>
+                        Solo Quest</button>
+                    <button id="tab-expert" onclick="switchTab('expert')">👤 Tag In An Advisor</button>
                 </div>
 
-                <!-- SELF-SERVICE TAB -->
+                <!-- SOLO QUEST TAB -->
                 <div id="panel-selfservice" style="display:flex; flex-direction:column; flex:1; overflow:hidden;">
                     <div class="chat-messages" id="chatMessages">
                         <!-- Messages injected by JS -->
@@ -617,12 +617,12 @@
                 followups: ["How to get a deferment", "Award letter location", "Talk to an advisor"]
             },
             "academic hold": {
-                answer: "An <strong>Academic Hold</strong> requires your <strong>Academic Advisor's signature</strong>:<br><br>1️⃣ Contact your assigned advisor via the <em>AI Navigator → Academic Advisors</em> section<br>2️⃣ Schedule a meeting to discuss your academic standing<br>3️⃣ Your advisor will remove the hold upon approval.",
-                followups: ["Find my academic advisor", "Talk to an expert"]
+                answer: "An <strong>Academic Hold</strong> requires your <strong>Academic Advisor's signature</strong>:<br><br>1️⃣ Contact your assigned advisor via the <em>Get Aura → Academic Advisors</em> section<br>2️⃣ Schedule a meeting to discuss your academic standing<br>3️⃣ Your advisor will remove the hold upon approval.",
+                followups: ["Find my academic advisor", "Tag In An Advisor"]
             },
             "library hold": {
                 answer: "A <strong>Library Hold</strong> is placed for overdue fines or unreturned items:<br><br>1️⃣ Log into the <em>Library Portal</em> to view your account<br>2️⃣ Return any overdue items to the main library desk<br>3️⃣ Pay any outstanding fines online ($0.25/day per item)<br>4️⃣ Hold clears within <strong>1–2 hours</strong>.",
-                followups: ["Pay library fines", "I returned items but hold is still active", "Talk to an expert"]
+                followups: ["Pay library fines", "I returned items but hold is still active", "Tag In An Advisor"]
             },
             "health hold": {
                 answer: "A <strong>Health Hold</strong> means your immunization records are missing:<br><br>1️⃣ Log into the <em>Student Health Portal</em><br>2️⃣ Upload your immunization records (MMR, Meningitis, etc.)<br>3️⃣ Hold is reviewed and cleared within <strong>1–3 business days</strong>.",
@@ -630,7 +630,7 @@
             },
             "still has hold after paying": {
                 answer: "If your hold hasn't cleared after payment, here's what to check:<br><br>✅ Has it been <strong>24–48 hours</strong> since payment?<br>✅ Check your <em>Billing Portal</em> to confirm payment was received<br>✅ Look for a pending/processing status<br><br>If confirmed processed and still blocked, an advisor needs to manually clear it. I'll connect you to an expert now.",
-                followups: ["Talk to an expert"],
+                followups: ["Tag In An Advisor"],
                 escalate: true
             },
             "talk to an expert": {
@@ -655,7 +655,7 @@
             "library hold": ["library hold", "overdue", "library fines", "book", "unreturned"],
             "health hold": ["health hold", "immunization", "health records", "vaccination", "mmr", "meningitis"],
             "still has hold after paying": ["still has hold", "paid but hold", "hold not cleared", "hold won't clear", "paid already", "already paid"],
-            "talk to an expert": ["talk to expert", "human", "speak to someone", "real person", "agent", "advisor", "help me"],
+            "tag in an advisor": ["talk to expert", "tag in an advisor", "human", "speak to someone", "real person", "agent", "advisor", "help me"],
             "talk to fafsa specialist": ["fafsa specialist", "scholarship specialist", "talk to fafsa"]
         };
 
@@ -667,7 +667,7 @@
             "Scholarship Pending",
             "Academic Hold",
             "Library Hold",
-            "Talk to an Expert"
+            "Tag In An Advisor"
         ];
 
         // ─── State ────────────────────────────────────────────────────────
@@ -769,7 +769,7 @@
                     } else if (item.followups && item.followups.length) {
                         renderQuickReplies(item.followups);
                     } else {
-                        renderQuickReplies(["Start over", "Talk to an Expert"]);
+                        renderQuickReplies(["Start over", "Tag In An Advisor"]);
                     }
                 } else {
                     appendBot("I'm not sure I understood that. Here are the most common topics I can help with — or type your question and I'll do my best!");

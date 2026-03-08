@@ -95,7 +95,7 @@ const Sidebar = ({ activeTab, onTabChange, userData, isOpen, onClose }) => {
                     {/* MAIN NAVIGATION */}
                     <div className="section-title">Home</div>
                     <div className={`nav-item ${activeTab === 'dashboard' ? 'active' : ''}`} onClick={() => handleProtectedTab('dashboard')}><LayoutDashboard size={20} /> Dashboard</div>
-                    <div className={`nav-item ${activeTab === 'chat' ? 'active' : ''}`} onClick={() => handleProtectedTab('chat')}><MessageSquare size={20} /> AI Navigator</div>
+                    <div className={`nav-item ${activeTab === 'chat' ? 'active' : ''}`} onClick={() => handleProtectedTab('chat')}><MessageSquare size={20} /> Get Aura</div>
                     <div className={`nav-item ${activeTab === 'analytics' ? 'active' : ''}`} onClick={() => handleProtectedTab('analytics')}><TrendingUp size={20} /> Institutional Research</div>
 
                     <div className="section-title">Academics</div>
@@ -201,7 +201,7 @@ const DashboardHome = ({ onNavigate, userData, onEditStats }) => {
                 )}
                 <div style={{ flex: 1 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.5rem', opacity: 0.9 }}>
-                        <Brain size={18} /> aumtech.ai Navigator
+                        <Brain size={18} /> aumtech.ai Get Aura
                     </div>
                     <h1 style={{ fontSize: '2.5rem', margin: '0.5rem 0 1rem 0', fontWeight: '700' }}>
                         Good afternoon, {userData?.full_name ? userData.full_name.split(' ')[0] : 'Student'}!
@@ -548,7 +548,7 @@ const Dashboard = () => {
                         <img src={logoAsset} alt="Logo" style={{ width: '28px', height: '28px', borderRadius: '4px' }} />
                     </div>
 
-                    <span style={{ fontWeight: '700', fontSize: '1.2rem', color: '#0f172a' }}>aumtech.ai Navigator</span>
+                    <span style={{ fontWeight: '700', fontSize: '1.2rem', color: '#0f172a' }}>aumtech.ai Get Aura</span>
                 </div>
                 <button onClick={() => setIsMobileMenuOpen(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#1e293b' }}>
                     <Menu size={24} />
@@ -642,7 +642,7 @@ const Dashboard = () => {
                                 {chatMode === 'tutor' ? 'The Tutor' :
                                     chatMode === 'admin' ? 'The Admin' :
                                         chatMode === 'coach' ? 'The Coach' :
-                                            chatMode === 'fafsa' ? 'AI FAFSA Expert' : 'AI Navigator'}
+                                            chatMode === 'fafsa' ? 'AI FAFSA Expert' : 'Get Aura'}
                             </h2>
                             <div style={{ flex: 1, background: 'white', borderRadius: '16px', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', overflow: 'hidden', minHeight: 0 }}>
                                 <ChatInterface mode={chatMode} initialSessionId={chatSessionId} />

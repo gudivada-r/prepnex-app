@@ -35,7 +35,7 @@ SCRIPT = {
 
     "03_Dashboard": (
         "Welcome to the Student Dashboard. The very first thing a student sees is a warm, personalized greeting "
-        "from the AI Navigator — noticing the time of day, their academic progress, and surfacing the most "
+        "from the Get Aura — noticing the time of day, their academic progress, and surfacing the most "
         "important action items right away. "
         "In the center, we have the On-Track Score — a real-time metric reflecting GPA, assignment completion, "
         "holds status, and wellness across all courses. "
@@ -46,7 +46,7 @@ SCRIPT = {
     ),
 
     "04_AINavigator": (
-        "At the heart of aumtech dot ai is the AI Navigator — a conversational academic agent powered by Google Gemini. "
+        "At the heart of aumtech dot ai is the Get Aura — a conversational academic agent powered by Google Gemini. "
         "This isn't a generic chatbot. It knows this student. It has access to their enrolled courses, "
         "GPA history, and academic calendar. Watch this. "
         "I'll ask: I failed my Calculus midterm — what should I do? "
@@ -65,7 +65,7 @@ SCRIPT = {
         "But we go further. Click on the Degree Roadmap — and now the student sees their entire academic journey "
         "laid out visually. Which credits are complete. Which are in progress. What is missing before they can graduate. "
         "No more mysterious holds about missing prerequisites. "
-        "The AI Navigator proactively surfaces gaps before they become problems."
+        "The Get Aura proactively surfaces gaps before they become problems."
     ),
 
     "06_Tutoring": (

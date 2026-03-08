@@ -50,12 +50,12 @@
 
 ---
 
-### Part 2: AI Navigator - The Core Intelligence (4 minutes)
+### Part 2: Get Aura - The Core Intelligence (4 minutes)
 
-**[Click "AI Navigator" from sidebar]**
+**[Click "Get Aura" from sidebar]**
 
 **TALKING POINTS:**
-- "The AI Navigator is powered by Google Gemini and acts as a 24/7 academic advisor."
+- "The Get Aura is powered by Google Gemini and acts as a 24/7 academic advisor."
 - "We've designed three specialized personas to help with different needs."
 
 **SHOW: The Three Personas**

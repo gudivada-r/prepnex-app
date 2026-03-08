@@ -38,7 +38,7 @@ TRANSFORM YOUR ACADEMIC JOURNEY
 
 Student Success Navigator is your all-in-one companion for academic excellence. Combining cutting-edge AI technology with comprehensive student tools, we help you navigate college with confidence and achieve your educational goals.
 
-INTELLIGENT AI NAVIGATOR
+INTELLIGENT GET AURA
 • Chat with your personal AI academic advisor 24/7
 • Get instant answers to academic, financial, and campus questions
 • Receive personalized course recommendations
@@ -176,7 +176,7 @@ Your comprehensive academic companion is here! This initial release includes eve
 
 NEW FEATURES:
 
-🤖 AI NAVIGATOR
+🤖 GET AURA
 • Personal AI academic advisor available 24/7
 • Intelligent course recommendations
 • Instant answers to academic questions
@@ -230,7 +230,7 @@ Questions or feedback? Contact us at support@studentsuccess.app
 - Title: "Your Academic Command Center"
 - Shows: GPA, on-track status, quick actions
 
-**Screenshot 2: AI Navigator**
+**Screenshot 2: Get Aura**
 - Title: "24/7 AI Academic Advisor"
 - Shows: Chat interface with AI responses
 
@@ -307,7 +307,7 @@ Please use the following credentials to test the app:
 
 KEY FEATURES TO TEST:
 
-1. AI Navigator (Dashboard → AI Navigator tab)
+1. Get Aura (Dashboard → Get Aura tab)
    - Send a test message to the AI advisor
    - Try asking about course recommendations
 

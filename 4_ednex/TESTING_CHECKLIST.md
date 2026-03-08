@@ -26,7 +26,7 @@ https://studentsuccess-j0l2298f7-ramkumars-projects-4158d662.vercel.app
 ## 2. Dashboard Navigation (Sidebar Links)
 Test each sidebar navigation item:
 - [ ] **Dashboard**: Click and verify it shows the hero section with GPA stats
-- [ ] **AI Navigator**: Click and verify chat interface loads
+- [ ] **Get Aura**: Click and verify chat interface loads
 - [ ] **Schedule**: Click and verify "Book an Advisor" form appears
 - [ ] **Courses**: Click and verify course list and GPA calculator appear
 - [ ] **Progress**: Click (currently placeholder - should not crash)
@@ -88,8 +88,8 @@ Test each quick action card on the main dashboard:
 
 ---
 
-## 7. AI Navigator Chat
-- [ ] **Open Chat**: Navigate to AI Navigator
+## 7. Get Aura Chat
+- [ ] **Open Chat**: Navigate to Get Aura
 - [ ] **Send Message**: Type a test query (e.g., "What are my grades?")
 - [ ] **Verify Response**: Check if AI responds (requires OPENAI_API_KEY in Vercel env vars)
 - [ ] **Check Sources**: Verify cited sources appear if applicable

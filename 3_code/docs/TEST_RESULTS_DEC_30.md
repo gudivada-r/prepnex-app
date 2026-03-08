@@ -13,7 +13,7 @@ A subset of critical test cases was executed on the production environment. Whil
 | **Authentication** | ❌ FAIL | API returns 500 Error. Cannot login as explicit users. |
 | **Dashboard** | ✅ PASS | Loads correctly with fallback session. |
 | **Degree Roadmap** | ✅ PASS | Drag & Drop + AI Auto-Plan works perfectly. |
-| **AI Navigator** | ✅ PASS | Contextual chat works. |
+| **Get Aura** | ✅ PASS | Contextual chat works. |
 | **Faculty Portal** | ❌ FAIL | Blocked by Authentication failure. |
 | **Admin Panel** | ❌ FAIL | Blocked by Authentication failure. |
 
@@ -39,7 +39,7 @@ A subset of critical test cases was executed on the production environment. Whil
 *   **TC-348 (AI Auto-Plan):** ✅ PASS
     *   *Observation:* Clicking the wand icon correctly populated future semesters.
 
-### 4. AI Navigator
+### 4. Get Aura
 *   **TC-031 (Send Message):** ✅ PASS
     *   *Observation:* Sent "Hello, I am testing." -> Received AI response.
 *   **TC-032 (History):** ✅ PASS

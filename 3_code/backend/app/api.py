@@ -1,4 +1,4 @@
-# aumtech.ai Navigator API - v1.4.1 (GPA fix: 2026-03-07)
+# aumtech.ai Get Aura API - v1.4.1 (GPA fix: 2026-03-07)
 from fastapi import APIRouter, Depends, HTTPException, status, Request, File, Form
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import Session, select
@@ -15,14 +15,14 @@ from app.models import ChatSession, ChatMessage, Tutor, User, StudentHold
 from datetime import datetime, timedelta
 from app.integrations.lms.canvas import CanvasService
 
-# Optional imports for AI Navigator (may not be available on Vercel due to size constraints)
+# Optional imports for Get Aura (may not be available on Vercel due to size constraints)
 try:
     from app.agent.graph import app_graph
     from langchain_core.messages import HumanMessage, AIMessage
     AGENT_AVAILABLE = True
 except ImportError:
     AGENT_AVAILABLE = False
-    print("WARNING: AI Navigator agent not available (langgraph not installed)")
+    print("WARNING: Get Aura agent not available (langgraph not installed)")
 
 router = APIRouter()
 
@@ -866,7 +866,7 @@ async def query_agent(
     else:
         # Fallback response when agent is not available
         final_response_dict = {
-            "message_content": f"I received your message: '{request.query}'. The AI Navigator is currently running in limited mode. Please try the Flashcards or Voice Notes features which are fully functional!",
+            "message_content": f"I received your message: '{request.query}'. The Get Aura is currently running in limited mode. Please try the Flashcards or Voice Notes features which are fully functional!",
             "cited_sources": [],
             "action_items": []
         }
@@ -880,6 +880,17 @@ async def query_agent(
     )
     session.add(ai_msg_db)
     session.commit()
+    
+    # 5.5 PUSH CONTEXT BACK TO EDNEX WAREHOUSE 
+    # Ensures the proxy remains stateless while persisting the insight for future sessions
+    try:
+        from app.ednex import update_ednex_ai_summary
+        summary_payload = final_response_dict.get('message_content', '')[:150] + "..."
+        if final_response_dict.get('action_items'):
+            summary_payload += f" Actions: {final_response_dict.get('action_items')}"
+        update_ednex_ai_summary(current_user.email, summary_payload)
+    except Exception as e:
+        print(f"Non-critical EdNex Warning: failed to writeback AI summary. {e}")
     
     # 6. Return response with session_id
     return {

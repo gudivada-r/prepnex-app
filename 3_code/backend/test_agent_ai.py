@@ -21,7 +21,7 @@ def run_test():
         return
     token = res.json()["access_token"]
     
-    print("2. Sending Query to AI Navigator...")
+    print("2. Sending Query to Get Aura...")
     headers = {"Authorization": f"Bearer {token}"}
     
     # Query that triggers the Tutor Agent

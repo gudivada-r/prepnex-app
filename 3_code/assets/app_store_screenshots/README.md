@@ -56,7 +56,7 @@ Each screenshot showcases a key feature:
 - Shows: Welcome message, GPA stat, On-Track percentage, Quick Actions, AI Support Team
 - Highlights: Comprehensive academic command center
 
-### 2. AI Navigator
+### 2. Get Aura
 - Shows: Chat interface with AI academic advisor
 - Highlights: 24/7 intelligent assistance
 

@@ -70,7 +70,7 @@
 │  - Flashcard Generation      │    │  - chatsession           │   │  - Assignments     │
 │  - Audio Transcription       │    │  - chatmessage           │   │  - Grades          │
 │  - Text Summarization        │    │  - course                │   │  - Calendar        │
-│  - AI Navigator (Chat)       │    │  - tutor                 │   │                    │
+│  - Get Aura (Chat)       │    │  - tutor                 │   │                    │
 │                              │    │  - formrequest           │   │                    │
 │  API Key: GOOGLE_API_KEY     │    │  - advisor               │   │                    │
 │                              │    │  - studygroup            │   │                    │

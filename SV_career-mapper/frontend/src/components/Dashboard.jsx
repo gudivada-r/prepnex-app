@@ -75,7 +75,7 @@ const Sidebar = ({ activeTab, onTabChange, userData, isOpen, onClose }) => {
                             onClick={() => handleProtectedTab(key)}
                         >
                             {key === 'dashboard' && <><LayoutDashboard size={20} /> Dashboard</>}
-                            {key === 'chat' && <><MessageSquare size={20} /> AI Navigator</>}
+                            {key === 'chat' && <><MessageSquare size={20} /> Get Aura</>}
                             {key === 'history' && <><HistoryIcon size={20} /> My History</>}
                             {key === 'schedule' && <><Calendar size={20} /> Schedule</>}
                             {key === 'courses' && <><BookOpen size={20} /> Courses</>}
@@ -465,7 +465,7 @@ const Dashboard = () => {
                             <h2 style={{ marginBottom: '1rem', flexShrink: 0 }}>
                                 {chatMode === 'tutor' ? 'The Tutor' :
                                     chatMode === 'admin' ? 'The Admin' :
-                                        chatMode === 'coach' ? 'The Coach' : 'AI Navigator'}
+                                        chatMode === 'coach' ? 'The Coach' : 'Get Aura'}
                             </h2>
                             <div style={{ flex: 1, background: 'white', borderRadius: '16px', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', overflow: 'hidden', minHeight: 0 }}>
                                 <ChatInterface mode={chatMode} initialSessionId={chatSessionId} />

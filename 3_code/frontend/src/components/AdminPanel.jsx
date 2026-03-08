@@ -414,7 +414,7 @@ const CampaignsManager = () => {
                                             <Bot size={20} /> AI Agent Handling
                                         </div>
                                         <p style={{ margin: 0, fontSize: '0.9rem', color: '#1e3a8a' }}>
-                                            If a student replies, the AI Navigator will attempt to answer their question immediately (e.g., "Where is the form?") without alerting you unless necessary.
+                                            If a student replies, the Get Aura will attempt to answer their question immediately (e.g., "Where is the form?") without alerting you unless necessary.
                                         </p>
                                     </div>
                                     <label className="switch" style={{ position: 'relative', display: 'inline-block', width: '40px', height: '24px' }}>

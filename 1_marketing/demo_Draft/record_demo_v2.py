@@ -231,9 +231,9 @@ async def record():
         await scroll(page, 0)
         await wait(page, DURATIONS["03_Dashboard"] - 18, "full dashboard overview")
 
-        # ── SCENE 04 : AI Navigator (62.26s) ──────────────────────────────────
+        # ── SCENE 04 : Get Aura (62.26s) ──────────────────────────────────
         scene("04_AINavigator")
-        await click(page, "text=AI Navigator", "navigate to AI chat")
+        await click(page, "text=Get Aura", "navigate to AI chat")
         await wait(page, 2, "chat interface loads")
         await inject_heartbeat(page)
 

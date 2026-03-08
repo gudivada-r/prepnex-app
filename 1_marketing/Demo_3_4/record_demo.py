@@ -195,9 +195,9 @@ async def record_demo():
         await slow_scroll(page, 0)
         await wait(page, DURATIONS["03_Dashboard"] - 22, "final dashboard overview")
 
-        # ── SCENE 04: AI Navigator (62.26s) ────────────────────────────────
+        # ── SCENE 04: Get Aura (62.26s) ────────────────────────────────
         scene("04_AINavigator")
-        await safe_click(page, "text=AI Navigator")
+        await safe_click(page, "text=Get Aura")
         await wait(page, 2, "chat interface loads")
 
         # Type the question — realistic speed

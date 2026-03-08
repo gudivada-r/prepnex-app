@@ -4,7 +4,7 @@ This document provides a comprehensive overview of all features implemented in t
 
 ## Table of Contents
 1. [Core Dashboard](#core-dashboard)
-2. [AI Navigator](#ai-navigator)
+2. [Get Aura](#ai-navigator)
 3. [Academics](#academics)
 4. [My Records](#my-records)
 5. [Tools & Support](#tools-support)
@@ -38,8 +38,8 @@ The **Dashboard** serves as the central hub for the student experience.
 
 ---
 
-## AI Navigator
-The **AI Navigator** is a persistent, intelligent assistant powered by Google Gemini, designed to help students with various aspects of university life.
+## Get Aura
+The **Get Aura** is a persistent, intelligent assistant powered by Google Gemini, designed to help students with various aspects of university life.
 
 ### Modes:
 - **General/Navigator**: The default chat interface for general queries.

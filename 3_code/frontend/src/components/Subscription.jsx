@@ -168,7 +168,7 @@ const Subscription = ({ userData, onBack }) => {
                     </div>
 
                     <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 2.5rem 0', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                        <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.05rem', fontWeight: '600', color: '#1e293b' }}><Star size={20} fill="#f59e0b" color="#f59e0b" /> Unlimited AI Navigator</li>
+                        <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.05rem', fontWeight: '600', color: '#1e293b' }}><Star size={20} fill="#f59e0b" color="#f59e0b" /> Unlimited Get Aura</li>
                         <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.05rem', fontWeight: '600', color: '#1e293b' }}><Star size={20} fill="#f59e0b" color="#f59e0b" /> Unlimited Syllabus Parsing</li>
                         <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1rem', color: '#475569' }}><Check size={20} color="#4f46e5" /> Priority Tutoring Matching</li>
                     </ul>

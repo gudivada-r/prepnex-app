@@ -229,7 +229,7 @@ const HoldsCenter = () => {
                     }}>
                         <div style={{ maxWidth: '60%' }}>
                             <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '700' }}>Confused about your aid?</h3>
-                            <p style={{ opacity: 0.9, fontSize: '0.95rem', marginTop: '0.5rem' }}>Our AI Navigator can help explain specific hold codes or guide you through the FAFSA process step-by-step.</p>
+                            <p style={{ opacity: 0.9, fontSize: '0.95rem', marginTop: '0.5rem' }}>Our Get Aura can help explain specific hold codes or guide you through the FAFSA process step-by-step.</p>
                             <button style={{ marginTop: '1.2rem', background: 'white', color: '#4f46e5', border: 'none', padding: '10px 20px', borderRadius: '8px', fontWeight: '700', cursor: 'pointer' }}>Talk to Financial Aid AI</button>
                         </div>
                         <div style={{ background: 'rgba(255,255,255,0.1)', padding: '20px', borderRadius: '50%' }}>

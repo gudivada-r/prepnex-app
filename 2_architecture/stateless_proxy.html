@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EdNex Stateless Proxy Architecture</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#1e293b',
+                primaryTextColor: '#f8fafc',
+                primaryBorderColor: '#3b82f6',
+                lineColor: '#60a5fa',
+                secondaryColor: '#0f172a',
+                tertiaryColor: '#1e293b',
+                noteBkgColor: '#064e3b',
+                noteTextColor: '#a7f3d0',
+                noteBorderColor: '#10b981',
+                sequenceNumberColor: '#f8fafc',
+                actorBkg: '#0ea5e9',
+                actorTextColor: '#ffffff',
+                actorLineColor: '#38bdf8'
+            },
+            sequence: {
+                showSequenceNumbers: true,
+                actorMargin: 50,
+                messageMargin: 40,
+                boxMargin: 10,
+                boxTextMargin: 5,
+                noteMargin: 10,
+                messageAlign: 'center',
+                mirrorActors: true,
+                bottomMarginAdj: 1,
+                useMaxWidth: true,
+            }
+        });
+    </script>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #3b82f6;
+            --success: #10b981;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header h1 {
+            color: #e0f2fe;
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 1.15rem;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Highlight tag for no PII */
+        .badge {
+            display: inline-block;
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid #10b981;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 20px;
+        }
+
+        /* Main Diagram Wrapper */
+        .diagram-section {
+            background-color: var(--bg-card);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border: 1px solid #334155;
+            margin-bottom: 50px;
+            overflow-x: auto;
+        }
+
+        .diagram-title {
+            font-size: 1.25rem;
+            color: #cbd5e1;
+            margin-bottom: 30px;
+            font-weight: 600;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 15px;
+        }
+
+        .mermaid {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Ensure svg scales beautifully */
+        .mermaid svg {
+            width: 100% !important;
+            max-width: 900px !important;
+            height: auto !important;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-top: 50px;
+        }
+
+        .card {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.15);
+            border-color: #475569;
+        }
+
+        .card h3 {
+            color: #bae6fd;
+            margin-top: 0;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card h3::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 24px;
+            background: var(--accent);
+            border-radius: 4px;
+        }
+
+        .card p {
+            color: #94a3b8;
+            line-height: 1.7;
+            margin-bottom: 0;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- Header -->
+        <div class="header">
+            <h1>EdNex Architecture</h1>
+            <p>Demonstrating the stateless proxy pattern where Aumtech AI acts as a secure, real-time intelligence layer
+                atop any University's native database instance.</p>
+            <div class="badge">Zero Local Storage • 100% FERPA Compliant</div>
+        </div>
+
+        <!-- Diagram -->
+        <div class="diagram-section">
+            <div class="diagram-title">System Authentication & Data Fetching Sequence</div>
+            <div class="mermaid">
+                sequenceDiagram
+                autonumber
+                participant S as Student
+                participant F as Aumtech App<br />(React)
+                participant B as Aumtech API<br />(FastAPI)
+                participant N as Aumtech DB<br />(Neon / Config)
+                participant E as University EdNex<br />(Supabase Instance)
+
+                Note over S,E: Phase 1: Authentication & Connection Routing
+                S->>F: Enters Login (e.g. @txu.edu)
+                F->>B: POST /api/auth/login
+                B->>N: Query DB: WHERE tenant = "txu.edu"
+                N-->>B: Returns URL & API Key for TXU
+
+                Note over B,E: Zero-Knowledge Proxy Pattern
+                B->>E: POST Login Hash to University DB
+                E-->>B: Confirms Valid Login / Hash
+                B->>F: Returns Session JWT<br />(ednex_role=true)
+
+                Note over S,E: Phase 2: Live Data Interactions (Never Cached Locally)
+                S->>F: "What is my GPA?"
+                F->>B: GET /api/ednex/user/profile
+                B->>E: Query mod01_student_profiles
+                E-->>B: Returns Live Academic Stats
+                B-->>F: Streams format to User
+
+                Note over B,E: Phase 3: AI Context Sync & Stateless Cleanup
+                F->>B: New Chat Message / Action Items
+                B->>B: Generate AI Summary internally
+                B->>E: POST Update mod01_student_profiles (ai_insight)
+                E-->>B: Confirms Context Saved safely to University
+                B-xB: Drops detailed PII logs (Stateless architecture)
+            </div>
+        </div>
+
+        <!-- System Benefits -->
+        <div class="features-grid">
+            <div class="card">
+                <h3 style="--accent: #10b981;">Absolute Data Sovereignty</h3>
+                <p>Because Aumtech acts solely as an intelligent proxy layer, we never persist, dump, or cache student
+                    records. The university has the ultimate kill-switch to their data via their own standard cloud
+                    database console.</p>
+            </div>
+            <div class="card">
+                <h3 style="--accent: #3b82f6;">"Bring Your Own DB" Scaling</h3>
+                <p>Aumtech scales to thousands of universities instantly without complex, slow data migrations or API
+                    integrations. Institutes simply point us to their existing EdNex data warehouse layer.</p>
+            </div>
+            <div class="card">
+                <h3 style="--accent: #f59e0b;">Real-time Data Accuracy</h3>
+                <p>Scheduled "syncing" jobs run the risk of dangerous real-time staleness (e.g. missing an immediate
+                    financial hold placed via another system). The stateless proxy queries the sole source of truth
+                    dynamically upon every click.</p>
+            </div>
+            <div class="card">
+                <h3 style="--accent: #a855f7;">Stateless AI Context</h3>
+                <p>To retain useful AI conversation history without caching sensitive PII locally, Aumtech automatically
+                    summarizes key interactions (e.g., action items or immediate sentiment) and pushes them back into
+                    the University's Supabase instance, closing the loop completely.</p>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

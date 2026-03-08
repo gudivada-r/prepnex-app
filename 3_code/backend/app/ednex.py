@@ -144,6 +144,32 @@ async def get_ednex_context(
 
     return {"status": "error", "message": "EdNex Supabase integration not configured."}
 
+def update_ednex_ai_summary(email: str, summary_content: str):
+    """
+    Pushes AI context summaries back to the EdNex data warehouse to maintain stateless proxy architecture.
+    """
+    supabase = get_supabase_client()
+    if not supabase:
+        return {"status": "error", "message": "EdNex not configured"}
+        
+    try:
+        # 1. Match student directly via their central EdNex identity
+        student_resp = supabase.table("mod00_users").select("id").eq("email", email).execute()
+        if student_resp.data:
+            student_id = student_resp.data[0]["id"]
+            
+            # 2. Push the insight back to the institution's data warehouse
+            import datetime
+            insight_payload = f"[{datetime.datetime.now().strftime('%Y-%m-%d')}] AI Sync: {summary_content}"
+            supabase.table("mod01_student_profiles").update({
+                "ai_insight": insight_payload
+            }).eq("user_id", student_id).execute()
+            
+            return {"status": "success", "message": "Pushed to EdNex successfully"}
+    except Exception as e:
+        print(f"Failed to sync AI summary to EdNex: {e}")
+        return {"status": "error", "message": str(e)}
+
 class SemanticQuery(BaseModel):
     query: str
     target_institution_id: str = "11111111-1111-1111-1111-111111111111"

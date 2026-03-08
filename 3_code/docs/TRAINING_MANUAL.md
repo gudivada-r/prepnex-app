@@ -33,9 +33,9 @@ Welcome to the Student Success Navigator! This platform is your all-in-one compa
 3.  **Use AI Auto-Plan**: If unsure, click the **AI Auto-Plan** button. The system will automatically place courses based on prerequisites and availability.
 4.  **Verify**: Ensure no red warning icons appear (indicating prerequisite conflicts).
 
-### 3.2 Using the AI Navigator
+### 3.2 Using the Get Aura
 *Goal: Get instant answers effectively.*
-1.  Click **AI Navigator** or **Chat**.
+1.  Click **Get Aura** or **Chat**.
 2.  Select a "Persona" based on your need:
     *   **The Tutor**: For homework help ("Explain derivatives").
     *   **The Admin**: For deadlines/forms ("When is the drop deadline?").

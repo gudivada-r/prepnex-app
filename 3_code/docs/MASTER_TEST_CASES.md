@@ -63,10 +63,10 @@
 
 ---
 
-## 3. AI NAVIGATOR (CHAT)
+## 3. GET AURA (CHAT)
 
 ### 3.1 Chat Session Creation
-- [ ] **TC-029:** Navigate to AI Navigator
+- [ ] **TC-029:** Navigate to Get Aura
 - [ ] **TC-030:** Verify chat interface loads
 - [ ] **TC-031:** Send first message - verify new session is created
 - [ ] **TC-032:** Verify session appears in history sidebar
@@ -512,7 +512,7 @@
 ### 18.1 Gemini AI Integration
 - [ ] **TC-313:** Verify flashcards use real AI (not mock data)
 - [ ] **TC-314:** Verify transcription uses real AI
-- [ ] **TC-315:** Verify AI Navigator uses real AI (if langgraph available)
+- [ ] **TC-315:** Verify Get Aura uses real AI (if langgraph available)
 - [ ] **TC-316:** Test with various topics/content
 - [ ] **TC-317:** Verify responses are contextually relevant
 - [ ] **TC-318:** Verify no "mock" or "demo" text in responses

@@ -29,7 +29,7 @@
 ## SCENE 03 — DASHBOARD OVERVIEW (60 seconds)
 **[Screen: Dashboard landing page with 'Good afternoon, Ram!' card]**
 
-> "Welcome to the Student Dashboard. The very first thing a student sees is a warm, personalized greeting from the AI Navigator — noticing the time of day, their academic progress, and surfacing the most important action items right away.
+> "Welcome to the Student Dashboard. The very first thing a student sees is a warm, personalized greeting from the Get Aura — noticing the time of day, their academic progress, and surfacing the most important action items right away.
 > 
 > In the center, we have the On-Track Score — a real-time metric that reflects GPA, assignment completion, holds status and wellness across all courses. Below that, Quick Actions give instant one-click access to the most common student needs: checking holds, booking an advisor, or talking to the AI.
 > 
@@ -37,10 +37,10 @@
 
 ---
 
-## SCENE 04 — AI NAVIGATOR CHAT (90 seconds)
-**[Screen: Click 'AI Navigator' in sidebar → chat opens]**
+## SCENE 04 — GET AURA CHAT (90 seconds)
+**[Screen: Click 'Get Aura' in sidebar → chat opens]**
 
-> "At the heart of aumtech.ai is the AI Navigator — a conversational academic agent powered by Google Gemini.
+> "At the heart of aumtech.ai is the Get Aura — a conversational academic agent powered by Google Gemini.
 > 
 > This isn't a generic chatbot. It knows this student. It has access to their enrolled courses, GPA history, academic calendar, and more. Watch this.
 > 
@@ -59,7 +59,7 @@
 
 > "Under Academics, students get a crystal-clear view of every course they are taking. Grades, credit hours, and AI-generated improvement suggestions appear automatically.
 > 
-> But we go further. Click on the Degree Roadmap — and now the student sees their entire academic journey laid out visually. Which credits are complete. Which are in progress. What's missing before they can graduate. No more mysterious advising holds about missing prerequisite courses. The AI Navigator proactively surfaces gaps before they become problems."
+> But we go further. Click on the Degree Roadmap — and now the student sees their entire academic journey laid out visually. Which credits are complete. Which are in progress. What's missing before they can graduate. No more mysterious advising holds about missing prerequisite courses. The Get Aura proactively surfaces gaps before they become problems."
 
 ---
 
@@ -161,7 +161,7 @@
 | 01 | Intro / Hook | 45s |
 | 02 | Sign In | 30s |
 | 03 | Dashboard Overview | 60s |
-| 04 | AI Navigator Chat | 90s |
+| 04 | Get Aura Chat | 90s |
 | 05 | Courses & Degree Roadmap | 60s |
 | 06 | Tutoring Center | 90s |
 | 07 | Wellness & Study Timer | 45s |
@@ -178,6 +178,6 @@
 - URL: `https://aumtech.ai` (live) or `http://localhost:5173` (local)
 - Login: `student@university.edu` / `student123`
 - Admin view: `admin@university.edu` / `admin123`
-- The AI Navigator may have slight delays depending on Gemini API response
+- The Get Aura may have slight delays depending on Gemini API response
 - Keep cursor movements smooth and deliberate
 - Allow 2-3 seconds on each screen before narration advances
