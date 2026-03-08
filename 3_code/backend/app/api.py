@@ -850,10 +850,14 @@ async def query_agent(
             else:
                 history_lc.append(HumanMessage(content=content))
 
+        # For EdNex stateless users, history is empty - add the current query so agent doesn't crash
+        if is_ednex_user or not history_lc:
+            history_lc.append(HumanMessage(content=request.query))
+
         # Invoke the graph
         inputs = {
             "messages": history_lc,
-            "student_id": str(current_user.id),
+            "student_id": str(abs(current_user.id) if current_user.id else 0),
             "next_step": "",
             "final_response": {},
             "student_context": {
@@ -870,6 +874,8 @@ async def query_agent(
             final_response_dict = result.get("final_response", {})
         except Exception as e:
             print(f"Agent Execution Failed: {e}")
+            import traceback
+            traceback.print_exc()
             final_response_dict = {
                 "message_content": "I apologize, but I encountered an error while processing your request. Please try again in a moment.",
                 "cited_sources": [],
