@@ -13,7 +13,6 @@ from pydantic import BaseModel
 from app.auth import get_session, create_access_token, get_password_hash, verify_password, get_current_user, get_admin_user
 from app.models import ChatSession, ChatMessage, Tutor, User, StudentHold
 from datetime import datetime, timedelta
-from app.integrations.lms.canvas import CanvasService
 
 # Optional imports for Get Aura (may not be available on Vercel due to size constraints)
 try:
@@ -866,7 +865,8 @@ async def query_agent(
                 "gpa": current_user.gpa,
                 "background": current_user.background,
                 "interests": current_user.interests,
-                "previous_insight": current_user.ai_insight
+                "previous_insight": current_user.ai_insight,
+                "is_ednex": is_ednex_user
             }
         }
         

@@ -3,37 +3,10 @@ from typing import List, Dict
 from datetime import datetime, timedelta
 # from app.auth import engine -- Remove this to avoid circular import if auth imports models
 # from app.models import Course -- Remove this too
-from app.integrations.lms.canvas import CanvasService
-
 class LMSTool:
-    """LMS Integration Tool bridging local DB and Canvas API"""
+    """LMS Integration Tool using only local DB (Canvas removed)"""
     def __init__(self):
-        import os
-        from dotenv import load_dotenv
-        load_dotenv(override=True)
-        
-        token = os.getenv("CANVAS_API_TOKEN")
-        base_url = os.getenv("CANVAS_BASE_URL")
-        
-        # Fallback: Manually read .env if os.getenv failed
-        if not token:
-            print("DEBUG: LMSTool os.getenv failed, reading .env manually...")
-            try:
-                with open(".env", "r") as f:
-                    for line in f:
-                        if line.startswith("CANVAS_API_TOKEN="):
-                            token = line.split("=", 1)[1].strip()
-                        elif line.startswith("CANVAS_BASE_URL="):
-                            base_url = line.split("=", 1)[1].strip()
-            except Exception as e:
-                print(f"DEBUG: LMSTool manual .env read failed: {e}")
-        
-        if not token:
-            # Final emergency fallback for demo only
-            # Final emergency fallback for demo only
-            token = ""
-            
-        self.canvas = CanvasService(base_url=base_url, access_token=token)
+        pass
 
     async def get_student_grades(self, student_id: str) -> Dict:
         """Fetch grades from local DB (preferred), then Canvas if available."""
@@ -49,32 +22,14 @@ class LMSTool:
         except Exception as db_err:
             print(f"DB grade lookup failed: {db_err}")
 
-        # 2. Try Canvas if DB is empty
-        try:
-            token = self.canvas.access_token
-            if token and token.strip():
-                print("Fetching live grades from Canvas...")
-                lms_grades = await self.canvas.get_course_grades()
-                if lms_grades:
-                    return {name: f"{data['score']}% ({data['grade']})" 
-                            for name, data in lms_grades.items()}
-        except Exception as canvas_err:
-            # Canvas is unavailable — silently ignore, the AI will answer Q&A without grade context
-            print(f"Canvas unavailable (will answer Q&A without grades): {canvas_err}")
-
-        # 3. No grades available — return empty so AI skips grade context
+        # 2. No grades available
         return {}
 
     
     async def get_upcoming_assignments(self, student_id: str) -> List[Dict]:
-        """Fetch upcoming assignments from Canvas."""
+        """Fetch upcoming assignments."""
         try:
-            # In a real app, we'd iterate over student's courses
-            events = await self.canvas.get_upcoming_events()
-            if events:
-                return events
-            
-            # Fallback to static mock if service returns nothing
+            # Fallback to static mock since LMS is removed
             return [
                 {"course": "Chemistry 101", "assignment": "Lab Report", "due_date": (datetime.now() + timedelta(days=2)).isoformat()},
                 {"course": "Calculus I", "assignment": "Midterm", "due_date": (datetime.now() + timedelta(days=5)).isoformat()}

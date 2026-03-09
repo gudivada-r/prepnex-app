@@ -97,8 +97,14 @@ async def tutor_agent(state: AgentState):
     messages = state["messages"]
     last_msg = messages[-1].content
     
-    # Reason: Check LMS for context
-    grades = await lms_tool.get_student_grades(state["student_id"])
+    student_context = state.get("student_context", {})
+    is_ednex = student_context.get("is_ednex", False)
+    
+    # Reason: Check LMS for context (only for non-EdNex users, EdNex users get grades from data warehouse)
+    if is_ednex:
+        grades = {}
+    else:
+        grades = await lms_tool.get_student_grades(state["student_id"])
     
     # Act: Use RAG for academic policies/resources or knowledge
     rag_info = rag_tool.query(last_msg, category="academic")
@@ -111,8 +117,9 @@ async def tutor_agent(state: AgentState):
     # AI Generation
     api_key = os.environ.get("GOOGLE_API_KEY")
 
-    student_context = state.get("student_context", {})
-    context_str = f"Student Profile: Name: {student_context.get('name')}, Major: {student_context.get('major')}, GPA: {student_context.get('gpa')}, Background: {student_context.get('background')}, Interests: {student_context.get('interests')}"
+    api_key = os.environ.get("GOOGLE_API_KEY")
+    source_label = "EdNex Data Warehouse" if is_ednex else "Aumtech Profile"
+    context_str = f"Student Profile ({source_label}): Name: {student_context.get('name')}, Major: {student_context.get('major')}, GPA: {student_context.get('gpa')}, Background: {student_context.get('background')}, Interests: {student_context.get('interests')}"
     
     # Add previous context from EdNex if available
     previous_insight = student_context.get("previous_insight")
@@ -122,6 +129,8 @@ async def tutor_agent(state: AgentState):
     # Build grade context string — skip gracefully if no grades
     if grades:
         grade_context = "LMS Grades: " + ", ".join([f"{k}: {v}" for k, v in grades.items()])
+    elif is_ednex:
+        grade_context = "Academic Data: Managed centrally via EdNex, refer to the Student Profile for GPA."
     else:
         grade_context = "LMS Grades: Not connected."
         
@@ -174,9 +183,9 @@ Respond in 2-3 SHORT sentences maximum. Be direct and complete."""
                 url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={api_key}"
                 payload = {
                     "contents": [{"parts": [{"text": prompt_text}]}],
-                    "generationConfig": {"maxOutputTokens": 256, "temperature": 0.5}
+                    "generationConfig": {"maxOutputTokens": 1024, "temperature": 0.5}
                 }
-                async with httpx.AsyncClient(timeout=8.0) as client:
+                async with httpx.AsyncClient(timeout=10.0) as client:
                     resp = await client.post(url, json=payload)
                     resp.raise_for_status()
                     data = resp.json()
