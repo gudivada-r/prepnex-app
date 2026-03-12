@@ -1,6 +1,6 @@
 {
-  "appId": "com.studentsuccess.navigator",
-  "appName": "Get Aura",
+  "appId": "com.aumtech.ai",
+  "appName": "aumtech.ai",
   "webDir": "dist",
   "bundledWebRuntime": false,
   "server": {
