@@ -341,98 +341,206 @@ const EditProfileModal = ({ userData, onClose, onRefresh }) => {
     };
 
     return (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="card-white" style={{ width: '450px', padding: '2rem' }}>
-                <h3 style={{ marginBottom: '1.5rem', fontSize: '1.5rem', fontWeight: '700' }}>Profile Settings</h3>
-                <form onSubmit={handleUpdate} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                className="card-white"
+                style={{
+                    width: '100%',
+                    maxWidth: '800px',
+                    maxHeight: '90vh',
+                    overflowY: 'auto',
+                    padding: '2.5rem',
+                    borderRadius: '24px',
+                    position: 'relative',
+                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+                }}
+            >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                    <h3 style={{ margin: 0, fontSize: '1.75rem', fontWeight: '800', color: '#1e293b' }}>Profile Settings</h3>
+                    <button
+                        onClick={onClose}
+                        style={{
+                            background: '#f1f5f9',
+                            border: 'none',
+                            borderRadius: '50%',
+                            width: '40px',
+                            height: '40px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer',
+                            color: '#64748b'
+                        }}
+                    >
+                        <X size={24} />
+                    </button>
+                </div>
 
-                    {/* Read-Only Identity Info */}
-                    <div style={{ background: '#f8fafc', padding: '1rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-                        <div style={{ marginBottom: '0.5rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase' }}>Email Address</label>
-                            <div style={{ fontSize: '0.95rem', fontWeight: '500' }}>{userData?.email}</div>
-                        </div>
-                        <div style={{ display: 'flex', gap: '1.5rem' }}>
+                <form onSubmit={handleUpdate} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+
+                    {/* Section 1: Institutional Identity */}
+                    <div style={{ background: '#f8fafc', padding: '1.5rem', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase' }}>Student ID</label>
-                                <div style={{ fontSize: '0.95rem', fontFamily: 'monospace' }}>#{userData?.id?.toString().padStart(6, '0')}</div>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748b', textTransform: 'uppercase', marginBottom: '0.5rem', letterSpacing: '0.05em' }}>University Email</label>
+                                <div style={{ fontSize: '1rem', fontWeight: '600', color: '#1e293b' }}>{userData?.email}</div>
                             </div>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase' }}>Joined</label>
-                                <div style={{ fontSize: '0.95rem' }}>{userData?.created_at ? new Date(userData.created_at).toLocaleDateString() : 'N/A'}</div>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748b', textTransform: 'uppercase', marginBottom: '0.5rem', letterSpacing: '0.05em' }}>Student ID</label>
+                                <div style={{ fontSize: '1rem', fontFamily: 'monospace', color: '#4f46e5', fontWeight: '700' }}>#{userData?.id?.toString().padStart(6, '0')}</div>
+                            </div>
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748b', textTransform: 'uppercase', marginBottom: '0.5rem', letterSpacing: '0.05em' }}>Joined Platform</label>
+                                <div style={{ fontSize: '1rem', color: '#1e293b' }}>{userData?.created_at ? new Date(userData.created_at).toLocaleDateString(undefined, { month: 'long', year: 'numeric' }) : 'N/A'}</div>
                             </div>
                         </div>
                     </div>
 
-                    <hr style={{ border: 'none', borderTop: '1px solid #e2e8f0', margin: '0.5rem 0' }} />
-
-                    {/* Editable Fields */}
-                    <div>
-                        <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Full Name</label>
-                        <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #e2e8f0' }} />
-                    </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                        <div>
-                            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Current GPA</label>
-                            <input type="number" step="0.1" max="4.0" value={gpa} onChange={(e) => setGpa(e.target.value)} style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #e2e880' }} />
+                    {/* Section 2: Personal & Academic Info */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+                        <div style={{ gridColumn: 'span 2' }}>
+                            <label style={{ display: 'block', fontSize: '0.95rem', fontWeight: '700', color: '#334155', marginBottom: '0.75rem' }}>Full Name</label>
+                            <input
+                                type="text"
+                                value={fullName}
+                                onChange={(e) => setFullName(e.target.value)}
+                                placeholder="Your full name"
+                                style={{ width: '100%', padding: '1rem', borderRadius: '12px', border: '2px solid #e2e8f0', fontSize: '1rem', transition: 'border-color 0.2s' }}
+                            />
                         </div>
+
                         <div>
-                            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>University Email</label>
-                            <div style={{ padding: '0.75rem', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#f8fafc', color: '#64748b' }}>{userData?.email}</div>
+                            <label style={{ display: 'block', fontSize: '0.95rem', fontWeight: '700', color: '#334155', marginBottom: '0.75rem' }}>Major / Study Track</label>
+                            <input
+                                type="text"
+                                value={major}
+                                onChange={(e) => setMajor(e.target.value)}
+                                placeholder="e.g. Computer Science"
+                                style={{ width: '100%', padding: '1rem', borderRadius: '12px', border: '2px solid #e2e8f0', fontSize: '1rem' }}
+                            />
+                        </div>
+
+                        <div>
+                            <label style={{ display: 'block', fontSize: '0.95rem', fontWeight: '700', color: '#334155', marginBottom: '0.75rem' }}>Current GPA</label>
+                            <div style={{ position: 'relative' }}>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    min="0"
+                                    max="4.0"
+                                    value={gpa}
+                                    onChange={(e) => setGpa(e.target.value)}
+                                    style={{ width: '100%', padding: '1rem', borderRadius: '12px', border: '2px solid #e2e8f0', fontSize: '1rem' }}
+                                />
+                                <div style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', fontSize: '0.85rem' }}>/ 4.0</div>
+                            </div>
                         </div>
                     </div>
 
+                    {/* Section 3: Background & AI Context */}
                     <div>
-                        <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Major / Study Track</label>
-                        <input type="text" value={major} onChange={(e) => setMajor(e.target.value)} placeholder="e.g. Computer Science" style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #e2e8f0' }} />
-                    </div>
-
-                    <div>
-                        <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Personal Background (Heritage, Identity, Goals)</label>
-                        <textarea value={background} onChange={(e) => setBackground(e.target.value)} placeholder="Helps with matching diversity scholarships..." style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #e2e8f0', height: '80px', resize: 'none' }} />
-                    </div>
-
-                    <div>
-                        <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Research Interests / Skills</label>
-                        <textarea value={interests} onChange={(e) => setInterests(e.target.value)} placeholder="e.g. Machine Learning, Renaissance Art, Sustainability..." style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #e2e8f0', height: '60px', resize: 'none' }} />
-                    </div>
-
-                    <div>
-                        <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Default Notes Language</label>
-
-                        <select
-                            value={defaultLang}
-                            onChange={(e) => setDefaultLang(e.target.value)}
-                            style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}
-                        >
-                            {["English", "Spanish", "Mandarin Chinese", "Hindi", "French", "Arabic", "Bengali", "Portuguese", "Russian", "Urdu"].map(lang => (
-                                <option key={lang} value={lang}>{lang}</option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '0.5rem', background: '#ecfdf5', padding: '1rem', borderRadius: '8px', border: '1px solid #10b981' }}>
-                        <input
-                            type="checkbox"
-                            checked={true}
-                            onChange={() => { }}
-                            style={{ transform: 'scale(1.2)' }}
+                        <label style={{ display: 'block', fontSize: '0.95rem', fontWeight: '700', color: '#334155', marginBottom: '0.75rem' }}>Personal Background (Heritage, Identity, Goals)</label>
+                        <p style={{ color: '#64748b', fontSize: '0.85rem', marginBottom: '0.75rem' }}>Helps Aura match you with diversity scholarships and relevant student orgs.</p>
+                        <textarea
+                            value={background}
+                            onChange={(e) => setBackground(e.target.value)}
+                            placeholder="Tell us about yourself..."
+                            style={{ width: '100%', padding: '1rem', borderRadius: '12px', border: '2px solid #e2e8f0', height: '120px', fontSize: '1rem', fontFamily: 'inherit', resize: 'vertical' }}
                         />
+                    </div>
+
+                    <div>
+                        <label style={{ display: 'block', fontSize: '0.95rem', fontWeight: '700', color: '#334155', marginBottom: '0.75rem' }}>Research Interests / Skills</label>
+                        <textarea
+                            value={interests}
+                            onChange={(e) => setInterests(e.target.value)}
+                            placeholder="e.g. Machine Learning, Renaissance Art, Sustainability..."
+                            style={{ width: '100%', padding: '1rem', borderRadius: '12px', border: '2px solid #e2e8f0', height: '100px', fontSize: '1rem', fontFamily: 'inherit', resize: 'vertical' }}
+                        />
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
                         <div>
-                            <div style={{ fontWeight: '700', color: '#065f46', fontSize: '0.9rem' }}>Enable AI SMS Nudges</div>
-                            <div style={{ fontSize: '0.8rem', color: '#047857' }}>Get proactive texts from Get Aura if you are falling behind or missing deadlines.</div>
+                            <label style={{ display: 'block', fontSize: '0.95rem', fontWeight: '700', color: '#334155', marginBottom: '0.75rem' }}>Preferred Language for Notes</label>
+                            <select
+                                value={defaultLang}
+                                onChange={(e) => setDefaultLang(e.target.value)}
+                                style={{ width: '100%', padding: '1rem', borderRadius: '12px', border: '2px solid #e2e8f0', fontSize: '1rem', background: 'white' }}
+                            >
+                                {["English", "Spanish", "Mandarin Chinese", "Hindi", "French", "Arabic", "Bengali", "Portuguese", "Russian", "Urdu"].map(lang => (
+                                    <option key={lang} value={lang}>{lang}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', background: '#f0f9ff', padding: '1.25rem', borderRadius: '16px', border: '2px solid #bae6fd' }}>
+                            <div style={{ flex: 1 }}>
+                                <div style={{ fontWeight: '700', color: '#0369a1', fontSize: '1rem' }}>AI SMS Nudges</div>
+                                <div style={{ fontSize: '0.85rem', color: '#0c4a6e' }}>Get proactive academic alerts via SMS.</div>
+                            </div>
+                            <div style={{
+                                width: '50px',
+                                height: '26px',
+                                background: '#0284c7',
+                                borderRadius: '20px',
+                                position: 'relative',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                padding: '3px'
+                            }}>
+                                <div style={{ width: '20px', height: '20px', background: 'white', borderRadius: '50%', marginLeft: 'auto' }}></div>
+                            </div>
                         </div>
                     </div>
 
-                    <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
-                        <button type="button" onClick={onClose} style={{ flex: 1, padding: '0.75rem', background: '#f1f5f9', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}>Close</button>
-                        <button type="submit" style={{ flex: 1, padding: '0.75rem', background: '#4f46e5', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}>Save Changes</button>
+                    {/* Footer Buttons */}
+                    <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem', borderTop: '1px solid #e2e8f0', paddingTop: '2.5rem' }}>
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            style={{
+                                flex: 1,
+                                padding: '1.25rem',
+                                background: '#f1f5f9',
+                                border: 'none',
+                                borderRadius: '16px',
+                                fontWeight: '700',
+                                color: '#64748b',
+                                cursor: 'pointer',
+                                fontSize: '1rem',
+                                transition: 'all 0.2s'
+                            }}
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            style={{
+                                flex: 2,
+                                padding: '1.25rem',
+                                background: '#4f46e5',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '16px',
+                                fontWeight: '700',
+                                cursor: 'pointer',
+                                fontSize: '1rem',
+                                boxShadow: '0 4px 14px 0 rgba(79, 70, 229, 0.39)',
+                                transition: 'all 0.2s'
+                            }}
+                        >
+                            Save Profile Changes
+                        </button>
                     </div>
                 </form>
             </motion.div>
         </div>
     );
 };
+
 
 
 const Dashboard = () => {
