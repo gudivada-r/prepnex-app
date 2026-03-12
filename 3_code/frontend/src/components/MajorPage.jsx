@@ -35,9 +35,8 @@ const MajorPage = () => {
         solution: "Aumtech.ai adapts to your curriculum, extracting your syllabus and creating a personalized study plan."
     };
 
-    // Update Meta Title for SEO
     useEffect(() => {
-        document.title = `AI Student Success Platform for ${major.name} Majors | Aumtech.ai`;
+        document.title = `Get Aura | Academic Success for ${major.name} Majors`;
     }, [major]);
 
     return (
@@ -49,7 +48,7 @@ const MajorPage = () => {
                     <span style={{ fontWeight: '800', fontSize: '1.25rem' }}>Aumtech.ai</span>
                 </Link>
                 <Link to="/login" style={{ background: '#4f46e5', color: 'white', padding: '0.5rem 1rem', borderRadius: '8px', textDecoration: 'none', fontWeight: '600' }}>
-                    Sign Up Free
+                    Student Portal
                 </Link>
             </header>
 
@@ -68,7 +67,7 @@ const MajorPage = () => {
                     </h2>
 
                     <Link to="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: '12px', background: '#4f46e5', color: 'white', padding: '1.25rem 2.5rem', borderRadius: '12px', textDecoration: 'none', fontWeight: '700', fontSize: '1.25rem', boxShadow: '0 20px 25px -5px rgb(79 70 229 / 0.3)' }}>
-                        Start Your Free Trial <ArrowRight size={24} />
+                        Enter My Hub <ArrowRight size={24} />
                     </Link>
                 </motion.div>
 

@@ -1,6 +1,6 @@
 {
   "appId": "com.studentsuccess.navigator",
-  "appName": "StudentSuccess",
+  "appName": "Get Aura",
   "webDir": "dist",
   "bundledWebRuntime": false,
   "server": {

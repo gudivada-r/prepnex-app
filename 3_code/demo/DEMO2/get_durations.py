@@ -1,7 +1,7 @@
 import os
-from moviepy import AudioFileClip
+from moviepy.editor import AudioFileClip
 
-D = os.path.join(r"c:\projects\3_code\demo\DEMO2\voiceovers")
+D = os.path.join(r"c:\Projects\AA\at\3_code\demo\DEMO2\voiceovers")
 durs = {}
 for f in sorted(os.listdir(D)):
     if f.endswith(".mp3"):

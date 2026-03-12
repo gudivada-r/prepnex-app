@@ -14,12 +14,7 @@ const PrivateRoute = ({ children }) => {
 
 function App() {
   useEffect(() => {
-    // Wrap in try-catch to prevent app crash if plugin is missing
-    try {
-      initializeIAP();
-    } catch (e) {
-      console.error("IAP Init Failed", e);
-    }
+    // IAP initialization removed as app is now University Licensed / Free.
   }, []);
 
   return (

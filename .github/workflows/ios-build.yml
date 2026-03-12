@@ -1,0 +1,59 @@
+name: Build & Deploy iOS App
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-ios:
+    runs-on: macos-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: 3_code/frontend/package-lock.json
+
+      - name: Install Frontend Dependencies
+        working-directory: 3_code/frontend
+        run: npm install
+
+      - name: Build Web App
+        working-directory: 3_code/frontend
+        run: npm run build
+
+      - name: Freshly Generate iOS Project (Fix Corruption)
+        working-directory: 3_code/frontend
+        run: |
+          rm -rf ios
+          npx cap add ios
+          npx cap sync ios
+          npx capacitor-assets generate --ios
+
+      - name: Strip macOS Detritus
+        run: |
+          find . -name "*.png" -exec xattr -c {} \; || true
+          find . -name "*.storyboard" -exec xattr -c {} \; || true
+          find . -name "*.xcassets" -exec xattr -c {} \; || true
+
+      - name: Resolve SPM Dependencies
+        working-directory: 3_code/frontend/ios/App
+        run: xcodebuild -resolvePackageDependencies -project App.xcodeproj -scheme App
+
+      - name: Install Bundler
+        run: gem install bundler
+
+      - name: Build and Deploy (Fastlane)
+        working-directory: 3_code
+        run: |
+          gem install fastlane
+          fastlane release --verbose
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          APP_STORE_CONNECT_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_KEY_CONTENT }}

@@ -38,7 +38,7 @@ const featureData = {
 const FeaturePage = () => {
     const { featureId } = useParams();
     const feature = featureData[featureId] || {
-        title: "Student Success Navigator Tools",
+        title: "Get Aura | Intelligence for Higher Ed",
         subtitle: "AI-powered tools to optimize your college experience.",
         heroText: "Aumtech.ai provides a full suite of autonomous tools to help you study smarter, not harder.",
         icon: <Clock size={40} color="#4f46e5" />,
@@ -59,7 +59,7 @@ const FeaturePage = () => {
                     <span style={{ fontWeight: '800', fontSize: '1.25rem' }}>Aumtech.ai</span>
                 </Link>
                 <Link to="/login" style={{ background: '#4f46e5', color: 'white', padding: '0.5rem 1rem', borderRadius: '8px', textDecoration: 'none', fontWeight: '600' }}>
-                    Try it Free
+                    Student Success Hub
                 </Link>
             </header>
 
@@ -85,7 +85,7 @@ const FeaturePage = () => {
                     </p>
 
                     <Link to="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#1e293b', color: 'white', padding: '1rem 2rem', borderRadius: '12px', textDecoration: 'none', fontWeight: '700', fontSize: '1.1rem', transition: 'transform 0.2s', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}>
-                        Get Started <ArrowRight size={20} />
+                        Enter My Dashboard <ArrowRight size={20} />
                     </Link>
                 </motion.div>
 

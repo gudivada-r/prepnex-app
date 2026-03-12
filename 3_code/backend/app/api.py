@@ -47,78 +47,14 @@ async def debug_env():
 
 
 
-class CheckoutRequest(BaseModel):
-    price_id: str
-
-@router.post("/payments/create-checkout-session")
-async def create_checkout_session(
-    request: CheckoutRequest,
-    current_user: User = Depends(get_current_user),
-    session: Session = Depends(get_session)
-):
-    try:
-        frontend_url = os.getenv("FRONTEND_URL", "http://localhost:5173")
-        checkout_session = stripe.checkout.Session.create(
-            payment_method_types=['card'],
-            customer_email=current_user.email,
-            line_items=[
-                {
-                    'price': request.price_id,
-                    'quantity': 1,
-                },
-            ],
-            mode='subscription',
-            success_url=f"{frontend_url}/dashboard?payment=success",
-            cancel_url=f"{frontend_url}/dashboard?payment=cancel",
-            metadata={
-                'user_id': current_user.id
-            }
-        )
-        return {"id": checkout_session.id, "url": checkout_session.url}
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
-@router.post("/payments/webhook")
-async def stripe_webhook(request: Request, session: Session = Depends(get_session)):
-    payload = await request.body()
-    sig_header = request.headers.get('stripe-signature')
-    webhook_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
-    
-    try:
-        event = stripe.Webhook.construct_event(
-            payload, sig_header, webhook_secret
-        )
-    except Exception as e:
-        print(f"Webhook error: {e}")
-        raise HTTPException(status_code=400, detail=f"Webhook Error: {str(e)}")
-
-    if event['type'] == 'checkout.session.completed':
-        session_data = event['data']['object']
-        user_id = session_data['metadata'].get('user_id')
-        if user_id:
-            statement = select(User).where(User.id == int(user_id))
-            user = session.exec(statement).first()
-            if user:
-                user.subscription_status = "active"
-                user.stripe_customer_id = session_data.get('customer')
-                user.stripe_subscription_id = session_data.get('subscription')
-                session.add(user)
-                session.commit()
-    
-    return {"status": "success"}
+# Payment endpoints removed as app is now University Licensed / Free.
     
 async def verify_subscription(current_user: User = Depends(get_current_user)):
-    if current_user.is_admin:
-        return True
-    if current_user.subscription_status == "active":
-        return True
-    if current_user.subscription_status == "trialing":
-        if current_user.trial_ends_at and current_user.trial_ends_at > datetime.utcnow():
-            return True
-    raise HTTPException(
-        status_code=status.HTTP_402_PAYMENT_REQUIRED, 
-        detail="Subscription required. Your 7-day free trial has expired."
-    )
+    """
+    App is now Free/University Licensed.
+    All registered or SSO users have full access.
+    """
+    return True
 
 
 class SyllabusEvent(BaseModel):

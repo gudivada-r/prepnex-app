@@ -8,7 +8,7 @@ const PrivacyPolicy = ({ onBack }) => (
         <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '1.5rem' }}>Privacy Policy</h1>
         <div className="card-white" style={{ lineHeight: '1.6', color: '#334155' }}>
             <p><strong>Effective Date:</strong> January 1, 2026</p>
-            <p>At Student Success Navigator, we take your privacy seriously. This policy describes how we collect, use, and protect your personal information.</p>
+            <p>At Aura, we take your privacy seriously. This policy describes how we collect, use, and protect your personal information.</p>
 
             <h3 style={{ marginTop: '1.5rem', fontWeight: 'bold' }}>1. Information We Collect</h3>
             <ul style={{ listStyleType: 'disc', marginLeft: '1.5rem', marginBottom: '1rem' }}>

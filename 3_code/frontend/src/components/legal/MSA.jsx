@@ -7,10 +7,10 @@ const MSA = ({ onBack }) => (
         <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '1.5rem' }}>Master Services Agreement (MSA)</h1>
         <div className="card-white" style={{ lineHeight: '1.6', color: '#334155' }}>
             <p><strong>Last Updated:</strong> January 1, 2026</p>
-            <p>This Master Services Agreement ("Agreement") governs your use of the Student Success Navigator platform.</p>
+            <p>This Master Services Agreement ("Agreement") governs your use of the Get Aura platform.</p>
 
             <h3 style={{ marginTop: '1.5rem', fontWeight: 'bold' }}>1. Services</h3>
-            <p>We agree to provide the access to the Student Success Navigator platform, including its AI-driven insights, dashboard, and scheduling tools, subject to the terms of this Agreement.</p>
+            <p>We agree to provide the access to the Get Aura platform, including its AI-driven insights, dashboard, and scheduling tools, subject to the terms of this Agreement.</p>
 
             <h3 style={{ marginTop: '1.5rem', fontWeight: 'bold' }}>2. User Obligations</h3>
             <p>You agree to:</p>
@@ -21,7 +21,7 @@ const MSA = ({ onBack }) => (
             </ul>
 
             <h3 style={{ marginTop: '1.5rem', fontWeight: 'bold' }}>3. Intellectual Property</h3>
-            <p>All rights, title, and interest in the platform and its content (excluding your user data) remain with Student Success Inc.</p>
+            <p>All rights, title, and interest in the platform and its content (excluding your user data) remain with Aura AI.</p>
 
             <h3 style={{ marginTop: '1.5rem', fontWeight: 'bold' }}>4. Termination</h3>
             <p>We reserve the right to suspend or terminate your access to the services if you violate any terms of this Agreement.</p>

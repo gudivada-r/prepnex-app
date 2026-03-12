@@ -76,75 +76,24 @@ const loadRevenueCat = async () => {
 };
 
 export const initializeIAP = async () => {
-    if (isConfigured) return;
-
-    const p = await loadRevenueCat();
-    if (p && !p.isMock) {
-        try {
-            await p.configure({ apiKey: API_KEY });
-            isConfigured = true;
-            console.log("RevenueCat configured successfully");
-        } catch (e) {
-            console.error("RevenueCat configuration failed", e);
-        }
-    } else {
-        isConfigured = true;
-        console.log("RevenueCat (Web Mock) Initialized");
-    }
+    // IAP functionality disabled as app is now free.
+    isConfigured = true;
+    console.log("IAP Initialization: App is in Free/University License mode.");
 };
 
 export const getRevenueCatOfferings = async () => {
-    // Safety Check: Ensure SDK is configured before fetching
-    if (!isConfigured) {
-        console.log("RevenueCat not configured yet, initializing now...");
-        await initializeIAP();
-    }
-
-    const p = await loadRevenueCat();
-    if (p) {
-        if (p.isMock) {
-            // Simulate network delay
-            await new Promise(r => setTimeout(r, 500));
-            return MOCK_OFFERINGS;
+    // App is free, no offerings to display.
+    return {
+        current: {
+            availablePackages: []
         }
-        try {
-            // Add Timeout Mechanism (5 seconds)
-            const timeout = new Promise((_, reject) =>
-                setTimeout(() => reject(new Error("Timeout fetching Key Offerings from Apple/RevenueCat")), 5000)
-            );
-            const offerings = await Promise.race([
-                p.getOfferings(),
-                timeout
-            ]);
-            return offerings;
-        } catch (e) {
-            console.error("Error getting offerings", e);
-            throw e; // Re-throw so the UI knows it failed
-        }
-    }
-    return null;
+    };
 };
 
 export const purchaseRevenueCatPackage = async (pkg) => {
-    const p = await loadRevenueCat();
-    if (p) {
-        if (p.isMock) {
-            await new Promise(r => setTimeout(r, 1000));
-            return { customerInfo: MOCK_CUSTOMER_INFO };
-        }
-        return await p.purchasePackage(pkg);
-    }
-    throw new Error("RevenueCat not initialized or not supported");
+    return { customerInfo: MOCK_CUSTOMER_INFO };
 };
 
 export const restorePurchases = async () => {
-    const p = await loadRevenueCat();
-    if (p) {
-        if (p.isMock) {
-            await new Promise(r => setTimeout(r, 800));
-            return { customerInfo: MOCK_CUSTOMER_INFO };
-        }
-        return await p.restorePurchases();
-    }
-    throw new Error("RevenueCat not initialized");
-}
+    return { customerInfo: MOCK_CUSTOMER_INFO };
+};

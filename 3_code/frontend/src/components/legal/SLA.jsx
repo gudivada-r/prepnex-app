@@ -7,7 +7,7 @@ const SLA = ({ onBack }) => (
         <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '1.5rem' }}>Service Level Agreement (SLA)</h1>
         <div className="card-white" style={{ lineHeight: '1.6', color: '#334155' }}>
             <p><strong>Effective Date:</strong> January 1, 2026</p>
-            <p>This Service Level Agreement defines the expected level of service for the Student Success Navigator platform.</p>
+            <p>This Service Level Agreement defines the expected level of service for the Get Aura platform.</p>
 
             <h3 style={{ marginTop: '1.5rem', fontWeight: 'bold' }}>1. Uptime Commitment</h3>
             <p>We commit to maintaining a Service Availability of at least 99.5% during each calendar month, excluding scheduled maintenance.</p>
