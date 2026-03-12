@@ -376,7 +376,7 @@ const AdminEdnex = () => {
                                                         <span style={{ fontWeight: 'bold' }}>{pkg.status}</span>
                                                     </div>
                                                     <div style={{ color: '#166534', fontSize: '0.8rem' }}>
-                                                        Offered: ${pkg.total_offered.toLocaleString()} • Distributed: ${pkg.total_disbursed.toLocaleString()}
+                                                        Offered: ${pkg.total_offered?.toLocaleString() || 0} • Distributed: ${pkg.total_disbursed?.toLocaleString() || 0}
                                                     </div>
                                                 </div>
                                             ))}
@@ -394,7 +394,7 @@ const AdminEdnex = () => {
                                             {selectedStudent.modules.mod09_contributions.map((con, i) => (
                                                 <div key={i} style={{ background: '#fff7ed', padding: '12px', borderRadius: '8px', fontSize: '0.85rem' }}>
                                                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                        <strong style={{ color: '#c2410c' }}>${con.amount.toLocaleString()}</strong>
+                                                        <strong style={{ color: '#c2410c' }}>${con.amount?.toLocaleString() || 0}</strong>
                                                         <span style={{ fontSize: '0.75rem', color: '#9a3412' }}>{new Date(con.contribution_date).toLocaleDateString()}</span>
                                                     </div>
                                                     <div style={{ fontSize: '0.75rem', marginTop: '2px' }}>{con.type}: {con.designation}</div>
