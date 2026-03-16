@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>aumtech.ai — The Student Success Navigator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #818cf8;
+            --accent: #f59e0b;
+            --accent-glow: rgba(245, 158, 11, 0.2);
+            --bg-deep: #f8fafc; /* Light Background */
+            --glass: rgba(255, 255, 255, 0.8);
+            --glass-border: rgba(0, 0, 0, 0.05);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body, html {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-deep);
+            color: var(--text-main);
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* ── Ambient Background ── */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #f1f5f9 0%, #f8fafc 100%);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.2;
+            animation: float 20s infinite alternate ease-in-out;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(5% , 5%) scale(1.1); }
+            100% { transform: translate(-5%, 2%) scale(0.9); }
+        }
+
+        /* ── Slide System ── */
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), visibility 1s;
+            padding: 0 8vw;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ── Typography & Content ── */
+        .content-box {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6vw;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 4.5vw, 4rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: #0f172a;
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 1.2vw, 1.4rem);
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+        }
+
+        /* ── Visual Elements ── */
+        .visual-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        }
+
+        /* ── Animations ── */
+        .reveal {
+            transform: translateY(30px);
+            opacity: 0;
+            transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .slide.active .reveal {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .delay-1 { transition-delay: 0.2s; }
+        .delay-2 { transition-delay: 0.4s; }
+        .delay-3 { transition-delay: 0.6s; }
+
+        /* SLIDE 1: Problem */
+        .problem-tag {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .frustration-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.25rem;
+            background: #fff;
+            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 16px;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        /* SLIDE 3: Architecture */
+        .arch-image-container {
+            position: relative;
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            background: #fff;
+            padding: 10px;
+        }
+
+        .arch-image-container img {
+            width: 100%;
+            display: block;
+        }
+
+        .aura-label {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-weight: 800;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.4);
+            animation: pulse-label 2s infinite alternate;
+        }
+
+        @keyframes pulse-label {
+            from { transform: translateX(-50%) scale(1); }
+            to { transform: translateX(-50%) scale(1.05); }
+        }
+
+        /* SLIDE 4: Aura Image */
+        .aura-visual {
+            width: 100%;
+            height: 400px;
+            background: url('./assets/aura.png') no-repeat center center;
+            background-size: contain;
+            filter: drop-shadow(0 0 20px rgba(79, 70, 229, 0.2));
+            animation: float-aura 4s infinite alternate ease-in-out;
+        }
+
+        @keyframes float-aura {
+            from { transform: translateY(0); }
+            to { transform: translateY(-15px); }
+        }
+
+        /* Nav & Progress */
+        .nav-dots {
+            position: fixed;
+            bottom: 6vh;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            z-index: 100;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: var(--primary);
+            transform: scale(1.5);
+        }
+
+        .side-nav {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+            height: 60px;
+            background: #fff;
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000; /* High priority */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: bold;
+            pointer-events: auto;
+        }
+
+        .side-nav:hover {
+            background: var(--primary);
+            color: #fff;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .side-nav:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .side-nav.prev { left: 2vw; }
+        .side-nav.next { right: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="side-nav prev" id="prevBtn">←</div>
+    <div class="side-nav next" id="nextBtn">→</div>
+
+    <div class="background">
+        <div class="orb" style="width: 40vw; height: 40vw; background: #c7d2fe; top: -10vh; left: -5vw;"></div>
+        <div class="orb" style="width: 35vw; height: 35vw; background: #ddd6fe; bottom: -5vh; right: -5vw; animation-delay: -5s;"></div>
+    </div>
+
+    <!-- ── SLIDE 1 ── -->
+    <div class="slide active" id="slide1">
+        <div class="content-box">
+            <div class="text-side">
+                <span class="problem-tag reveal">THE CHALLENGE</span>
+                <h1 class="reveal delay-1">Students are navigating<br>a fragmented maze.</h1>
+                <p class="subtitle reveal delay-2">Disconnected systems, silent emails, and manual processes create invisible barriers to graduation.</p>
+            </div>
+            <div class="visual-container reveal delay-3">
+                <div style="display: flex; flex-direction: column; gap: 1rem; width: 100%;">
+                    <div class="frustration-item">
+                        <span style="font-size: 1.5rem;">😤</span>
+                        <div><strong>Manual Advising</strong></div>
+                    </div>
+                    <div class="frustration-item">
+                        <span style="font-size: 1.5rem;">🔍</span>
+                        <div><strong>Data Silos</strong></div>
+                    </div>
+                    <div class="frustration-item">
+                        <span style="font-size: 1.5rem;">🛑</span>
+                        <div><strong>Mystery Holds</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── SLIDE 2 ── -->
+    <div class="slide" id="slide2">
+        <div class="content-box">
+            <div class="text-side">
+                <h1 class="reveal">The High Cost of Inefficiency.</h1>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;" class="reveal delay-1">
+                    <div>
+                        <div style="font-size: 3rem; font-weight: 800; color: var(--primary);">40%</div>
+                        <p style="color: var(--text-muted);">Non-graduation rate</p>
+                    </div>
+                    <div>
+                        <div style="font-size: 3rem; font-weight: 800; color: var(--primary);">73%</div>
+                        <p style="color: var(--text-muted);">Lack timely support</p>
+                    </div>
+                </div>
+            </div>
+            <div class="visual-container reveal delay-2">
+                <img src="./assets/navigation.png" alt="Navigation" style="width: 100%; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
+            </div>
+        </div>
+    </div>
+
+    <!-- ── SLIDE 3 ── -->
+    <div class="slide" id="slide3">
+        <div class="content-box" style="grid-template-columns: 0.8fr 1.2fr;">
+            <div class="text-side">
+                <h1 class="reveal">The Architecture of Intelligence.</h1>
+                <p class="subtitle reveal delay-1">Powered by <strong>EdNex</strong> for secure data staging and <strong>Aura</strong> for conversational academic guidance.</p>
+                <div class="reveal delay-2 glass-card" style="padding: 1.5rem; margin-top: -1rem; background: rgba(79, 70, 229, 0.05); border-left: 4px solid var(--primary); border-radius: 0 16px 16px 0;">
+                    <p style="font-size: 0.95rem; color: var(--text-main); font-weight: 500;">
+                        Featuring the <strong>Aura Privacy Gateway</strong>: Every request is automatically stripped of student PII—ensuring 100% secure enterprise AI.
+                    </p>
+                </div>
+            </div>
+            <div class="visual-container reveal delay-3">
+                <div class="arch-image-container">
+                    <img src="./assets/aura_detailed_architecture.png" alt="Aura Detailed Architecture">
+                    <div class="aura-label">SECURE INTELLIGENCE LAYER</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── SLIDE 4 ── -->
+    <div class="slide" id="slide4">
+        <div class="content-box">
+            <div class="text-side">
+                <h1 class="reveal">Meet Aura.<br>Your AI Navigator.</h1>
+                <p class="subtitle reveal delay-1">A unified AI platform powered by Google Gemini, providing 24/7 hyper-personalized guidance.</p>
+            </div>
+            <div class="visual-container reveal delay-2">
+                <div class="aura-visual"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── SLIDE 5 ── -->
+    <div class="slide" id="slide5">
+        <div style="text-align: center; width: 100%;">
+            <h1 class="reveal">Unified Intelligence.</h1>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem;" class="reveal delay-1">
+                <div class="glass-card"><strong>🎓 Roadmap</strong></div>
+                <div class="glass-card"><strong>💰 Finance</strong></div>
+                <div class="glass-card"><strong>🏥 Wellness</strong></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── SLIDE 6 ── -->
+    <div class="slide" id="slide6">
+        <div style="text-align: center; width: 100%;">
+            <div class="reveal" style="width: 150px; height: 150px; margin: 0 auto 2rem;">
+                <img src="./assets/logo.png" alt="logo" style="width: 100%; border-radius: 30px;">
+            </div>
+            <h1 class="reveal delay-1">aumtech.ai</h1>
+            <p class="subtitle reveal delay-2" style="margin: 0 auto;">THE STUDENT SUCCESS NAVIGATOR</p>
+        </div>
+    </div>
+
+    <div class="nav-dots">
+        <div class="dot active" onclick="jumpToSlide(0)"></div>
+        <div class="dot" onclick="jumpToSlide(1)"></div>
+        <div class="dot" onclick="jumpToSlide(2)"></div>
+        <div class="dot" onclick="jumpToSlide(3)"></div>
+        <div class="dot" onclick="jumpToSlide(4)"></div>
+        <div class="dot" onclick="jumpToSlide(5)"></div>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        let currentSlide = 0;
+        let autoAdvance = true;
+        let autoTimer = null;
+
+        const timings = [10000, 10000, 15000, 12000, 10000, 10000];
+
+        function goToSlide(n) {
+            if (n < 0) n = slides.length - 1;
+            if (n >= slides.length) n = 0;
+            
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+            
+            currentSlide = n;
+            
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+
+        function jumpToSlide(n) {
+            console.log('Jumping to slide:', n);
+            autoAdvance = false;
+            if (autoTimer) clearTimeout(autoTimer);
+            goToSlide(n);
+        }
+
+        function nextSlide() { 
+            jumpToSlide((currentSlide + 1) % slides.length); 
+        }
+        
+        function prevSlide() { 
+            jumpToSlide((currentSlide - 1 + slides.length) % slides.length); 
+        }
+
+        // Bind events
+        document.getElementById('nextBtn').addEventListener('click', nextSlide);
+        document.getElementById('prevBtn').addEventListener('click', prevSlide);
+
+        // Attach to window for global access
+        window.nextSlide = nextSlide;
+        window.prevSlide = prevSlide;
+        window.jumpToSlide = jumpToSlide;
+
+        function startAuto() {
+            if (!autoAdvance) return;
+            autoTimer = setTimeout(() => {
+                if (autoAdvance && currentSlide < slides.length - 1) {
+                    goToSlide(currentSlide + 1);
+                    startAuto();
+                }
+            }, timings[currentSlide]);
+        }
+
+        // Global key listeners
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            }
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            }
+        });
+
+        // Initialize
+        setTimeout(startAuto, 3000);
+        window.goToSlide = jumpToSlide;
+    </script>
+</body>
+</html>

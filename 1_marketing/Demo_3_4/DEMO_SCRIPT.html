@@ -336,11 +336,68 @@
                 break-inside: avoid;
             }
         }
+
+        /* ===== TELEPROMPTER MODE ===== */
+        body.teleprompter .timing-bar,
+        body.teleprompter header,
+        body.teleprompter .scene-header,
+        body.teleprompter .notes-box,
+        body.teleprompter .summary-section {
+            display: none !important;
+        }
+
+        body.teleprompter .container {
+            max-width: 100%;
+            padding: 5vh 10vw;
+        }
+
+        body.teleprompter .scene {
+            background: transparent;
+            border: none;
+            margin-bottom: 10vh;
+        }
+
+        body.teleprompter .narration {
+            border: none;
+            background: transparent;
+        }
+
+        body.teleprompter .narration p {
+            font-size: 2.8rem;
+            line-height: 1.4;
+            font-weight: 500;
+            color: #fff;
+            margin-bottom: 2rem;
+        }
+
+        body.teleprompter .pause-note {
+            font-size: 1.2rem;
+            padding: 0.5rem 1rem;
+            margin: 1rem 0;
+        }
+
+        .tele-btn {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 100px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .tele-btn:hover { transform: scale(1.05); }
     </style>
 </head>
 
 <body>
-
+    <button class="tele-btn" onclick="document.body.classList.toggle('teleprompter')">Toggle Teleprompter Mode</button>
     <header>
         <div class="logo-pill">aumtech.ai</div>
         <div>
@@ -355,6 +412,7 @@
         <div class="timing-bar">
             <h2>⏱ Scene Timing at a Glance</h2>
             <div class="time-chip"><span class="label">01 Intro</span><span class="val">45s</span></div>
+            <div class="time-chip"><span class="label">01B Architecture</span><span class="val">45s</span></div>
             <div class="time-chip"><span class="label">02 Sign In</span><span class="val">30s</span></div>
             <div class="time-chip"><span class="label">03 Dashboard</span><span class="val">60s</span></div>
             <div class="time-chip"><span class="label">04 Get Aura</span><span class="val">90s</span></div>
@@ -366,7 +424,7 @@
             <div class="time-chip"><span class="label">10 Social Campus</span><span class="val">45s</span></div>
             <div class="time-chip"><span class="label">11 Admin Panel</span><span class="val">60s</span></div>
             <div class="time-chip"><span class="label">12 Closing</span><span class="val">45s</span></div>
-            <div class="time-chip total"><span class="label">⏱ Total Runtime</span><span class="val">~9m 30s</span>
+            <div class="time-chip total"><span class="label">⏱ Total Runtime</span><span class="val">~10m 15s</span>
             </div>
         </div>
 
@@ -397,6 +455,25 @@
                         intelligent tutoring triage, financial aid matching, and institutional analytics — all powered
                         by Google Gemini and built for universities at scale.</p>
                     <p>Let's go."</p>
+                </div>
+            </div>
+        </div>
+        <!-- SCENE 01B -->
+        <div class="scene">
+            <div class="scene-header">
+                <div class="scene-number" style="background:linear-gradient(135deg,#4f46e5,#7c3aed);">01B</div>
+                <div class="scene-title">
+                    <h3>The Engine — EdNex &amp; Aura Architecture</h3>
+                    <div class="screen-note">🖥 Screen: Architecture Diagram (Hand-off or Overlay)</div>
+                </div>
+                <div class="scene-duration">45 sec</div>
+            </div>
+            <div class="scene-body">
+                <div class="narration">
+                    <p>"Before we step into the platform, we need to look at the engine making this possible.</p>
+                    <p>At the center is <strong>EdNex</strong> — our sophisticated Integration and Staging Layer. EdNex functions as a 'DataStream' conduit, securely normalizing fragmented data from legacy SIS, LMS, and financial systems into a unified, multi-tenant cloud staging hub.</p>
+                    <p>On top of this sits <strong>Aura</strong>, the Intelligence Layer. Aura isn't just a generic LLM; it's a context-aware engine that bridges raw institutional data with the reasoning power of Google Gemini.</p>
+                    <p>And for our university partners, security is paramount. Every request passes through our <strong>Aura Privacy Gateway</strong>, where sensitive student PII is automatically stripped and tokenized before it ever touches a cloud model. This is how we deliver enterprise AI that is both incredibly powerful and 100% secure."</p>
                 </div>
             </div>
         </div>
@@ -696,6 +773,11 @@
                     <td>45s</td>
                 </tr>
                 <tr>
+                    <td>01B</td>
+                    <td>Architecture (EdNex &amp; Aura)</td>
+                    <td>45s</td>
+                </tr>
+                <tr>
                     <td>02</td>
                     <td>Sign In &amp; First Impression</td>
                     <td>30s</td>
@@ -752,7 +834,7 @@
                 </tr>
                 <tr>
                     <td colspan="2"><strong>⏱ TOTAL</strong></td>
-                    <td><strong>~9 min 30 sec</strong></td>
+                    <td><strong>~10 min 15 sec</strong></td>
                 </tr>
             </tbody>
         </table>

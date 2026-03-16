@@ -25,17 +25,27 @@ SCRIPT = {
         "intelligent tutoring triage, financial aid matching, and institutional analytics — "
         "all powered by Google Gemini and built for universities at scale. Let's go."
     ),
-
+    "01B_Architecture": (
+        "Before we step into the platform, we need to look at the engine making this possible. "
+        "At the center is Ed Nex — our sophisticated Integration and Staging Layer. Ed Nex functions as a "
+        "Data Stream conduit, securely normalizing fragmented data from legacy S I S, L M S, and financial systems "
+        "into a unified, multi-tenant cloud staging hub. "
+        "On top of this sits Aura, the Intelligence Layer. Aura is not just a generic L L M; "
+        "it is a context-aware engine that bridges raw institutional data with the reasoning power of Google Gemini. "
+        "And for our university partners, security is paramount. "
+        "Every request passes through our Aura Privacy Gateway, where sensitive student P I I is automatically "
+        "stripped and tokenized before it ever touches a cloud model. "
+        "This is how we deliver enterprise AI that is both incredibly powerful and one hundred percent secure."
+    ),
     "02_SignIn": (
         "The sign-in experience is clean and professional. Students log in with their university credentials. "
         "What happens next is immediate — our AI backend instantly loads their personalized profile: "
         "courses, GPA trends, outstanding holds, and a dynamically generated AI insight — "
         "all before the page even finishes rendering."
     ),
-
     "03_Dashboard": (
         "Welcome to the Student Dashboard. The very first thing a student sees is a warm, personalized greeting "
-        "from the Get Aura — noticing the time of day, their academic progress, and surfacing the most "
+        "from Aura — noticing the time of day, their academic progress, and surfacing the most "
         "important action items right away. "
         "In the center, we have the On-Track Score — a real-time metric reflecting GPA, assignment completion, "
         "holds status, and wellness across all courses. "
@@ -44,9 +54,8 @@ SCRIPT = {
         "On the left sidebar, the navigation panel organizes everything across five categories: Home, Academics, "
         "Resources, Campus Life, and Administrative. No hunting around. Everything is exactly where you expect it."
     ),
-
     "04_AINavigator": (
-        "At the heart of aumtech dot ai is the Get Aura — a conversational academic agent powered by Google Gemini. "
+        "At the heart of aumtech dot ai is Aura — a conversational academic agent powered by Google Gemini. "
         "This isn't a generic chatbot. It knows this student. It has access to their enrolled courses, "
         "GPA history, and academic calendar. Watch this. "
         "I'll ask: I failed my Calculus midterm — what should I do? "
@@ -58,16 +67,14 @@ SCRIPT = {
         "This is truly a next-generation academic advising experience — available twenty-four-seven, "
         "not just during office hours."
     ),
-
     "05_Courses": (
         "Under Academics, students get a crystal-clear view of every course they are taking — "
         "grades, credit hours, and AI-generated improvement suggestions appear automatically. "
         "But we go further. Click on the Degree Roadmap — and now the student sees their entire academic journey "
         "laid out visually. Which credits are complete. Which are in progress. What is missing before they can graduate. "
         "No more mysterious holds about missing prerequisites. "
-        "The Get Aura proactively surfaces gaps before they become problems."
+        "Aura proactively surfaces gaps before they become problems."
     ),
-
     "06_Tutoring": (
         "One of aumtech dot ai's most powerful features is the intelligent Tutoring System, "
         "built on what we call Roster Truth — the system syncs directly with the university's learning management system, "
@@ -82,7 +89,6 @@ SCRIPT = {
         "And a confirmation email is sent to the student instantly. "
         "This is not just scheduling. This is intelligent academic triage at scale."
     ),
-
     "07_Wellness": (
         "aumtech dot ai doesn't just track grades — it cares about the whole student. "
         "The Wellness Check-In is a brief, thoughtful survey. Responses are processed by the AI to personalize "
@@ -90,7 +96,6 @@ SCRIPT = {
         "And for students who need focus, the Study Timer provides a built-in Pomodoro-style productivity tool. "
         "Session data is even factored into the on-track score."
     ),
-
     "08_Holds": (
         "One of the biggest sources of student frustration is the mystery hold — "
         "a financial or administrative block that prevents registration, with zero explanation of how to resolve it. "
@@ -98,7 +103,6 @@ SCRIPT = {
         "how much is owed if applicable, and exactly what the student needs to do to resolve it. "
         "One click initiates resolution — no more emailing three different offices to figure out why you cannot register."
     ),
-
     "09_FinancialAid": (
         "Financial stress is one of the top reasons students drop out. "
         "aumtech dot ai tackles this head-on with the Financial Aid Nexus. "
@@ -108,7 +112,6 @@ SCRIPT = {
         "Even more powerful: click Draft Statement, and the AI writes a personalized, professional scholarship essay — "
         "ready to review and submit. What used to take days of writing now takes seconds."
     ),
-
     "10_SocialCampus": (
         "College is not just academics — it is community. The Social Campus module connects students with each other. "
         "The Study Buddy Finder matches students taking the same courses so they can form groups and study together. "
@@ -116,7 +119,6 @@ SCRIPT = {
         "And the Textbook Marketplace? Students can buy and sell textbooks directly within the platform — "
         "no third-party sites, no awkward meetups."
     ),
-
     "11_AdminPanel": (
         "Now let's flip to the administrator view — what university leadership and advising staff see. "
         "The Admin Panel gives leadership a live dashboard of every student, ranked by academic risk. "
@@ -127,7 +129,6 @@ SCRIPT = {
         "And through the Tutoring Analytics dashboard, the Dean can see which courses have the highest demand, "
         "which topics students struggle with most, and how effectively the T A team responds — all in real time."
     ),
-
     "12_Closing": (
         "aumtech dot ai is more than software — it is a mission. "
         "We believe every student, regardless of background, deserves the kind of personalized, "
