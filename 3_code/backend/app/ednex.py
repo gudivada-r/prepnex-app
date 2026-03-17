@@ -159,7 +159,55 @@ async def get_ednex_context(
             print(f"EdNex Supabase error: {e}")
             return {"status": "error", "message": f"EdNex connection error: {str(e)}"}
 
-    return {"status": "error", "message": "EdNex Supabase integration not configured."}
+@ednex_router.get("/users/all")
+async def get_all_ednex_users(current_user: User = Depends(get_current_user)):
+    """
+    Fetches all student profiles from EdNex for batch processing.
+    """
+    if not current_user.is_admin:
+        raise HTTPException(status_code=403, detail="Admin restricted")
+        
+    supabase = get_supabase_client()
+    if not supabase:
+        return []
+        
+    try:
+        resp = supabase.table("mod00_users").select("*").execute()
+        return resp.data if resp.data else []
+    except Exception as e:
+        print(f"EdNex bulk fetch error: {e}")
+        return []
+
+@ednex_router.get("/context/{email}")
+async def get_ednex_context_by_email(email: str):
+    """Internal helper to get context without requiring a User object for every student."""
+    supabase = get_supabase_client()
+    if not supabase: return None
+    
+    try:
+        student_resp = supabase.table("mod00_users").select("*").eq("email", email).execute()
+        student_data = student_resp.data[0] if student_resp.data else None
+        if not student_data: return None
+        
+        student_id = student_data["id"]
+        sis = supabase.table("mod01_student_profiles").select("*").eq("user_id", student_id).execute()
+        fin = supabase.table("mod02_student_accounts").select("*").eq("student_id", student_id).execute()
+        adm = supabase.table("mod06_admissions_applications").select("*").eq("user_id", student_id).execute()
+        aud = supabase.table("mod07_degree_audits").select("*").eq("user_id", student_id).execute()
+        aid = supabase.table("mod08_aid_packages").select("*").eq("student_id", student_id).execute()
+        
+        return {
+            "name": f"{student_data.get('first_name', '')} {student_data.get('last_name', '')}",
+            "email": email,
+            "sis_stream": sis.data[0] if sis.data else {},
+            "finance_stream": fin.data[0] if fin.data else {},
+            "admissions_stream": adm.data if adm.data else [],
+            "advisement_stream": aud.data if aud.data else [],
+            "financial_aid_stream": aid.data if aid.data else []
+        }
+    except Exception as e:
+        print(f"Context fetch fail for {email}: {e}")
+        return None
 
 def update_ednex_ai_summary(email: str, summary_content: str):
     """

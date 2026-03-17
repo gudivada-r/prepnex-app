@@ -1,5 +1,5 @@
 # aumtech.ai Get Aura API - v1.4.1 (GPA fix: 2026-03-07)
-from fastapi import APIRouter, Depends, HTTPException, status, Request, File, Form
+from fastapi import APIRouter, Depends, HTTPException, status, Request, File, Form, BackgroundTasks
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import Session, select
 from typing import List, Optional, Dict
@@ -1805,18 +1805,31 @@ async def get_career_pathways(current_user: User = Depends(get_current_user)):
     }
 
 @router.post('/cron/nudges')
-async def trigger_nudges(session: Session = Depends(get_session)):
-    # Background job to send SMS/Push Notification nudges to students falling behind
-    from app.models import User
-    from sqlmodel import select
-    # In a real app we would use twilio/AWS SNS to send SMS here.
-    students = session.exec(select(User).where(User.gpa < 2.5)).all()
-    nudges_sent = 0
-    for student in students:
-        nudges_sent += 1
-        # Example Push logic: send_sms(student.phone, f"Hey {student.full_name}, noticed your GPA dipped. Want to run through some Flashcards? - Get Aura")
+async def trigger_nudges(background_tasks: BackgroundTasks, session: Session = Depends(get_session)):
+    """
+    Background job triggered every 4-6 hours to sync with EdNex and generate proactive insights.
+    """
+    from app.agent.intelligence import run_proactive_intelligence_batch
     
-    return {"status": "success", "nudges_sent": nudges_sent, "message": "Proactive SMS/Push nudges fired successfully."}
+    # 1. Fire and forget in the background
+    background_tasks.add_task(run_proactive_intelligence_batch)
+    
+    return {
+        "status": "success", 
+        "message": "Proactive Intelligence Batch started in background. Syncing with EdNex..."
+    }
+
+@router.get('/admin/intelligence/trigger')
+async def manual_intelligence_trigger(
+    current_user: User = Depends(get_current_user)
+):
+    """Admin-only manual trigger for the intelligence batch."""
+    if not current_user.is_admin:
+        raise HTTPException(status_code=403, detail="Admin only")
+        
+    from app.agent.intelligence import run_proactive_intelligence_batch
+    result = await run_proactive_intelligence_batch()
+    return result
 
 from app.ednex import ednex_router
 router.include_router(ednex_router, prefix='/ednex', tags=['ednex'])
