@@ -943,27 +943,52 @@ async def read_users_me(
     current_user: User = Depends(get_current_user),
     session: Session = Depends(get_session)
 ):
-    # Dynamic Insight Generation (Simple Rule-based for Demo)
-    # In a real system, this would be an async background agent task
-    # Regenerate insight if missing OR if gpa is still 0 (EdNex may not have enriched yet)
+    # Dynamic Insight Generation (Enhanced for Demo)
     if not current_user.ai_insight or current_user.gpa == 0.0:
-        first_name = (current_user.full_name or current_user.email).split(' ')[0]
-        insight = f"Welcome back, {first_name}! "
+        first_name = (current_user.full_name or "Student").split(' ')[0]
         
+        # 1. Time-of-day greeting
+        hour = datetime.now().hour
+        greeting = "Good morning"
+        if 12 <= hour < 17:
+            greeting = "Good afternoon"
+        elif hour >= 17:
+            greeting = "Good evening"
+            
+        insight = f"{greeting}, {first_name}! "
+        
+        # 2. Performance-based insight
         if current_user.gpa >= 3.5:
-            insight += "You are doing excellently with a high GPA. Keep up the great work in your honors classes."
+            insight += "You're doing excellently. Your academic trajectory is strong!"
         elif current_user.gpa >= 3.0:
-            insight += "You are on solid ground. A little extra focus on your upcoming finals could push you to the Dean's List."
+            insight += "You're on steady ground. A small push could get you on the Dean's List."
         else:
-            insight += "I noticed your GPA has room for improvement. Let's set up a tutoring session to get you back on track."
+            insight += "I've noticed your grades have dipped. I recommend booking a tutoring session to stay ahead."
             
         current_user.ai_insight = insight
-        # Only save to local cache if they are a Native Core user (id > 0)
-        # EdNex users are stateless; their insights are pushed to mod01 when AI generates paths.
-        if current_user.id and current_user.id > 0:
-            session.add(current_user)
-            session.commit()
-            session.refresh(current_user)
+        
+    # 3. Dynamic On-Track Score calculation
+    try:
+        from sqlmodel import func
+        active_holds = session.exec(select(func.count(StudentHold.id)).where(
+            StudentHold.user_id == current_user.id,
+            StudentHold.status == "active"
+        )).one()
+        
+        # Simple algorithm: Start at 95, penalize for low GPA and active holds
+        score = 95
+        if current_user.gpa < 3.0: score -= 10
+        if current_user.gpa < 2.5: score -= 15
+        score -= (active_holds * 7)
+        current_user.on_track_score = max(40, min(100, score))
+    except Exception:
+        pass # Fallback to existing value if calculation fails
+        
+    # Only save to local cache if they are a Native Core user (id > 0)
+    if current_user.id and current_user.id > 0:
+        session.add(current_user)
+        session.commit()
+        session.refresh(current_user)
         
     # Check if trial has expired
     is_trial_active = False

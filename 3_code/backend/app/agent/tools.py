@@ -62,6 +62,8 @@ class RAGRetriever:
         elif category == "academic":
             if any(word in normalized_query for word in ["career", "job", "internship", "employment", "resume"]):
                 return "Career Services: We offer resume workshops every Tuesday at 4pm. You can also book a 1-on-1 career coaching session via the Handshake portal."
+            if "calculus" in normalized_query or "fail" in normalized_query:
+                return "Academic Success Policy: Students struggling in Calculus II should visit the Tutoring Center. A common retake opportunity is available on Tuesdays. For formal documentation, students should submit the 'Academic Petition Form' (Form 12-B) to the Registrar."
             return "Tutoring Center: Free math tutoring is available M-F 9am-5pm."
         
         return "No specific documents found."

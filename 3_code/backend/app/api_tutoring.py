@@ -189,17 +189,18 @@ def analyze_problem_with_ai(note: str, image_path: Optional[str] = None) -> str:
         
         prompt = f"""
         Act as a Teaching Assistant Supervisor.
-        Summarize the following student problem into a concise 1-sentence 'Brief' for the TA.
-        Extract the core Technical Concept they are struggling with.
+        Summarize the following student problem into a concise 1-sentence 'Brief' for the Teaching Assistant.
+        The brief should start with 'Student is struggling with...' and identify the core technical concept.
         
         Student Note: "{note}"
         """
         
-        # If we had image processing logic here, we'd upload the file to Gemini.
-        # For MVP Phase 3, we focus on text unless image path is local/accessible.
-        
         response = model.generate_content(prompt)
-        return response.text.strip()
+        brief = response.text.strip()
+        # Ensure it's not too long
+        if len(brief) > 150:
+            brief = brief[:147] + "..."
+        return brief
     except Exception as e:
         print(f"AI Summary Failed: {e}")
         return "AI Analysis Failed"
