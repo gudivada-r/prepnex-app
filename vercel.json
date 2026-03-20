@@ -1,11 +1,12 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/", "destination": "/3_code/prepnex_app/src/PREPAI_LANDING_PAGE.html" },
-    { "source": "/login", "destination": "/3_code/prepnex_app/src/Login.html" },
-    { "source": "/dashboard", "destination": "/3_code/prepnex_app/src/PREPAI_MASTER_DASHBOARD.html" },
-    { "source": "/academic", "destination": "/3_code/prepnex_app/src/PREPAI_DASHBOARD_MOCKUP.html" },
-    { "source": "/vesta", "destination": "/3_code/prepnex_app/src/VestaChat.html" },
+    { "source": "/", "destination": "/3_code/prepnex_app/index.html" },
+    { "source": "/login", "destination": "/3_code/prepnex_app/Login.html" },
+    { "source": "/dashboard", "destination": "/3_code/prepnex_app/Dashboard.html" },
+    { "source": "/academic", "destination": "/3_code/prepnex_app/Roadmap.html" },
+    { "source": "/vesta", "destination": "/3_code/prepnex_app/Vesta.html" },
+    { "source": "/strategy", "destination": "/3_code/prepnex_app/Strategy.html" },
     { "source": "/src/(.*)", "destination": "/3_code/prepnex_app/src/$1" },
     { "source": "/aumtech_logo.jpg", "destination": "/3_code/prepnex_app/src/aumtech_logo.jpg" }
   ]

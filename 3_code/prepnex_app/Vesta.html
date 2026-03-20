@@ -85,7 +85,7 @@
             <div style="width:28px; height:28px; background:var(--aura-gradient); border-radius:8px;"></div> PrepNex
         </div>
         <nav style="margin-top:40px;">
-            <a href="/dashboard" class="nav-item"><i data-lucide="layout-grid"></i> Dashboard</a>
+            <a href="Dashboard.html" class="nav-item"><i data-lucide="layout-grid"></i> Dashboard</a>
             <a href="#" class="nav-item active"><i data-lucide="sparkles"></i> Vesta Hub</a>
             <a href="Billing.html" class="nav-item"><i data-lucide="credit-card"></i> Subscriptions</a>
         </nav>
@@ -144,7 +144,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="module">
-        import { vestaChat, getVestaContext } from './PREPNEX_VESTA_LOGIC.js';
+        import { vestaChat, getVestaContext } from '/src/PREPNEX_VESTA_LOGIC.js';
 
         const chatStream = document.getElementById('chat-stream');
         const chatInput = document.querySelector('input');

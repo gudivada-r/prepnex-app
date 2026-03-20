@@ -1,12 +1,12 @@
 {
   "rewrites": [
-    { "source": "/", "destination": "/src/PREPAI_LANDING_PAGE.html" },
-    { "source": "/login", "destination": "/src/Login.html" },
-    { "source": "/dashboard", "destination": "/src/PREPAI_MASTER_DASHBOARD.html" },
-    { "source": "/academic", "destination": "/src/PREPAI_DASHBOARD_MOCKUP.html" },
-    { "source": "/vesta", "destination": "/src/VestaChat.html" },
-    { "source": "/profile", "destination": "/src/PREPAI_MASTER_DASHBOARD.html" },
-    { "source": "/testing", "destination": "/src/PREPAI_DASHBOARD_MOCKUP.html" },
-    { "source": "/coaching", "destination": "/src/PREPAI_MASTER_DASHBOARD.html" }
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/login", "destination": "/Login.html" },
+    { "source": "/dashboard", "destination": "/Dashboard.html" },
+    { "source": "/academic", "destination": "/Roadmap.html" },
+    { "source": "/vesta", "destination": "/Vesta.html" },
+    { "source": "/profile", "destination": "/Dashboard.html" },
+    { "source": "/testing", "destination": "/Roadmap.html" },
+    { "source": "/coaching", "destination": "/Dashboard.html" }
   ]
 }
