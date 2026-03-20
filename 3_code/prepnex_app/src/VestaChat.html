@@ -146,21 +146,77 @@
     <script type="module">
         import { vestaChat, getVestaContext } from './PREPNEX_VESTA_LOGIC.js';
 
+        const chatStream = document.getElementById('chat-stream');
+        const chatInput = document.querySelector('input');
+        const sendBtn = document.querySelector('.btn-send');
+
         async function initVestaHub() {
             try {
-                // For demo, we pull the first seeded student
-                const studentId = "8ba7b8... (ID from seeded data)";
+                // For demo, we pull the first seeded student or use a mock ID
+                const studentId = "8ba7b812-4f32-4d5c-9b8d-123456789012"; 
                 const context = await getVestaContext(studentId);
 
-                if (context && context.ai_context.length > 0) {
+                if (context && context.ai_context && context.ai_context.length > 0) {
                     const lastNudge = context.ai_context[0].last_strategy_nudge;
-                    // Update initial greeting with context-aware message from DB
                     document.querySelector('.bubble.vesta p').innerText = "Vesta here. I see we have initiated our strategy for " + context.target_universities[0] + ". Let's focus on: " + lastNudge;
                 }
             } catch (err) {
                 console.warn("Vesta: Running in Local Standalone mode.");
             }
         }
+
+        function appendMessage(text, isUser = false) {
+            const bubble = document.createElement('div');
+            bubble.className = `bubble ${isUser ? 'user' : 'vesta'}`;
+            
+            if (!isUser) {
+                const avatar = document.createElement('div');
+                avatar.className = 'avatar-vesta';
+                avatar.innerHTML = '<i data-lucide="sparkle" style="color:white; width:16px;"></i>';
+                bubble.appendChild(avatar);
+            }
+
+            const p = document.createElement('p');
+            p.innerText = text;
+            bubble.appendChild(p);
+            
+            chatStream.appendChild(bubble);
+            chatStream.scrollTop = chatStream.scrollHeight;
+            lucide.createIcons();
+        }
+
+        async function handleSend() {
+            const msg = chatInput.value.trim();
+            if (!msg) return;
+
+            // 1. Show User Message
+            appendMessage(msg, true);
+            chatInput.value = '';
+
+            // 2. Simulate Loading
+            const loading = document.createElement('div');
+            loading.className = 'bubble vesta loading';
+            loading.innerHTML = '<p>Vesta is thinking...</p>';
+            chatStream.appendChild(loading);
+
+            try {
+                // 3. Call Logic
+                const response = await vestaChat("8ba7b812-4f32-4d5c-9b8d-123456789012", msg);
+                chatStream.removeChild(loading);
+                appendMessage(response.reply);
+            } catch (err) {
+                // Offline Fallback
+                chatStream.removeChild(loading);
+                setTimeout(() => {
+                    appendMessage("I'm currently in offline mode, but I've noted your interest. For competitive trajectories, I recommend intensifying your extracurricular focus this semester.");
+                }, 1000);
+            }
+        }
+
+        sendBtn.addEventListener('click', handleSend);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSend();
+        });
 
         lucide.createIcons();
         initVestaHub();
