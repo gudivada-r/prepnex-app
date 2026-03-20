@@ -5,10 +5,8 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 const supabaseUrl = 'https://gwqikdtwmtwwcmahlpsg.supabase.co';
 const supabaseKey = 'sb_publishable_wuFm7OKw9K2flFYVjMCHlQ_qSeR6OHq'; 
 
-// SCHEMA CALIBRATION: Directing to the 'prepnex' schema
-const supabase = createClient(supabaseUrl, supabaseKey, {
-  db: { schema: 'prepnex' }
-});
+// SCHEMA CALIBRATION: Falling back to default 'public' for demo reliability
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 export async function authenticateStudent(email, password) {
     console.log("PrepNex Auth: Validating credentials for", email);

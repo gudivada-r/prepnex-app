@@ -22,10 +22,13 @@ When deploying this repository to Vercel, you **MUST** configure the following E
 | `SUPABASE_SERVICE_ROLE_KEY` | *Use your New Project Service Role Key* |
 | `GOOGLE_GEMINI_API_KEY` | *Share the Aura AI Key* |
 
-### **Step 2: Database Initialization (COMPLETE)**
-The following scripts have been applied to the `prepnex` schema:
-1.  **`docs/PREPNEX_DB_SCHEMA.sql`**: Initialized tables (students, roadmaps, HIS scores).
-2.  **`docs/PREPNEX_SEED_DATA.sql`**: Populated **100 diversified student profiles**.
+### **Step 2: Database Initialization (REQUIRED)**
+You must run the following scripts in your Supabase SQL Editor:
+1.  **`docs/PREPNEX_DB_SCHEMA.sql`**: Creates tables in the `public` schema.
+2.  **`docs/PREPNEX_SEED_DATA.sql`**: Populates student profiles.
+
+> [!IMPORTANT]
+> To resolve "Invalid Schema" errors, the application now defaults to the **`public`** schema. Ensure you re-run these scripts if you were previously using a custom `prepnex` schema.
 
 ---
 
