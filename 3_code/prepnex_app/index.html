@@ -3,140 +3,315 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>PrepAI | Powered by Aura Intelligence</title>
+    <title>PrepAI | Powered by Vesta Intelligence</title>
     <!-- SEO -->
-    <meta name="description" content="The elite 6th-12th grade college pathfinder powered by Aura Intelligence. Align your academic and extracurricular profile with elite higher education.">
+    <meta name="description" content="The elite 6th-12th grade college pathfinder powered by Vesta Intelligence. Align your academic and extracurricular profile with elite higher education.">
     
-    <!-- Aumtech Font Stack -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Google Fonts for a Premium Modern Look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
         :root {
-            /* Official aumtech.ai Elite Palette (Light Edition) */
-            --aum-indigo: #4f46e5;
-            --aum-violet: #7c3aed;
-            --aum-cyan: #0ea5e9;
-            --aum-bg: #f8fafc;
-            --aum-card: #ffffff;
-            --aum-border: #e2e8f0;
+            /* Vesta Premium Color Palette */
+            --vesta-indigo: #4f46e5;
+            --vesta-violet: #7c3aed;
+            --vesta-cyan: #0ea5e9;
+            --bg-base: #f8fafc;
             --text-main: #0f172a;
-            --text-dim: #64748b;
-            --hero-gradient: linear-gradient(135deg, #7c3aed 0%, #4f46e5 50%, #0ea5e9 100%);
+            --text-dim: #475569;
+            --hero-gradient: linear-gradient(135deg, var(--vesta-violet) 0%, var(--vesta-indigo) 50%, var(--vesta-cyan) 100%);
+            --card-bg: rgba(255, 255, 255, 0.75);
+            --card-border: rgba(255, 255, 255, 0.6);
+            --glass-blur: blur(24px);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        /* Reset & Base Setup */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            -webkit-font-smoothing: antialiased; 
+            -moz-osx-font-smoothing: grayscale;
+        }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--aum-bg);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-base);
             color: var(--text-main);
-            overflow: hidden;
-            line-height: 1.6;
-            height: 100vh;
+            overflow-x: hidden;
+            /* Allow vertical scrolling only if content exceeds viewport, preventing unwanted double scrollbars */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Abstract Ambient Background Elements */
+        .ambient-glow-1 {
+            position: absolute; width: 600px; height: 600px; top: -150px; left: -150px;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.12) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%; z-index: -1; pointer-events: none;
+        }
+        .ambient-glow-2 {
+            position: absolute; width: 700px; height: 700px; bottom: -200px; right: -150px;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.08) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%; z-index: -1; pointer-events: none;
         }
 
         /* --- Navigation --- */
         nav {
-            position: fixed; top: 0; width: 100%; padding: 15px 5%;
+            position: fixed; top: 0; width: 100%; padding: 16px 6%;
             display: flex; justify-content: space-between; align-items: center;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--aum-border);
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.7);
             z-index: 1000;
         }
 
         .logo {
-            font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 700;
-            display: flex; align-items: center; gap: 10px;
+            font-family: 'Outfit', sans-serif; font-size: 1.3rem; font-weight: 800;
+            display: flex; align-items: center; gap: 12px;
             color: var(--text-main); text-decoration: none;
+            letter-spacing: -0.5px;
         }
 
         .logo-icon {
-            width: 28px; height: 28px; background: var(--hero-gradient);
-            border-radius: 8px; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+            width: 34px; height: 34px; background: var(--hero-gradient);
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+            color: white;
         }
 
-        .nav-actions { display: flex; align-items: center; gap: 20px; }
-        .nav-link { color: var(--text-dim); text-decoration: none; font-weight: 600; font-size: 0.85rem; transition: color 0.2s; }
-        .nav-link:hover { color: var(--aum-indigo); }
+        .nav-actions { display: flex; align-items: center; gap: 28px; }
+        
+        .nav-link { 
+            color: var(--text-dim); text-decoration: none; font-weight: 600; 
+            font-size: 0.95rem; transition: color 0.2s ease; 
+        }
+        .nav-link:hover { color: var(--vesta-indigo); }
 
         .btn-premium {
             background: var(--hero-gradient);
-            color: white; padding: 10px 24px; border-radius: 50px;
-            font-size: 0.85rem; font-weight: 700; text-decoration: none;
-            transition: all 0.3s ease; border: none; cursor: pointer;
-            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.2);
+            color: white; padding: 12px 28px; border-radius: 50px;
+            font-size: 0.95rem; font-weight: 700; text-decoration: none;
+            border: none; cursor: pointer;
+            box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4);
+            position: relative; overflow: hidden;
+            display: inline-flex; align-items: center; justify-content: center;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s;
         }
 
-        .btn-premium:hover { transform: scale(1.05); }
+        .btn-premium::after {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-20deg); transition: all 0.6s ease;
+        }
+        
+        .btn-premium:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px -5px rgba(79, 70, 229, 0.5);
+        }
+        .btn-premium:hover::after { left: 150%; }
 
         /* --- Hero Section --- */
         .hero { 
-            padding: 120px 5% 40px; text-align: center; position: relative; 
-            height: 100vh; display: flex; flex-direction: column; justify-content: center;
+            padding: 130px 6% 80px; text-align: center; position: relative; 
+            flex-grow: 1; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center;
         }
-        .hero h1 { font-family: 'Outfit', sans-serif; font-size: clamp(2rem, 6vw, 3.8rem); font-weight: 700; line-height: 1.1; margin-bottom: 20px; color: var(--text-main); letter-spacing: -2px; }
-        .hero p { font-size: 1.1rem; color: var(--text-dim); max-width: 700px; margin: 0 auto 35px; }
+        
+        .badge {
+            display: inline-flex; align-items: center; gap: 8px; 
+            padding: 8px 16px; background: rgba(79, 70, 229, 0.08); 
+            color: var(--vesta-indigo); border-radius: 50px; font-size: 0.8rem; font-weight: 700; 
+            text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 24px;
+            border: 1px solid rgba(79, 70, 229, 0.15);
+            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.05);
+            animation: fadeInDown 0.8s ease-out;
+        }
 
-        /* --- Glass Cards --- */
-        .pillars-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; width: 100%; max-width: 1200px; margin: 60px auto; }
-        .f-card { background: white; border: 1px solid var(--aum-border); border-radius: 32px; padding: 40px; transition: all 0.4s; text-align: left; }
-        .f-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px rgba(0,0,0,0.06); border-color: var(--aum-indigo); }
-        .icon-box { width: 48px; height: 48px; background: #f1f5f9; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--aum-indigo); margin-bottom: 25px; }
+        .hero h1 { 
+            font-family: 'Outfit', sans-serif; 
+            font-size: clamp(2.5rem, 5.5vw, 4.8rem); 
+            font-weight: 800; line-height: 1.05; margin-bottom: 24px; 
+            color: var(--text-main); letter-spacing: -2px; 
+            animation: fadeInUp 0.8s ease-out 0.1s both;
+        }
+        
+        .hero h1 .accent {
+            background: var(--hero-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
 
-        @media (max-width: 768px) { .hero h1 { font-size: 3rem; } }
+        .hero p { 
+            font-size: 1.15rem; color: var(--text-dim); 
+            max-width: 680px; margin: 0 auto 50px; 
+            line-height: 1.6;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        /* --- Glass Cards - Proportional Grid --- */
+        .pillars-grid { 
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; 
+            width: 100%; max-width: 1150px; margin: 0 auto 50px; 
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+        
+        .f-card { 
+            background: var(--card-bg); 
+            backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--card-border); 
+            border-radius: 28px; padding: 36px; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            text-align: left;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+            position: relative; overflow: hidden;
+            display: flex; flex-direction: column;
+        }
+        
+        .f-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px;
+            background: var(--hero-gradient); opacity: 0; transition: opacity 0.3s ease;
+        }
+
+        .f-card:hover { 
+            transform: translateY(-8px) scale(1.02); 
+            box-shadow: 0 25px 45px rgba(0,0,0,0.06); 
+            border-color: rgba(79, 70, 229, 0.25); 
+        }
+        
+        .f-card:hover::before { opacity: 1; }
+
+        .icon-box { 
+            width: 56px; height: 56px; 
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.1) 0%, rgba(14, 165, 233, 0.1) 100%); 
+            border-radius: 16px; display: flex; align-items: center; justify-content: center; 
+            color: var(--vesta-indigo); margin-bottom: 24px;
+            box-shadow: inset 0 0 0 1px rgba(79, 70, 229, 0.15);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .f-card:hover .icon-box { 
+            transform: scale(1.1) rotate(5deg); 
+            color: var(--vesta-cyan); 
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.15) 0%, rgba(14, 165, 233, 0.15) 100%); 
+        }
+
+        .f-card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.35rem; font-weight: 700; margin-bottom: 12px; color: var(--text-main);
+            letter-spacing: -0.3px;
+        }
+
+        .f-card p {
+            font-size: 1rem; color: var(--text-dim); margin: 0; line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .cta-container {
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1024px) {
+            .pillars-grid { gap: 20px; }
+            .f-card { padding: 28px; }
+        }
+
+        @media (max-width: 850px) { 
+            .pillars-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); } 
+            .hero { padding-top: 120px; }
+            .hero h1 { font-size: 3rem; }
+        }
+
+        @media (max-width: 600px) {
+            nav { padding: 14px 5%; }
+            .hero { padding-top: 110px; }
+            .hero h1 { font-size: 2.3rem; letter-spacing: -1px; }
+            .badge { font-size: 0.75rem; padding: 6px 12px; }
+            .nav-actions { gap: 16px; }
+            .nav-link { display: none; } /* Hide 'Log in' text link on super small screens to focus on primary CTA */
+            .f-card { padding: 24px; border-radius: 20px; }
+            .btn-premium { font-size: 0.9rem; padding: 10px 20px; }
+        }
     </style>
 </head>
 <body>
 
+    <!-- Soft Ambient Light Backgrounds -->
+    <div class="ambient-glow-1"></div>
+    <div class="ambient-glow-2"></div>
+
     <nav>
-        <a href="/" class="logo">
-            <div class="logo-icon"><i data-lucide="sparkle" style="color:white; width:16px;"></i></div>
+        <a href="index.html" class="logo">
+            <div class="logo-icon"><i data-lucide="sparkles" style="width:20px; height:20px;"></i></div>
             Aumtech PrepAI
         </a>
         <div class="nav-actions">
             <a href="Login.html" class="nav-link">Log in</a>
-            <a href="Login.html" class="btn-premium">Start Pathfinding</a>
+            <a href="Login.html" class="btn-premium">
+                Start Pathfinding
+                <i data-lucide="arrow-right" style="width:16px; height:16px; margin-left:6px;"></i>
+            </a>
         </div>
     </nav>
 
-    <main>
-        <section class="hero">
-            <div style="display:inline-flex; align-items:center; gap:8px; padding:8px 16px; background:#eef2ff; color:var(--aum-indigo); border-radius:50px; font-size:0.75rem; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:25px;">
-                <i data-lucide="zap" style="width:14px; fill:currentColor;"></i> Powered by Vesta Intelligence
-            </div>
-            <h1>Elite Higher Education<br><span class="accent">Starts in 6th Grade</span></h1>
-            <p>From math olympiads to SAT strategy, PrepAI builds a holistic roadmap specifically designed for elite university admissions.</p>
-            
-            <div class="pillars-grid">
-                <div class="f-card">
-                    <div class="icon-box"><i data-lucide="book-open"></i></div>
-                    <h3>Academic Engine</h3>
-                    <p>Automated course planning aligned with Stanford, MIT, and Ivy League requirements.</p>
-                </div>
-
-                <div class="f-card">
-                    <div class="icon-box"><i data-lucide="git-branch"></i></div>
-                    <h3>Profile Builder</h3>
-                    <p>AI-suggested co-curriculars that move the needle for elite admissions officers.</p>
-                </div>
-
-                <div class="f-card">
-                    <div class="icon-box"><i data-lucide="timer"></i></div>
-                    <h3>Testing Strategy</h3>
-                    <p>Dynamic SAT/ACT timelines that adapt to your progress and target goals.</p>
-                </div>
+    <main class="hero">
+        <div class="badge">
+            <i data-lucide="zap" style="width:14px; height:14px; fill:currentColor;"></i> 
+            Powered by Vesta Intelligence
+        </div>
+        
+        <h1>Elite Higher Education<br><span class="accent">Starts in 6th Grade</span></h1>
+        
+        <p>From math olympiads to SAT strategy, PrepAI builds a holistic roadmap specifically designed for elite university admissions, continuously adapting to your personal journey.</p>
+        
+        <div class="pillars-grid">
+            <div class="f-card">
+                <div class="icon-box"><i data-lucide="book-open" style="width:28px; height:28px;"></i></div>
+                <h3>Academic Engine</h3>
+                <p>Automated course planning seamlessly aligned with Stanford, MIT, and Ivy League rigor requirements.</p>
             </div>
 
-            <div style="margin-top:40px;">
-                <a href="Login.html" class="btn-premium" style="padding: 16px 50px; font-size: 1.1rem;">Explore the Whole Student Approach</a>
+            <div class="f-card">
+                <div class="icon-box"><i data-lucide="award" style="width:28px; height:28px;"></i></div>
+                <h3>Profile Builder</h3>
+                <p>Unique, AI-suggested co-curriculars that move the needle for elite admissions officers.</p>
             </div>
-        </section>
+
+            <div class="f-card">
+                <div class="icon-box"><i data-lucide="target" style="width:28px; height:28px;"></i></div>
+                <h3>Testing Strategy</h3>
+                <p>Dynamic SAT/ACT timelines that constantly adapt to your progress and target score goals.</p>
+            </div>
+        </div>
+
+        <div class="cta-container">
+            <a href="Login.html" class="btn-premium" style="padding: 16px 36px; font-size: 1.1rem;">
+                Explore the Whole Student Approach
+            </a>
+        </div>
     </main>
 
     <script>
+        // Initialize Lucide Icons
         lucide.createIcons();
     </script>
 </body>
