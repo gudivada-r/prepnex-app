@@ -191,7 +191,7 @@
         </div>
 
         <div class="actions-grid">
-            <div class="action-card" onclick="window.location.href=`Testing.html${window.location.search}`">
+            <div class="action-card" id="pathway-sync-btn">
                 <div class="action-icon" style="background: rgba(79, 70, 229, 0.15); color: #818cf8;"><i data-lucide="refresh-cw"></i></div>
                 <h3>Pathway Sync</h3>
                 <p>Run immediate audit of current academic trajectory against elite cohorts.</p>
@@ -238,7 +238,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="module">
-        import { getVestaContext } from '/src/PREPNEX_VESTA_LOGIC.js';
+        import { getVestaContext, performPathwaySync } from '/src/PREPNEX_VESTA_LOGIC.js';
 
         async function hydrateDashboard() {
             try {
@@ -271,6 +271,24 @@
                     if (context.ai_context && context.ai_context.length > 0) {
                         document.getElementById('vesta-nudge-text').innerText = context.ai_context[0].last_strategy_nudge;
                     }
+
+                    // ADD EVENT LISTENERS
+                    document.getElementById('pathway-sync-btn').addEventListener('click', async () => {
+                        const btn = document.getElementById('pathway-sync-btn');
+                        btn.style.opacity = '0.5';
+                        btn.querySelector('h3').innerText = "Syncing...";
+                        
+                        try {
+                            const newScore = await performPathwaySync(studentId);
+                            document.getElementById('stat-alignment').innerText = newScore + "%";
+                            btn.querySelector('h3').innerText = "Pathway Sync";
+                            alert("Vesta Audit Complete: Your Ivy Alignment is now " + newScore + "%");
+                        } catch (e) {
+                            alert("Vesta Audit Interrupted.");
+                        } finally {
+                            btn.style.opacity = '1';
+                        }
+                    });
                 }
             } catch (err) {
                 console.warn("PrepNex: Integration failed, using standalone UI.");

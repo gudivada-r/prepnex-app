@@ -178,17 +178,46 @@
     </main>
 
     <script type="module">
-        const urlParams = new URLSearchParams(window.location.search);
-        const studentId = urlParams.get('id');
-        if (studentId) {
-            document.querySelectorAll('.nav-item').forEach(link => {
-                const href = link.getAttribute('href');
-                if (href && href !== '#' && !href.includes('logout')) {
-                    link.setAttribute('href', `${href}?id=${studentId}`);
+        import { getTestHistory } from '/src/PREPNEX_VESTA_LOGIC.js';
+
+        async function hydrateTesting() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const studentId = urlParams.get('id');
+
+            if (studentId) {
+                // Session Link Propagation
+                document.querySelectorAll('.nav-item').forEach(link => {
+                    const href = link.getAttribute('href');
+                    if (href && href !== '#' && !href.includes('logout')) {
+                        link.setAttribute('href', `${href}?id=${studentId}`);
+                    }
+                });
+
+                try {
+                    const tests = await getTestHistory(studentId);
+                    if (tests && tests.length > 0) {
+                        const timeline = document.querySelector('.test-timeline');
+                        timeline.innerHTML = '';
+                        
+                        tests.forEach(test => {
+                            const box = document.createElement('div');
+                            box.className = `test-box ${test.is_actual ? 'completed' : 'active'}`;
+                            box.innerHTML = `
+                                <p class="test-name">${test.test_type}</p>
+                                <p class="test-date">Academic History</p>
+                                <p class="test-score">${test.score}</p>
+                            `;
+                            timeline.appendChild(box);
+                        });
+                    }
+                } catch (e) {
+                    console.error("Testing Hydration Failed", e);
                 }
-            });
+            }
+            lucide.createIcons();
         }
-        lucide.createIcons();
+
+        hydrateTesting();
     </script>
 </body>
 </html>

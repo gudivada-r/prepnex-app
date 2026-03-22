@@ -176,17 +176,49 @@
     </main>
 
     <script type="module">
-        const urlParams = new URLSearchParams(window.location.search);
-        const studentId = urlParams.get('id');
-        if (studentId) {
-            document.querySelectorAll('.nav-item').forEach(link => {
-                const href = link.getAttribute('href');
-                if (href && href !== '#' && !href.includes('logout')) {
-                    link.setAttribute('href', `${href}?id=${studentId}`);
+        import { getProfileImpact } from '/src/PREPNEX_VESTA_LOGIC.js';
+
+        async function hydrateProfile() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const studentId = urlParams.get('id');
+
+            if (studentId) {
+                // Session Link Propagation
+                document.querySelectorAll('.nav-item').forEach(link => {
+                    const href = link.getAttribute('href');
+                    if (href && href !== '#' && !href.includes('logout')) {
+                        link.setAttribute('href', `${href}?id=${studentId}`);
+                    }
+                });
+
+                try {
+                    const profileItems = await getProfileImpact(studentId);
+                    if (profileItems && profileItems.length > 0) {
+                        const portfolio = document.querySelector('.glass-card div:nth-child(2)'); // Target portfolio area
+                        portfolio.innerHTML = ''; // Placeholder clear
+
+                        profileItems.forEach(item => {
+                            const entry = document.createElement('div');
+                            entry.className = 'impact-item';
+                            const icon = item.activity_type === 'STEM' ? 'cpu' : (item.activity_type === 'Leadership' ? 'award' : 'layers');
+                            entry.innerHTML = `
+                                <div style="display:flex; align-items:center; gap:20px;">
+                                    <div style="width:48px; height:48px; background:rgba(99, 102, 241, 0.1); border-radius:12px; display:flex; align-items:center; justify-content:center; color:var(--vesta-indigo);"><i data-lucide="${icon}"></i></div>
+                                    <div><p style="font-weight:700; font-size:1rem; color:white;">${item.activity_name}</p><p style="font-size:0.8rem; color:var(--text-dim); font-weight:600;">Outcome: ${item.status || 'Verified'}</p></div>
+                                </div>
+                                <div class="his-badge">${item.his_score || 'N/A'}</div>
+                            `;
+                            portfolio.parentNode.insertBefore(entry, portfolio.nextSibling); // Hacky insert for demo
+                        });
+                    }
+                } catch (e) {
+                    console.error("Profile Hydration Failed", e);
                 }
-            });
+            }
+            lucide.createIcons();
         }
-        lucide.createIcons();
+
+        hydrateProfile();
     </script>
 </body>
 </html>

@@ -146,17 +146,52 @@
     </main>
 
     <script type="module">
-        const urlParams = new URLSearchParams(window.location.search);
-        const studentId = urlParams.get('id');
-        if (studentId) {
-            document.querySelectorAll('.nav-item').forEach(link => {
-                const href = link.getAttribute('href');
-                if (href && href !== '#' && !href.includes('logout')) {
-                    link.setAttribute('href', `${href}?id=${studentId}`);
+        import { getAcademicRoadmap } from '/src/PREPNEX_VESTA_LOGIC.js';
+
+        async function hydrateRoadmap() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const studentId = urlParams.get('id');
+
+            if (studentId) {
+                // Session Link Propagation
+                document.querySelectorAll('.nav-item').forEach(link => {
+                    const href = link.getAttribute('href');
+                    if (href && href !== '#' && !href.includes('logout')) {
+                        link.setAttribute('href', `${href}?id=${studentId}`);
+                    }
+                });
+
+                try {
+                    const roadmap = await getAcademicRoadmap(studentId);
+                    if (roadmap && roadmap.length > 0) {
+                        const grid = document.querySelector('.roadmap-grid');
+                        grid.innerHTML = ''; // Clear hardcoded
+
+                        // Simple mapping for demo
+                        roadmap.forEach(course => {
+                            const slot = document.createElement('div');
+                            slot.className = 'year-slot';
+                            const statusLabel = course.status === 'active' ? 'IN PROGRESS' : (course.grade ? `GRADED: ${course.grade}` : 'PLANNED');
+                            const boxClass = course.status === 'active' ? 'active' : (course.grade ? 'completed' : '');
+
+                            slot.innerHTML = `
+                                <p style="font-size:0.75rem; margin-bottom:12px; color:var(--text-dim); font-weight:700;">Grade ${course.grade_level}</p>
+                                <div class="slot-box ${boxClass}">
+                                    <span class="course-name">${course.course_name}</span>
+                                    <span style="font-size:0.7rem; color:var(--vesta-indigo); font-weight:800; border-top:1px solid rgba(99,102,241,0.2); padding-top:8px;">${statusLabel}</span>
+                                </div>
+                            `;
+                            grid.appendChild(slot);
+                        });
+                    }
+                } catch (e) {
+                    console.error("Roadmap Hydration Failed", e);
                 }
-            });
+            }
+            lucide.createIcons();
         }
-        lucide.createIcons();
+
+        hydrateRoadmap();
     </script>
 </body>
 </html>

@@ -192,9 +192,9 @@
                 });
 
                 const context = await getVestaContext(activeStudentId);
-                if (context && context.ai_context && context.ai_context.length > 0) {
-                    const lastNudge = context.ai_context[0].last_strategy_nudge;
-                    // Seed initial AI context in the view if needed
+                if (context) {
+                    // Update header if needed or just greeting
+                    document.querySelector('h2').innerText = `Vesta Link: ${context.full_name}`;
                 }
             } catch (err) {
                 console.warn("Vesta: Hub running in standalone node.");

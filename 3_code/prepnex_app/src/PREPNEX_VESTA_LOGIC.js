@@ -52,14 +52,54 @@ export async function persistVestaNudge(studentId, nudgeContent) {
 }
 
 /**
- * 3. AI CHAT HANDLER (VESTA PERSONA)
+ * 3. CORE MODULE HELPERS
+ */
+export async function getAcademicRoadmap(studentId) {
+    const { data, error } = await supabase.from('academic_roadmaps').select('*').eq('student_id', studentId);
+    if (error) throw error;
+    return data;
+}
+
+export async function getTestHistory(studentId) {
+    const { data, error } = await supabase.from('test_history').select('*').eq('student_id', studentId);
+    if (error) throw error;
+    return data;
+}
+
+export async function getProfileImpact(studentId) {
+    const { data, error } = await supabase.from('profile_activities').select('*').eq('student_id', studentId);
+    if (error) throw error;
+    return data;
+}
+
+/**
+ * 4. PATHWAY SYNC (AUDIT ENGINE)
+ * Simulates a Vesta Audit by updating the alignment score.
+ */
+export async function performPathwaySync(studentId) {
+    console.log("Vesta: Running Pathway Sync Audit...");
+    const newScore = Math.floor(Math.random() * (99 - 90 + 1) + 90);
+    
+    const { error } = await supabase
+        .from('students')
+        .update({ alignment_score: newScore })
+        .eq('id', studentId);
+
+    if (error) throw error;
+    return newScore;
+}
+
+/**
+ * 5. AI CHAT HANDLER (VESTA PERSONA)
  */
 export async function vestaChat(studentId, message) {
     const context = await getVestaContext(studentId);
     
     // Simulating Vesta Persona Intelligence
+    const replyText = `Vesta here. I see your top target is ${context.target_universities[0]}. Based on your ${context.academic_roadmaps[0] ? context.academic_roadmaps[0].course_name : 'Algebra II'} performance, I've updated your roadmap.`;
+    
     const response = {
-        reply: `Vesta here. I see your top target is ${context.target_universities[0]}. Based on your ${context.academic_roadmaps[0].course_name} performance, I've updated your roadmap.`,
+        reply: replyText,
         suggestedAction: "Strategic Alignment: SECURED"
     };
 
