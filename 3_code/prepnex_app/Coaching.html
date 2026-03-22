@@ -3,103 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>PrepAI | Coaching Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>PrepNex | Aura Coaching Hub</title>
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root {
-            --aum-indigo: #4f46e5;
-            --aum-violet: #7c3aed;
-            --aum-dark: #020617;
-            --aum-card: rgba(15, 23, 42, 0.75);
-            --aum-border: rgba(255, 255, 255, 0.06);
+            /* Vesta Premium Color Palette (Dark Mode Parity) */
+            --vesta-indigo: #6366f1;
+            --vesta-violet: #8b5cf6;
+            --vesta-bg: #020617;
+            --vesta-sidebar: rgba(15, 23, 42, 0.4);
+            --vesta-card: rgba(30, 41, 59, 0.4);
+            --vesta-border: rgba(255, 255, 255, 0.08);
             --text-main: #f8fafc;
             --text-dim: #94a3b8;
-            --aura-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            --aura-gradient: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+            --glass-blur: blur(24px);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--aum-dark); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--vesta-bg);
+            color: var(--text-main);
+            display: flex; height: 100vh; overflow: hidden;
+            background-image: 
+                radial-gradient(circle at 100% 0%, rgba(79, 70, 229, 0.05) 0%, transparent 40%);
+        }
+
+        /* sidebar: Refined for the whole platform */
         aside {
-            width: 280px; background-color: rgba(2, 6, 23, 0.95);
-            backdrop-filter: blur(20px); border-right: 1px solid var(--aum-border);
-            padding: 30px 24px; display: flex; flex-direction: column; gap: 40px;
+            width: 280px; background-color: var(--vesta-sidebar);
+            backdrop-filter: var(--glass-blur); border-right: 1px solid var(--vesta-border);
+            padding: 40px 24px; display: flex; flex-direction: column; gap: 40px;
+            z-index: 100;
         }
 
-        .logo { font-family: 'Outfit'; font-size: 1.6rem; font-weight: 700; display: flex; align-items: center; gap: 12px; }
-        .logo-box { width: 32px; height: 32px; background: var(--aura-gradient); border-radius: 8px; display:flex; align-items:center; justify-content:center; }
+        .logo-section { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+        .logo-icon { width: 32px; height: 32px; background: var(--aura-gradient); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3); }
+        .logo-text { font-family: 'Outfit'; font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; }
+
+        .nav-group-label { font-size: 0.7rem; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin: 10px 0 10px 12px; }
 
         nav { display: flex; flex-direction: column; gap: 8px; }
-        .nav-item { padding: 12px 16px; border-radius: 12px; color: var(--text-dim); text-decoration: none; display: flex; align-items: center; gap: 12px; font-weight: 500; font-size: 0.95rem; }
-        .nav-item:hover, .nav-item.active { background: rgba(255, 255, 255, 0.04); color: var(--text-main); }
-        .nav-item.active { border: 1px solid var(--aum-border); }
+        .nav-item { padding: 12px 18px; border-radius: 14px; color: var(--text-dim); text-decoration: none; display: flex; align-items: center; gap: 14px; font-weight: 600; font-size: 0.9rem; transition: all 0.3s ease; }
+        .nav-item:hover, .nav-item.active { background: rgba(255, 255, 255, 0.05); color: var(--text-main); transform: translateX(5px); }
+        .nav-item.active { border: 1px solid var(--vesta-border); background: linear-gradient(90deg, rgba(255,255,255,0.06), transparent); }
 
-        main { flex: 1; padding: 40px; overflow-y: auto; }
-        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
-        h1 { font-family: 'Outfit'; font-size: 2.2rem; }
+        main { flex: 1; padding: 60px; overflow-y: auto; position: relative; }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px; }
+        h1 { font-family: 'Outfit'; font-size: 2.5rem; font-weight: 800; letter-spacing: -1px; }
 
-        .glass-card { background: var(--aum-card); backdrop-filter: blur(12px); border: 1px solid var(--aum-border); border-radius: 24px; padding: 28px; margin-bottom: 24px; }
-        .card-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); font-weight: 700; margin-bottom: 15px; display: block; }
+        .glass-card { 
+            background: var(--vesta-card); backdrop-filter: var(--glass-blur); border: 1px solid var(--vesta-border); 
+            border-radius: 32px; padding: 35px; margin-bottom: 30px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .card-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-dim); font-weight: 800; margin-bottom: 25px; display: block; }
 
-        .coach-box { padding: 16px; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--aum-border); border-radius: 16px; display: flex; align-items: center; gap: 15px; margin-bottom: 12px; }
-        .coach-photo { height: 48px; width: 48px; background: var(--aura-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+        .directive-box { 
+            background: rgba(124, 58, 237, 0.1); border-radius: 24px; padding: 30px; 
+            border: 1px solid rgba(124, 58, 237, 0.2); margin-bottom: 30px;
+        }
+        .directive-title { font-weight: 800; color: white; font-size: 1.1rem; margin-bottom: 20px; font-family: 'Outfit'; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px; }
+        
+        .directive-item { display: flex; gap: 16px; margin-bottom: 18px; align-items: flex-start; }
+        .directive-item i { margin-top: 3px; }
+        .directive-item p { font-size: 0.9rem; line-height: 1.5; font-weight: 500; color: #cbd5e1; }
 
-        .directive { background: rgba(124, 58, 237, 0.1); border-radius: 16px; padding: 20px; border: 1px solid rgba(124, 58, 237, 0.2); }
-        .directive-bullet { display: flex; gap: 10px; margin-top: 10px; font-size: 0.85rem; color: var(--text-dim); line-height: 1.4; }
+        .coach-card { 
+            padding: 24px; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--vesta-border); 
+            border-radius: 20px; display: flex; align-items: center; gap: 20px; margin-bottom: 15px; 
+            transition: all 0.3s; cursor: pointer;
+        }
+        .coach-card:hover { transform: translateX(10px); background: rgba(255,255,255,0.05); border-color: var(--vesta-indigo); }
+        
+        .coach-avatar { 
+            width: 56px; height: 56px; background: var(--aura-gradient); border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; font-weight: 800; 
+            font-size: 1.2rem; color: white; font-family: 'Outfit'; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn-book { 
+            width: 100%; padding: 20px; background: var(--aura-gradient); 
+            color: white; border: none; border-radius: 18px; font-weight: 800; 
+            cursor: pointer; box-shadow: 0 10px 25px rgba(124, 58, 237, 0.3); 
+            transition: all 0.3s; font-family: 'Outfit'; font-size: 1rem;
+        }
+        .btn-book:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(124, 58, 237, 0.5); }
     </style>
 </head>
 <body>
     <aside>
-        <div class="logo"><div class="logo-box"><i data-lucide="sparkle" style="color:white; width:16px;"></i></div> PrepAI</div>
+        <div class="logo-section">
+            <div class="logo-icon"><i data-lucide="sparkle" style="width:18px; height:18px;"></i></div>
+            <div class="logo-text">PrepNex</div>
+        </div>
+        <div class="nav-group-label">Core Engine</div>
         <nav>
-            <a href="PREPAI_MASTER_DASHBOARD.html" class="nav-item"><i data-lucide="layout-grid" style="width:18px;"></i> Master Dashboard</a>
-            <a href="PREPAI_DASHBOARD_MOCKUP.html" class="nav-item"><i data-lucide="book-open" style="width:18px;"></i> Academic Engine</a>
-            <a href="PREPAI_PROFILE_BUILDER_MOCKUP.html" class="nav-item"><i data-lucide="git-branch" style="width:18px;"></i> Profile Builder</a>
-            <a href="PREPAI_TESTING_STRATEGY_MOCKUP.html" class="nav-item"><i data-lucide="timer" style="width:18px;"></i> Testing strategy</a>
-            <a href="PREPAI_COACHING_MOCKUP.html" class="nav-item active"><i data-lucide="users-2" style="width:18px;"></i> Coaching Hub</a>
+            <a href="Dashboard.html" class="nav-item"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            <a href="Vesta.html" class="nav-item"><i data-lucide="sparkles"></i> Vesta Hub</a>
         </nav>
+        <div class="nav-group-label">Elite Pathway</div>
+        <nav>
+            <a href="Roadmap.html" class="nav-item"><i data-lucide="map-pinned"></i> Strategy Roadmap</a>
+            <a href="Testing.html" class="nav-item"><i data-lucide="target"></i> Testing Strategy</a>
+            <a href="Profile.html" class="nav-item"><i data-lucide="layers"></i> Profile Impact</a>
+            <a href="Coaching.html" class="nav-item active"><i data-lucide="crown"></i> Aura Session</a>
+        </nav>
+        <div style="margin-top:auto;">
+            <a href="/" class="nav-item" style="color:#ef4444; opacity: 0.8;"><i data-lucide="log-out"></i> System Logout</a>
+        </div>
     </aside>
 
     <main>
         <header>
             <div>
-                <h1>Coaching Hub</h1>
-                <p style="color:var(--text-dim);">Human-in-the-Loop Elite Advisory</p>
+                <h1>Aura Coaching</h1>
+                <p style="color:var(--text-dim); font-weight: 500;">Human-in-the-Loop Elite Advisory Sessions</p>
             </div>
-            <div style="background: var(--aum-card); padding: 10px 20px; border-radius: 50px; border: 1px solid var(--aum-border);">
-                <span style="font-size: 0.85rem; font-weight: 600; color: #818cf8;">Next Session: Sarah M. (Ivy Expert)</span>
+            <div style="background: var(--vesta-card); padding: 12px 24px; border-radius: 50px; border: 1px solid var(--vesta-border); backdrop-filter: blur(10px);">
+                <span style="font-size: 0.85rem; font-weight: 700; color: #818cf8;">Lead Expert: Sarah M. (Ex-Stanford Admissions)</span>
             </div>
         </header>
 
-        <div style="display:grid; grid-template-columns: 2fr 1fr; gap:24px;">
+        <div style="display:grid; grid-template-columns: 2fr 1.2fr; gap:30px;">
             <div class="glass-card">
-                <span class="card-label">Strategic Directives</span>
-                <div class="directive">
-                    <p style="font-weight:700; color:white; font-size:1.1rem; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:10px; margin-bottom:15px;">Sarah M.'s Top 3 Actions</p>
-                    <div class="directive-bullet"><i data-lucide="target" style="width:16px; color:#10b981;"></i> <p>You must reach **USACO Gold** rank by end of 9th Grade to stay in the 98% MIT alignment tier.</p></div>
-                    <div class="directive-bullet"><i data-lucide="target" style="width:16px; color:#818cf8;"></i> <p>Refine your summer interest profile for **Stanford Summer Institutes** this June.</p></div>
-                    <div class="directive-bullet"><i data-lucide="target" style="width:16px; color:#f59e0b;"></i> <p>Finalize the 'Humanities Spike' project concept by next Wednesday session.</p></div>
+                <span class="card-label">Active Strategic Directives</span>
+                <div class="directive-box">
+                    <p class="directive-title">High-Fidelity Action Protocols</p>
+                    <div class="directive-item">
+                        <i data-lucide="check-circle-2" style="color:#10b981; width:20px;"></i>
+                        <p>Complete USACO Gold Tier training cycle by end of 9th Grade to ensure MIT trajectory alignment.</p>
+                    </div>
+                    <div class="directive-item">
+                        <i data-lucide="check-circle-2" style="color:var(--vesta-indigo); width:20px;"></i>
+                        <p>Refine your summer interest profile for **Stanford Summer Institutes** application window (Opens Feb 2027).</p>
+                    </div>
+                    <div class="directive-item">
+                        <i data-lucide="check-circle-2" style="color:#f59e0b; width:20px;"></i>
+                        <p>Finalize the 'Humanities Spike' project concept for review during next Wednesday's strategy sync.</p>
+                    </div>
                 </div>
 
-                <div style="margin-top:30px;">
-                    <span class="card-label">Elite Mentor Matches</span>
-                    <div class="coach-box"><div class="coach-photo">SM</div> <div><p style="font-weight:600; font-size:0.9rem;">Sarah Mitchell</p><p style="font-size:0.75rem; color:var(--text-dim);">Ex-Stanford Admissions • S.T.E.M Expert</p></div></div>
-                    <div class="coach-box"><div class="coach-photo" style="background:#7c3aed;">RK</div> <div><p style="font-weight:600; font-size:0.9rem;">Robert Kim</p><p style="font-size:0.75rem; color:var(--text-dim);">2x Olympiad Gold • Elite Math Coaching</p></div></div>
-                </div>
+                <span class="card-label">Vesta Verified Mentors</span>
+                <div class="coach-card"><div class="coach-avatar">SM</div> <div><p style="font-weight:700; font-size:1rem; color:white;">Sarah Mitchell</p><p style="font-size:0.8rem; color:var(--text-dim); font-weight:600;">Elite Tier Specialist • Ex-Stanford Admissions Officer</p></div></div>
+                <div class="coach-card"><div class="coach-avatar" style="background:#7c3aed;">RK</div> <div><p style="font-weight:700; font-size:1rem; color:white;">Robert Kim</p><p style="font-size:0.8rem; color:var(--text-dim); font-weight:600;">2x IMO Gold Medalist • Advanced Math Trajectory Lead</p></div></div>
             </div>
 
             <div class="glass-card" style="text-align:center;">
-                <span class="card-label">Quick Scheduler</span>
-                <button style="width:100%; margin-top:10px; padding:15px; background:var(--aura-gradient); border:none; border-radius:12px; color:white; font-weight:700; cursor:pointer; box-shadow:0 8px 20px rgba(79, 70, 229, 0.3);">Book Priority Session</button>
-                <div style="margin-top:30px;">
-                    <span class="card-label" style="font-size:0.6rem;">Aura AI Buddy</span>
-                    <p style="font-size:0.8rem; color:var(--text-dim);">Unlimited AI-Buddy support included. Access Aura in real-time for roadmap queries.</p>
+                <span class="card-label">High-Priority Scheduler</span>
+                <button class="btn-book">Sync Strategy Session</button>
+                
+                <div style="margin-top:40px; padding-top:40px; border-top:1px solid var(--vesta-border);">
+                    <div style="width:48px; height:48px; background:rgba(99, 102, 241, 0.1); border-radius:12px; display:flex; align-items:center; justify-content:center; color:var(--vesta-indigo); margin: 0 auto 15px;"><i data-lucide="zap" style="fill:currentColor; width:20px;"></i></div>
+                    <p style="font-size:0.9rem; font-weight:700; color:white; margin-bottom:10px;">Vesta Real-Time Support</p>
+                    <p style="font-size:0.8rem; color:var(--text-dim); line-height:1.6; font-weight:500;">Your subscription includes 24/7 access to Vesta Intelligence. Connect with your AI Buddy for immediate roadmap audits.</p>
                 </div>
             </div>
         </div>
     </main>
 
-    <script>lucide.createIcons();</script>
+    <script type="module">
+        const urlParams = new URLSearchParams(window.location.search);
+        const studentId = urlParams.get('id');
+        if (studentId) {
+            document.querySelectorAll('.nav-item').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && href !== '#' && !href.includes('logout')) {
+                    link.setAttribute('href', `${href}?id=${studentId}`);
+                }
+            });
+        }
+        lucide.createIcons();
+    </script>
 </body>
 </html>

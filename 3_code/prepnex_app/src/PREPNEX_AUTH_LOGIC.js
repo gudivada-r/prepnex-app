@@ -13,15 +13,23 @@ export async function authenticateStudent(email, password) {
 
     // MOCK PASSWORD FOR DEMO (Seeded Students)
     const DEMO_PASSWORD = 'prepnex2026';
+    const ADMIN_PASSWORD = 'password123';
 
     try {
-        if (password !== DEMO_PASSWORD) {
+        // Support Admin Users
+        if (email === 'ram@aumtech.ai' || email === 'shiva@aumtech.ai') {
+            if (password !== ADMIN_PASSWORD) {
+                return { success: false, message: "Invalid Admin password." };
+            }
+        } else if (password !== DEMO_PASSWORD) {
             return { success: false, message: "Invalid Pathfinder password." };
         }
 
         // IDENTITY MAPPING: Mapping email to a seeded student name for the demo
-        // We assume 'alex.davis@example.com' maps to 'Student_1' (Our elite test profile)
-        const targetName = email === 'alex.davis@example.com' ? 'Student_1' : email;
+        let targetName = email;
+        if (email === 'alex.davis@example.com') targetName = 'Student_1';
+        if (email === 'ram@aumtech.ai') targetName = 'Ram (Admin)';
+        if (email === 'shiva@aumtech.ai') targetName = 'Shiva (Admin)';
 
         const { data, error } = await supabase
             .from('students')

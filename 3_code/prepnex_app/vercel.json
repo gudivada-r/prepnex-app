@@ -5,8 +5,10 @@
     { "source": "/dashboard", "destination": "/Dashboard.html" },
     { "source": "/academic", "destination": "/Roadmap.html" },
     { "source": "/vesta", "destination": "/Vesta.html" },
-    { "source": "/profile", "destination": "/Dashboard.html" },
-    { "source": "/testing", "destination": "/Roadmap.html" },
-    { "source": "/coaching", "destination": "/Dashboard.html" }
+    { "source": "/profile", "destination": "/Profile.html" },
+    { "source": "/testing", "destination": "/Testing.html" },
+    { "source": "/coaching", "destination": "/Coaching.html" },
+    { "source": "/strategy", "destination": "/Strategy.html" },
+    { "source": "/billing", "destination": "/Billing.html" }
   ]
 }

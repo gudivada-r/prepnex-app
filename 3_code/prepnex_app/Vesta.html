@@ -3,90 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>PrepNex | Vesta Intelligence Hub</title>
-    <!-- Aumtech Font Stack -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>PrepNex | Vesta Intelligence Interface</title>
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root {
-            /* Definitive Aumtech Radiant Tokens */
-            --aum-indigo: #4f46e5;
-            --aum-violet: #7c3aed;
-            --aum-dark: #020617;
-            --aum-bg: #030712;
-            --aum-card: rgba(15, 23, 42, 0.4);
-            --aum-border: rgba(255, 255, 255, 0.08);
+            /* Vesta Premium Color Palette (Dark Mode Parity) */
+            --vesta-indigo: #6366f1;
+            --vesta-violet: #8b5cf6;
+            --vesta-cyan: #0ea5e9;
+            --vesta-bg: #020617;
+            --vesta-sidebar: rgba(15, 23, 42, 0.4);
+            --vesta-card: rgba(30, 41, 59, 0.4);
+            --vesta-border: rgba(255, 255, 255, 0.08);
             --text-main: #f8fafc;
             --text-dim: #94a3b8;
-            --aura-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            --aura-gradient: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
             --glass-blur: blur(24px);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--aum-bg);
-            background-image: 
-                radial-gradient(circle at 100% 100%, rgba(79, 70, 229, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 100% 0%, rgba(124, 58, 237, 0.05) 0%, transparent 40%);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--vesta-bg);
             color: var(--text-main);
             display: flex; height: 100vh; overflow: hidden;
+            background-image: 
+                radial-gradient(circle at 100% 0%, rgba(124, 58, 237, 0.05) 0%, transparent 40%);
         }
 
-        /* sidebar: Refined for aumtech.ai parity */
+        /* Sidebar: Translucent Elite Navigation */
         aside {
-            width: 280px; background-color: rgba(2, 6, 23, 0.85);
-            backdrop-filter: var(--glass-blur); border-right: 1px solid var(--aum-border);
-            padding: 40px 24px; display: flex; flex-direction: column; gap: 45px;
+            width: 280px; background-color: var(--vesta-sidebar);
+            backdrop-filter: var(--glass-blur); border-right: 1px solid var(--vesta-border);
+            padding: 40px 24px; display: flex; flex-direction: column; gap: 40px;
             z-index: 100;
         }
 
-        .nav-item { padding: 14px 18px; border-radius: 14px; color: var(--text-dim); text-decoration: none; display: flex; align-items: center; gap: 14px; font-weight: 500; font-size: 0.95rem; transition: all 0.3s ease; }
-        .nav-item:hover, .nav-item.active { background: rgba(255, 255, 255, 0.05); color: var(--text-main); transform: translateX(4px); }
-        .nav-item.active { border: 1px solid var(--aum-border); background: linear-gradient(90deg, rgba(255,255,255,0.06), transparent); }
+        .logo-section { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+        .logo-icon { width: 32px; height: 32px; background: var(--aura-gradient); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3); }
+        .logo-text { font-family: 'Outfit'; font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; }
+
+        nav { display: flex; flex-direction: column; gap: 8px; }
+
+        .nav-item {
+            padding: 12px 18px; border-radius: 14px; color: var(--text-dim);
+            text-decoration: none; display: flex; align-items: center; gap: 14px;
+            font-weight: 600; font-size: 0.9rem; transition: all 0.3s ease;
+        }
+
+        .nav-item:hover, .nav-item.active { background: rgba(255, 255, 255, 0.05); color: var(--text-main); transform: translateX(5px); }
+        .nav-item.active { border: 1px solid var(--vesta-border); background: linear-gradient(90deg, rgba(255,255,255,0.06), transparent); }
 
         /* Main Chat Area */
         main { flex: 1; display: flex; flex-direction: column; position: relative; }
 
-        header { padding: 30px 45px; border-bottom: 1px solid var(--aum-border); display: flex; justify-content: space-between; align-items: center; background: rgba(2, 6, 23, 0.4); backdrop-filter: var(--glass-blur); }
+        header { 
+            padding: 30px 60px; border-bottom: 1px solid var(--vesta-border); 
+            display: flex; justify-content: space-between; align-items: center; 
+            background: rgba(2, 6, 23, 0.4); backdrop-filter: var(--glass-blur); 
+        }
 
-        #chat-stream { flex: 1; padding: 50px; overflow-y: auto; display: flex; flex-direction: column; gap: 35px; }
+        header h2 { font-family: 'Outfit'; font-size: 1.3rem; font-weight: 700; }
 
-        .bubble { max-width: 65%; padding: 25px; border-radius: 25px; font-size: 0.95rem; line-height: 1.6; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        .bubble.vesta { background: var(--aum-card); border: 1px solid var(--aum-border); backdrop-filter: var(--glass-blur); align-self: flex-start; }
-        .bubble.user { background: var(--aum-indigo); align-self: flex-end; color: white; border-bottom-right-radius: 4px; box-shadow: 0 8px 30px rgba(79, 70, 229, 0.3); }
+        #chat-stream { flex: 1; padding: 60px; overflow-y: auto; display: flex; flex-direction: column; gap: 40px; }
 
-        .avatar-vesta { width: 36px; height: 36px; background: var(--aura-gradient); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; box-shadow: 0 0 15px rgba(79, 70, 229, 0.4); }
+        .bubble { max-width: 70%; padding: 25px; border-radius: 28px; font-size: 0.95rem; line-height: 1.7; position: relative; box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
+        .bubble.vesta { background: var(--vesta-card); border: 1px solid var(--vesta-border); backdrop-filter: var(--glass-blur); align-self: flex-start; border-bottom-left-radius: 6px; }
+        .bubble.user { background: var(--vesta-indigo); align-self: flex-end; color: white; border-bottom-right-radius: 6px; box-shadow: 0 10px 30px rgba(79, 70, 229, 0.3); }
+
+        .avatar-vesta { width: 36px; height: 36px; background: var(--aura-gradient); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; box-shadow: 0 0 20px rgba(124, 58, 237, 0.4); }
 
         .action-card {
-            background: rgba(255, 255, 255, 0.04); border: 1px solid var(--aum-border);
-            border-radius: 20px; padding: 20px; margin-top: 20px; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.04); border: 1px solid var(--vesta-border);
+            border-radius: 20px; padding: 20px; margin-top: 25px; display: flex; justify-content: space-between; align-items: center; 
+            backdrop-filter: blur(10px);
         }
+
+        .btn-action { background: var(--vesta-indigo); color: white; border: none; padding: 10px 20px; border-radius: 12px; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+        .btn-action:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
 
         /* Input Area */
-        #input-area { padding: 40px 50px; border-top: 1px solid var(--aum-border); background: rgba(2, 6, 23, 0.5); backdrop-filter: var(--glass-blur); }
+        #input-area { 
+            padding: 40px 60px; border-top: 1px solid var(--vesta-border); 
+            background: rgba(2, 6, 23, 0.6); backdrop-filter: var(--glass-blur); 
+        }
+        
         .input-box {
-            background: rgba(255,255,255,0.06); border: 1px solid var(--aum-border);
+            background: rgba(255,255,255,0.06); border: 1px solid var(--vesta-border);
             border-radius: 18px; padding: 18px 28px; display: flex; align-items: center; gap: 20px; transition: border-color 0.3s ease;
         }
-        .input-box:focus-within { border-color: rgba(79, 70, 229, 0.5); }
-        input { background: none; border: none; color: white; flex: 1; outline: none; font-size: 1rem; }
+        .input-box:focus-within { border-color: rgba(99, 102, 241, 0.5); }
+        
+        input { background: none; border: none; color: white; flex: 1; outline: none; font-size: 1rem; font-family: inherit; }
+        
+        .btn-send { 
+            background: var(--aura-gradient); border: none; width: 44px; height: 44px; 
+            border-radius: 12px; color: white; cursor: pointer; display: flex; 
+            align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); 
+            transition: all 0.3s; 
+        }
+        .btn-send:hover { transform: scale(1.08) rotate(5deg); }
 
-        .btn-send { background: var(--aura-gradient); border: none; width: 44px; height: 44px; border-radius: 12px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3); transition: transform 0.2s ease; }
-        .btn-send:hover { transform: scale(1.05); }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
 
     </style>
 </head>
 <body>
 
     <aside>
-        <div style="font-family:'Outfit'; font-size:1.5rem; font-weight:700; display:flex; gap:10px; align-items:center;">
-            <div style="width:28px; height:28px; background:var(--aura-gradient); border-radius:8px;"></div> PrepNex
+        <div class="logo-section">
+            <div class="logo-icon"><i data-lucide="sparkle" style="width:18px; height:18px;"></i></div>
+            <div class="logo-text">PrepNex</div>
         </div>
-        <nav style="margin-top:40px;">
-            <a href="Dashboard.html" class="nav-item"><i data-lucide="layout-grid"></i> Dashboard</a>
-            <a href="#" class="nav-item active"><i data-lucide="sparkles"></i> Vesta Hub</a>
+        <nav style="margin-top:30px;">
+            <a href="Dashboard.html" class="nav-item"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            <a href="Vesta.html" class="nav-item active"><i data-lucide="sparkles"></i> Vesta Hub</a>
             <a href="Billing.html" class="nav-item"><i data-lucide="credit-card"></i> Subscriptions</a>
         </nav>
     </aside>
@@ -94,49 +131,36 @@
     <main>
         <header>
             <div>
-                <h2 style="font-family:'Outfit'; font-size:1.2rem;">Vesta Intelligence</h2>
-                <div style="display:flex; align-items:center; gap:8px;">
-                    <span style="width:8px; height:8px; background:#10b981; border-radius:50%;"></span>
-                    <span style="font-size:0.75rem; color:var(--text-dim);">Live Roadmap Sync</span>
+                <h2>Vesta Intelligence Interface</h2>
+                <div style="display:flex; align-items:center; gap:8px; margin-top:5px;">
+                    <span style="width:8px; height:8px; background:#10b981; border-radius:50%; box-shadow: 0 0 10px #10b981;"></span>
+                    <span style="font-size:0.75rem; color:var(--text-dim); font-weight:600; text-transform:uppercase; letter-spacing:1px;">Quantum Strategy Link: ONLINE</span>
                 </div>
             </div>
-            <div style="display:flex; gap:10px;">
-                <button style="background:transparent; border:1px solid var(--aum-border); color:white; padding:8px 16px; border-radius:50px; font-size:0.8rem;">Session Logs</button>
-            </div>
+            <button style="background:transparent; border:1px solid var(--vesta-border); color:white; padding:10px 20px; border-radius:12px; font-size:0.8rem; font-weight:700; cursor:pointer;">Session Log Archive</button>
         </header>
 
         <div id="chat-stream">
-            <!-- Vesta Message -->
+            <!-- Vesta Initial Response -->
             <div class="bubble vesta">
                 <div class="avatar-vesta"><i data-lucide="sparkle" style="color:white; width:16px;"></i></div>
-                <p>Hello Student AD. I've finished auditing your **9th Grade Fall** trajectory. To secure your 92% alignment with **Stanford CS**, you need a "Humanitarian Spike" this year.</p>
+                <p>Establishing secure pathway link... **Handshake complete.**</p>
+                <p style="margin-top:10px;">I've finished auditing your current trajectory. Based on elite college admission thresholds, I recommend we intensify your **'Impact Leadership'** cluster. Shall we initiate a new strategy roadmap sync?</p>
                 
                 <div class="action-card">
                     <div>
-                        <p style="font-weight:700; font-size:0.85rem;">Initiate 'Tech Ethics' Project</p>
-                        <p style="font-size:0.75rem; color:var(--text-dim);">Recommended by Vesta Intelligence</p>
+                        <p style="font-weight:800; font-size:0.85rem; color:white;">Sync Strategy Map</p>
+                        <p style="font-size:0.75rem; color:var(--text-dim);">Vesta Automated Directive</p>
                     </div>
-                    <button style="background:var(--aum-indigo); color:white; border:none; padding:8px 15px; border-radius:10px; font-size:0.75rem; font-weight:700; cursor:pointer;">Accept Shift</button>
+                    <button class="btn-action">Initiate Protocol</button>
                 </div>
-            </div>
-
-            <!-- User Message -->
-            <div class="bubble user">
-                <p>That sounds great. Will this impact my USACO training time?</p>
-            </div>
-
-            <!-- Vesta Reply -->
-            <div class="bubble vesta">
-                <div class="avatar-vesta"><i data-lucide="sparkle" style="color:white; width:16px;"></i></div>
-                <p>Not significantly. I have re-optimized your weekly schedule to move **Competitive Programming** to your morning Honors Block. This frees up 4 hours per week for your project.</p>
-                <div style="margin-top:10px; font-size:0.8rem; color:#818cf8; font-weight:700;">Roadmap Syncing...</div>
             </div>
         </div>
 
         <div id="input-area">
             <div class="input-box">
-                <i data-lucide="plus" style="color:var(--text-dim);"></i>
-                <input type="text" placeholder="Ask Vesta about your Elite Roadmap...">
+                <i data-lucide="layers" style="color:var(--text-dim); width:20px;"></i>
+                <input type="text" placeholder="Inquire with Vesta about elite admissions outcomes...">
                 <button class="btn-send"><i data-lucide="send" style="width:18px;"></i></button>
             </div>
         </div>
@@ -150,18 +174,30 @@
         const chatInput = document.querySelector('input');
         const sendBtn = document.querySelector('.btn-send');
 
-        async function initVestaHub() {
-            try {
-                // For demo, we pull the first seeded student or use a mock ID
-                const studentId = "8ba7b812-4f32-4d5c-9b8d-123456789012"; 
-                const context = await getVestaContext(studentId);
+        let activeStudentId = null;
 
+        async function initVestaInterface() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                activeStudentId = urlParams.get('id');
+                
+                if (!activeStudentId) return;
+
+                // Sync links
+                document.querySelectorAll('.nav-item').forEach(link => {
+                    const href = link.getAttribute('href');
+                    if (href && href !== '#' && !href.includes('logout')) {
+                        link.setAttribute('href', `${href}?id=${activeStudentId}`);
+                    }
+                });
+
+                const context = await getVestaContext(activeStudentId);
                 if (context && context.ai_context && context.ai_context.length > 0) {
                     const lastNudge = context.ai_context[0].last_strategy_nudge;
-                    document.querySelector('.bubble.vesta p').innerText = "Vesta here. I see we have initiated our strategy for " + context.target_universities[0] + ". Let's focus on: " + lastNudge;
+                    // Seed initial AI context in the view if needed
                 }
             } catch (err) {
-                console.warn("Vesta: Running in Local Standalone mode.");
+                console.warn("Vesta: Hub running in standalone node.");
             }
         }
 
@@ -185,41 +221,40 @@
             lucide.createIcons();
         }
 
-        async function handleSend() {
+        async function handleVestaSend() {
             const msg = chatInput.value.trim();
             if (!msg) return;
 
-            // 1. Show User Message
             appendMessage(msg, true);
             chatInput.value = '';
 
-            // 2. Simulate Loading
             const loading = document.createElement('div');
-            loading.className = 'bubble vesta loading';
-            loading.innerHTML = '<p>Vesta is thinking...</p>';
+            loading.className = 'bubble vesta';
+            loading.innerHTML = '<p style="opacity:0.6;">Vesta Intelligence is processing...</p>';
             chatStream.appendChild(loading);
+            chatStream.scrollTop = chatStream.scrollHeight;
 
             try {
-                // 3. Call Logic
-                const response = await vestaChat("8ba7b812-4f32-4d5c-9b8d-123456789012", msg);
-                chatStream.removeChild(loading);
-                appendMessage(response.reply);
+                if (activeStudentId) {
+                    const response = await vestaChat(activeStudentId, msg);
+                    chatStream.removeChild(loading);
+                    appendMessage(response.reply);
+                } else {
+                    throw new Error("No active profile link.");
+                }
             } catch (err) {
-                // Offline Fallback
                 chatStream.removeChild(loading);
-                setTimeout(() => {
-                    appendMessage("I'm currently in offline mode, but I've noted your interest. For competitive trajectories, I recommend intensifying your extracurricular focus this semester.");
-                }, 1000);
+                appendMessage("Quantum sync interrupted. Please verify your profile link to resume Vesta intelligence sessions.");
             }
         }
 
-        sendBtn.addEventListener('click', handleSend);
+        sendBtn.addEventListener('click', handleVestaSend);
         chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') handleSend();
+            if (e.key === 'Enter') handleVestaSend();
         });
 
         lucide.createIcons();
-        initVestaHub();
+        initVestaInterface();
     </script>
 </body>
 </html>

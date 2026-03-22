@@ -2,105 +2,124 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PrepNex | Student Login</title>
-    <!-- Aumtech Font Stack -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>PrepNex | Secure Portal Access</title>
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root {
-            /* Official aumtech.ai Elite Palette (Light Edition) */
-            --aum-indigo: #4f46e5;
-            --aum-violet: #7c3aed;
-            --aum-cyan: #0ea5e9;
-            --aum-bg: #f8fafc;
-            --aum-sidebar: #ffffff;
-            --aum-card: #ffffff;
-            --aum-border: #e2e8f0;
-            --text-main: #0f172a;
-            --text-dim: #64748b;
-            --hero-gradient: linear-gradient(135deg, #7c3aed 0%, #4f46e5 50%, #0ea5e9 100%);
+            /* Vesta Premium Color Palette (Dark Mode Parity) */
+            --vesta-indigo: #6366f1;
+            --vesta-violet: #8b5cf6;
+            --vesta-cyan: #0ea5e9;
+            --vesta-bg: #020617;
+            --vesta-card: rgba(15, 23, 42, 0.4);
+            --vesta-border: rgba(255, 255, 255, 0.08);
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --aura-gradient: linear-gradient(135deg, #7c3aed 0%, #4f46e5 50%, #0ea5e9 100%);
+            --glass-blur: blur(24px);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--aum-bg);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--vesta-bg);
             color: var(--text-main);
             display: flex; align-items: center; justify-content: center; height: 100vh;
             background-image: 
-                radial-gradient(circle at 0% 0%, rgba(79, 70, 229, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 100% 100%, rgba(124, 58, 237, 0.03) 0%, transparent 50%);
+                radial-gradient(circle at 0% 0%, rgba(79, 70, 229, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, rgba(124, 58, 237, 0.08) 0%, transparent 40%);
         }
 
         .login-card {
-            width: 100%; max-width: 440px; background: white; padding: 60px;
-            border-radius: 36px; border: 1px solid var(--aum-border);
-            box-shadow: 0 40px 80px -20px rgba(0,0,0,0.12);
-            text-align: center;
+            width: 100%; max-width: 460px; background: var(--vesta-card); padding: 70px 60px;
+            border-radius: 40px; border: 1px solid var(--vesta-border);
+            backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+            box-shadow: 0 40px 100px -20px rgba(0,0,0,0.5);
+            text-align: center; position: relative; overflow: hidden;
+            animation: fadeInScale 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .login-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 6px;
+            background: var(--aura-gradient);
         }
 
         .logo-box {
-            width: 48px; height: 48px; background: var(--hero-gradient);
-            border-radius: 12px; display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 30px; box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+            width: 54px; height: 54px; background: var(--aura-gradient);
+            border-radius: 14px; display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 35px; box-shadow: 0 8px 30px rgba(79, 70, 229, 0.4);
+            transition: transform 0.3s;
         }
+        .logo-box:hover { transform: rotate(10deg); }
 
-        h2 { font-family: 'Outfit'; font-size: 2rem; margin-bottom: 12px; font-weight: 700; color: #1e293b; }
-        p { color: var(--text-dim); font-size: 1rem; margin-bottom: 40px; }
+        h2 { font-family: 'Outfit'; font-size: 2.2rem; margin-bottom: 12px; font-weight: 800; letter-spacing: -1px; }
+        p { color: var(--text-dim); font-size: 1.05rem; margin-bottom: 45px; font-weight: 500; }
 
-        .form-group { text-align: left; margin-bottom: 25px; }
-        label { display: block; font-size: 0.8rem; font-weight: 800; color: var(--text-dim); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1.5px; }
+        .form-group { text-align: left; margin-bottom: 30px; }
+        label { display: block; font-size: 0.75rem; font-weight: 800; color: #475569; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 2px; }
         
         input {
-            width: 100%; padding: 16px 20px; border-radius: 14px;
-            border: 1.5px solid var(--aum-border); background: #fdfdfd;
-            font-size: 1rem; outline: none; transition: all 0.2s ease;
-            color: var(--text-main);
+            width: 100%; padding: 18px 24px; border-radius: 16px;
+            border: 1.5px solid var(--vesta-border); background: rgba(255, 255, 255, 0.04);
+            font-size: 1rem; outline: none; transition: all 0.3s ease;
+            color: white; font-family: inherit;
         }
-        input:focus { border-color: var(--aum-indigo); background: white; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.08); }
+        input:focus { border-color: var(--vesta-indigo); background: rgba(255, 255, 255, 0.08); box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15); }
 
         .btn-login {
-            width: 100%; padding: 18px; background: var(--hero-gradient);
+            width: 100%; padding: 20px; background: var(--aura-gradient);
             color: white; border: none; border-radius: 50px;
-            font-size: 1.1rem; font-weight: 700; cursor: pointer;
-            margin-top: 20px; box-shadow: 0 12px 25px rgba(79, 70, 229, 0.25);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 1.15rem; font-weight: 800; cursor: pointer;
+            margin-top: 25px; box-shadow: 0 15px 35px rgba(124, 58, 237, 0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-family: 'Outfit';
         }
-        .btn-login:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(79, 70, 229, 0.4); }
-        .btn-login:disabled { opacity: 0.7; transform: none; cursor: default; }
+        .btn-login:hover { transform: translateY(-4px); box-shadow: 0 20px 45px rgba(124, 58, 237, 0.5); }
+        .btn-login:active { transform: scale(0.98); }
+        .btn-login:disabled { opacity: 0.6; transform: none; cursor: wait; }
 
-        #auth-error { display:none; color:#ef4444; background:#fff1f2; padding: 15px; border-radius: 14px; font-size: 0.9rem; margin-bottom: 25px; border: 1px solid rgba(239, 68, 68, 0.1); font-weight: 600; }
+        #auth-error { display:none; color:#fb7185; background:rgba(251, 113, 133, 0.1); padding: 18px; border-radius: 16px; font-size: 0.95rem; margin-bottom: 30px; border: 1px solid rgba(251, 113, 133, 0.2); font-weight: 600; }
 
-        .footer { margin-top: 45px; font-size: 0.8rem; color: var(--text-dim); line-height: 1.5; }
+        .footer { margin-top: 50px; font-size: 0.85rem; color: #475569; font-weight: 600; }
+        .footer b { color: var(--text-dim); }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
 
     </style>
 </head>
 <body>
 
     <div class="login-card">
-        <div class="logo-box"><i data-lucide="sparkle" style="color:white; width:24px;"></i></div>
-        <h2>Welcome Back</h2>
-        <p>Log in as an elite PrepNex student.</p>
+        <div class="logo-box"><i data-lucide="sparkles" style="color:white; width:28px;"></i></div>
+        <h2>System Access</h2>
+        <p>Unlock your elite college pathfinder.</p>
 
-        <div id="auth-error">Email or password incorrect.</div>
+        <div id="auth-error">Authentication failed. Verify credentials.</div>
 
         <div class="form-group">
             <label>Educational Email</label>
-            <input type="email" id="email" placeholder="alex.davis@example.com" required>
+            <input type="email" id="email" placeholder="alex.davis@example.com" required autocomplete="email">
         </div>
 
         <div class="form-group">
             <label>Pathfinder Password</label>
-            <input type="password" id="password" placeholder="••••••••" required>
+            <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password">
         </div>
 
-        <button class="btn-login" id="login-btn">Log in to Pathfinder</button>
+        <button class="btn-login" id="login-btn">Initialize Connection</button>
         
         <div class="footer">
-            Powered by <b>Vesta Intelligence</b><br>
-            Democratizing Elite Admissions Strategy
+            Powered by <b>Vesta Intelligence Layer</b><br>
+            <span style="font-size:0.75rem; letter-spacing:0.5px; margin-top:8px; display:inline-block; opacity:0.8;">DEMOCRATIZING ELITE ADMISSIONS STRATEGY</span>
         </div>
     </div>
 
